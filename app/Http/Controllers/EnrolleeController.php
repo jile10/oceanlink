@@ -513,7 +513,7 @@ class EnrolleeController extends Controller
                     'message' => $message, 
                     'alert-type' => 'warning'
                 );
-            return redirect('/manage_app/genrollee')->with($notification);
+            return redirect('/manage_app/enrollee')->with($notification);
         }
 		
     }
