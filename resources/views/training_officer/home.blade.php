@@ -43,7 +43,10 @@
 										@else
 											<td>{{count($sprog->trainingclass->groupclassdetail)}}</td>
 										@endif
-										<td>@if($sprog->trainingclass->status == 1)
+										<td>
+											@if($sprog->trainingclass->status == 0)
+												Pending
+											@elseif($sprog->trainingclass->status == 1)
 												Not yet started 
 											@elseif($sprog->trainingclass->status == 2) 
 												Started 
@@ -51,7 +54,7 @@
 												Ended
 											@endif
 										</td>
-										<td><form action="/tofficer/setclass" method="get"><input type="hidden" name="officer_id" value="{{$officer->id}}"><button type="submit" name="tclass_id" value="{{$sprog->trainingclass->id}}" class="btn btn-primary col-sm-8">View Class</button></form>
+										<td><form  action="/tofficer/setclass" method="get"><input type="hidden" name="officer_id" value="{{$officer->id}}"><button style="margin-bottom: 5px;" type="submit" name="tclass_id" value="{{$sprog->trainingclass->id}}" class="btn btn-primary col-sm-8">View Class</button></form>@if($sprog->trainingclass->status == 2) <form action="/enrollmentreport" method="post" target="_blank">{{csrf_field()}}<button type="submit" name="tclass_id" value="{{$sprog->trainingclass->id}}" class="btn btn-primary col-sm-10">Print Enrollment Report</button></form>@endif
 										</td>
 									</tr>
 								@endif
