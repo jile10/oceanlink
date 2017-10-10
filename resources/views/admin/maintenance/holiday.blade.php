@@ -2,6 +2,8 @@
 @section('css')
 <link href="/vendors/datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen" />
 <link href="/vendors/panel/panel.css" rel="stylesheet" type="text/css"/>
+<link href="/css/flat/blue.css" rel="stylesheet">
+<link href="/css/all.css?v=1.0.2" rel="stylesheet">
 <style type="text/css">
     
 	.buttons{
@@ -95,41 +97,37 @@
 						<div class="row">
 							<div class="col-md-12">
 								<div class="alert alert-success">
-										<p><em>Note: <font color="red">*</font> fields are required</em></p>
+									<p><em>Note: <font color="red">*</font> fields are required</em></p>
 								</div>
 							</div>
 						</div>
 						<div class="col-md-12">
 							<div class="form-group">
-                <label class="control-label col-sm-3">Name<font color="red">*</font></label>
-                <div class="col-sm-9">
-                	<div style="margin-left: -4%;" class="col-sm-12">
-                		<input type="text" name="holidayName" id="holidayName" class="form-control capitalize">
-                	</div>
-                </div>
-            </div>
-          	<div class="form-group">
-                <label class="control-label col-sm-3">Start Date<font color="red">*</font></label>
-                <div class="col-md-8">
-                  <div class="input-group date form_datetime col-sm-7" data-link-field="dtp_input1">
-                      <input class="form-control hasDatepicker" size="16" type="text" value="{{Carbon\Carbon::now()->format('F d,Y')}}" id="start" name="dateStart" readonly>
-                      <span class="input-group-addon">
-                          <span class="glyphicon glyphicon-th"></span>
-                      </span>
-                  </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="control-label col-sm-3">End Date<font color="red">*</font></label>
-                <div class="col-md-8">
-                	<div class="input-group date form_datetime col-sm-7" data-link-field="dtp_input1">
-                      <input class="form-control" size="16" type="text" value="{{Carbon\Carbon::now()->format('F d,Y')}}" id="end" name="dateEnd" readonly>
-                      <span class="input-group-addon">
-                          <span class="glyphicon glyphicon-th"></span>
-                      </span>
-                  </div>
-                </div>
-            </div>
+								<label class="control-label col-sm-3">Name<font color="red">*</font></label>
+								<div class="col-sm-9">
+									<div style="margin-left: -4%;" class="col-sm-12">
+										<input type="text" name="holidayName" id="holidayName" class="form-control capitalize">
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-md-3 col-md-offset-3">
+									<input id="dateRange" type="checkbox" name="dateRange">&ensp;Date Range
+								</div>
+							</div>
+							<div id="dates">
+								<div class="form-group">
+									<label class="control-label col-sm-3">Date<font color="red">*</font></label>
+									<div class="col-md-8">
+										<div class="input-group date form_datetime col-sm-7" data-link-field="dtp_input1">
+											<input class="form-control hasDatepicker" size="16" type="text" value="{{Carbon\Carbon::now()->format('F d,Y')}}" id="start" name="date" readonly>
+											<span class="input-group-addon">
+												<span class="glyphicon glyphicon-th"></span>
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -173,26 +171,47 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-sm-3">Start Date<font color="red">*</font></label>
-								<div class="col-md-8">
-									<div class="input-group date form_datetime col-sm-7" data-link-field="dtp_input1">
-										<input class="form-control hasDatepicker" size="16" type="text" value="{{Carbon\Carbon::parse($holidays->dateStart)->format('F d,Y')}}" id="start{{$holidays->id}}" name="dateStart" readonly>
-										<span class="input-group-addon">
-											<span class="glyphicon glyphicon-th"></span>
-										</span>
-									</div>
+								<div class="col-md-3 col-md-offset-3">
+									<input id="dateRange{{$holidays->id}}" type="checkbox" name="dateRange">&ensp;Date Range
 								</div>
 							</div>
-							<div class="form-group">
-								<label class="control-label col-sm-3">End Date<font color="red">*</font></label>
-								<div class="col-md-8">
-									<div class="input-group date form_datetime col-sm-7" data-link-field="dtp_input1">
-										<input class="form-control" size="16" type="text" value="{{Carbon\Carbon::parse($holidays->dateEnd)->format('F d,Y')}}" id="end{{$holidays->id}}" name="dateEnd" readonly>
-										<span class="input-group-addon">
-											<span class="glyphicon glyphicon-th"></span>
-										</span>
+							<div id="dates{{$holidays->id}}">
+								@if($holidays->dateStart == $holidays->dateEnd)
+								<div class="form-group">
+									<label class="control-label col-sm-3">Date<font color="red">*</font></label>
+									<div class="col-md-8">
+										<div class="input-group date form_datetime col-sm-7" data-link-field="dtp_input1">
+											<input class="form-control hasDatepicker" size="16" type="text" value="{{Carbon\Carbon::parse($holidays->dateStart)->format('F d,Y')}}" id="start" name="date" readonly>
+											<span class="input-group-addon">
+												<span class="glyphicon glyphicon-th"></span>
+											</span>
+										</div>
 									</div>
 								</div>
+								@else
+								<div class="form-group">
+									<label class="control-label col-sm-3">Start Date<font color="red">*</font></label>
+									<div class="col-md-8">
+										<div class="input-group date form_datetime col-sm-7" data-link-field="dtp_input1">
+											<input class="form-control hasDatepicker" size="16" type="text" value="{{Carbon\Carbon::parse($holidays->dateStart)->format('F d,Y')}}" id="start{{$holidays->id}}" name="dateStart" readonly>
+											<span class="input-group-addon">
+												<span class="glyphicon glyphicon-th"></span>
+											</span>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="control-label col-sm-3">End Date<font color="red">*</font></label>
+									<div class="col-md-8">
+										<div class="input-group date form_datetime col-sm-7" data-link-field="dtp_input1">
+											<input class="form-control" size="16" type="text" value="{{Carbon\Carbon::parse($holidays->dateEnd)->format('F d,Y')}}" id="end{{$holidays->id}}" name="dateEnd" readonly>
+											<span class="input-group-addon">
+												<span class="glyphicon glyphicon-th"></span>
+											</span>
+										</div>
+									</div>
+								</div>
+								@endif
 							</div>
 						</div>
 					</div>
@@ -234,6 +253,8 @@
 @endsection
 @section('js')
 <script type="text/javascript" src="/vendors/datetimepicker/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+<script src="/js/icheck.js" type="text/javascript"></script>
+<script src="/vendors/iCheck/icheck.js" type="text/javascript"></script>
 <script type="text/javascript">
 	$("#maintenance").last().addClass( "active" );
 	$('#holiday').last().addClass(" active ");
@@ -243,6 +264,90 @@
 			"order":[[1,"desc"]]
 		});
 	});
+
+	$(document).ready(function(){
+	  $('input').iCheck({
+	    checkboxClass: 'icheckbox_flat-blue',
+	    radioClass: 'iradio_flat-blue'
+	  });
+	});
+
+	$('#dateRange').on('ifChecked',function(){
+		$('#dates').empty();
+		$('#dates').append('<div class="form-group"><label class="control-label col-sm-3">Start Date<font color="red">*</font></label><div class="col-md-8"><div class="input-group date form_datetime col-sm-7" data-link-field="dtp_input1"><input class="form-control hasDatepicker" size="16" type="text" value="{{Carbon\Carbon::now()->format("F d,Y")}}" id="start" name="dateStart" readonly><span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span></div></div></div><div class="form-group"><label class="control-label col-sm-3">End Date<font color="red">*</font></label><div class="col-md-8"><div class="input-group date form_datetime col-sm-7" data-link-field="dtp_input1"><input class="form-control" size="16" type="text" value="{{Carbon\Carbon::now()->format("F d,Y")}}" id="end" name="dateEnd" readonly><span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span></div></div></div>');
+
+		$(".form_datetime").datetimepicker({
+	        format: "MM dd, yyyy",
+	        weekStart: 1,
+	        todayBtn:  1,
+			autoclose: 1,
+			todayHighlight: 1,
+			startView: 2,
+			minView: 2,
+			maxView: 3,
+			forceParse: 0,
+			viewSelect:'month'
+	    });
+	})
+
+	$('#dateRange').on('ifUnchecked',function(){
+		$('#dates').empty();
+		$('#dates').append('<div class="form-group"><label class="control-label col-sm-3">Date<font color="red">*</font></label><div class="col-md-8"><div class="input-group date form_datetime col-sm-7" data-link-field="dtp_input1"><input class="form-control hasDatepicker" size="16" type="text" value="{{Carbon\Carbon::now()->format('F d,Y')}}" id="start" name="date" readonly><span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span></div></div></div>');
+
+		$(".form_datetime").datetimepicker({
+	        format: "MM dd, yyyy",
+	        weekStart: 1,
+	        todayBtn:  1,
+			autoclose: 1,
+			todayHighlight: 1,
+			startView: 2,
+			minView: 2,
+			maxView: 3,
+			forceParse: 0,
+			viewSelect:'month'
+	    });
+	});
+
+
+	@foreach($holiday as $holidays)
+		@if($holidays->dateStart != $holidays->dateEnd)
+			$('#dateRange{{$holidays->id}}').iCheck('check');
+		@endif
+		$('#dateRange{{$holidays->id}}').on('ifChecked',function(){
+				$('#dates{{$holidays->id}}').empty();
+				$('#dates{{$holidays->id}}').append('<div class="form-group"><label class="control-label col-sm-3">Start Date<font color="red">*</font></label><div class="col-md-8"><div class="input-group date form_datetime col-sm-7" data-link-field="dtp_input1"><input class="form-control hasDatepicker" size="16" type="text" value="{{Carbon\Carbon::parse($holidays->dateStart)->format("F d,Y")}}" id="start{{$holidays->id}}" name="dateStart" readonly><span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span></div></div></div><div class="form-group"><label class="control-label col-sm-3">End Date<font color="red">*</font></label><div class="col-md-8"><div class="input-group date form_datetime col-sm-7" data-link-field="dtp_input1"><input class="form-control" size="16" type="text" value="{{Carbon\Carbon::parse($holidays->dateEnd)->format("F d,Y")}}" id="end{{$holidays->id}}" name="dateEnd" readonly><span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span></div></div></div>');
+
+				$(".form_datetime").datetimepicker({
+			        format: "MM dd, yyyy",
+			        weekStart: 1,
+			        todayBtn:  1,
+					autoclose: 1,
+					todayHighlight: 1,
+					startView: 2,
+					minView: 2,
+					maxView: 3,
+					forceParse: 0,
+					viewSelect:'month'
+			    });
+			});
+		$('#dateRange{{$holidays->id}}').on('ifUnchecked',function(){
+		$('#dates{{$holidays->id}}').empty();
+		$('#dates{{$holidays->id}}').append('<div class="form-group"><label class="control-label col-sm-3">Date<font color="red">*</font></label><div class="col-md-8"><div class="input-group date form_datetime col-sm-7" data-link-field="dtp_input1"><input class="form-control hasDatepicker" size="16" type="text" value="{{Carbon\Carbon::parse($holidays->dateStart)->format('F d,Y')}}" id="start{{$holidays->id}}" name="date" readonly><span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span></div></div></div>');
+
+		$(".form_datetime").datetimepicker({
+	        format: "MM dd, yyyy",
+	        weekStart: 1,
+	        todayBtn:  1,
+			autoclose: 1,
+			todayHighlight: 1,
+			startView: 2,
+			minView: 2,
+			maxView: 3,
+			forceParse: 0,
+			viewSelect:'month'
+	    });
+	});
+	@endforeach
 </script>
 <script type="text/javascript">
 	    $(".form_datetime").datetimepicker({
@@ -320,7 +425,8 @@ $.validator.addMethod("valid1", function(value, element) {
 		$.validator.addMethod("valid3", function(value, element) { 
 			var start = Date.parse($("#start"+id).val());
 			var end =Date.parse($("#end"+id).val());
-		return this.optional(element) || end>=start;
+			console.log(start + end);
+			return this.optional(element) || end>=start;
 		}, "End Date must be greater than Start Date");
 		
 		$('#update-form'+id).validate({

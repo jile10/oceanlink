@@ -14,16 +14,16 @@
     <style type="text/css">
     body{
         background-image: url(/images/header-bg4.png);
-        background-size: auto, 100%;
+        background-size: cover;
         background-repeat: no-repeat;
     }
     .container{
         position: relative;
-        height: 55rem;
+        height: 47.3em;
     }
     #login{
-        position: absolute;
-        top: 50%;
+        position: relative;
+        top: 50.5%;
         left:50%;
         transform: translate(-50%,-50%);
         width: 30%;
@@ -74,62 +74,13 @@
                         </div>
                         <input class="form-control" placeholder="Password" name="password" type="password" value="" />
                     </div>
-<<<<<<< HEAD
-                    <div class="panel-body">
-                        <form action="/login/prelogin" method="post">
-                            {{csrf_field()}}
-                            <fieldset>
-                                <div class="form-group input-group">
-                                    <div class="input-group-addon">
-                                        <i class="livicon" data-name="at" data-size="18" data-c="#000" data-hc="#000" data-loop="true"></i>
-                                    </div>
-                                    <input class="form-control" placeholder="E-mail" name="email" type="text" />
-                                </div>
-                                <div class="form-group input-group">
-                                    <div class="input-group-addon">
-                                        <i class="livicon" data-name="key" data-size="18" data-c="#000" data-hc="#000" data-loop="true"></i>
-                                    </div>
-                                    <input class="form-control" placeholder="Password" name="password" type="password" value="" />
-                                </div>
-                                <div class="form-group">
-                                </div>
-                                <button type="submit" class="btn btn-lg btn-primary btn-block" >Login</button>
-                            </fieldset>
-                        </form>
-=======
                     <div class="form-group">
->>>>>>> 722fe664d72d2a6ccfc2fd105a0293a508794c52
                     </div>
                     <button type="submit" class="btn btn-block btn-primary btn-lg" ><font size="4px;">LOGIN</font></button>
                 </fieldset>
             </form>
         </div>
     </div>
-<<<<<<< HEAD
-    <!-- global js -->
-    <script src="assets/js/jquery-1.11.1.min.js" type="text/javascript"></script>
-    <script src="assets/js/bootstrap.min.js" type="text/javascript"></script>
-    <!--livicons-->
-    <script src="assets/js/raphael-min.js" type="text/javascript"></script>
-    <script src="assets/js/livicons-1.4.min.js" type="text/javascript"></script>
-    <!-- end of global js -->
-    <!-- begining of page level js-->
-    <script src="/assets/js/TweenLite.min.js"></script>
-    <script src="assets/vendors/iCheck/icheck.js" type="text/javascript"></script>
-    <!-- <script type="text/javascript">
-    $(document).ready(function() {
-        $(document).mousemove(function(event) {
-            TweenLite.to($('body'), .5, {css:{'background-position':parseInt(event.pageX/8) + "px "+parseInt(event.pageY/12)+"px, "+parseInt(event.pageX/15)+"px "+parseInt(event.pageY/15)+"px, "+parseInt(event.pageX/30)+"px "+parseInt(event.pageY/30)+"px"}});
-        });
-
-        //Flat red color scheme for iCheck
-        $('input[type="checkbox"].minimal-blue').iCheck({
-            checkboxClass: 'icheckbox_minimal-blue'
-        });
-    });
-    </script> -->
-    <!-- end of page level js-->
-=======
 </div>
 <!-- global js -->
 <script src="assets/js/jquery-1.11.1.min.js" type="text/javascript"></script>
@@ -142,6 +93,5 @@
 <script src="/assets/js/TweenLite.min.js"></script>
 <script src="assets/vendors/iCheck/icheck.js" type="text/javascript"></script>
 <!-- end of page level js-->
->>>>>>> 722fe664d72d2a6ccfc2fd105a0293a508794c52
 </body>
 </html>

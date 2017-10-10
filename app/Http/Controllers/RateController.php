@@ -64,7 +64,6 @@ class RateController extends Controller
             $rate->classHour = $request->class_hours;
             $rate->price =  str_replace(',','',$request->price);
             $rate->min_students = $request->min_students;
-            $rate->max_students = $request->max_students;
             $rate->save();
             $notification = array(
                 'message' => 'New course has been successfully added', 
@@ -128,7 +127,6 @@ class RateController extends Controller
             $rate->classHour = $request->class_hours;
             $rate->price =  str_replace(',','',$request->price);
             $rate->min_students = $request->min_students;
-            $rate->max_students = $request->max_students;
             $rate->save();
             $notification = array(
                 'message' => 'Course has been successfully updated', 
