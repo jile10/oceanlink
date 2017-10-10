@@ -305,7 +305,7 @@ class EnrollmentController extends Controller
                 );
             //insert 
             $sprog = new Scheduledprogram;
-            $sprog->dateStart = $request->dateStart;
+            $sprog->dateStart = Carbon::parse($request->dateStart)->format('Y-m-d');
             $sprog->rate_id = $request->rate_id;
             $sprog->trainingofficer_id = $request->officer_id;
             $sprog->save();
@@ -509,7 +509,7 @@ class EnrollmentController extends Controller
                     'alert-type' => 'success'
                 );
             //insert 
-            $sprog->dateStart = $request->dateStart;
+            $sprog->dateStart = Carbon::parse($request->dateStart)->format('Y-m-d');
             $sprog->save();
             if(count($request->calendar)!=0)
             {
@@ -683,7 +683,7 @@ class EnrollmentController extends Controller
                 );
             //insert 
             $sprog = Scheduledprogram::find($request->trainingclass_id);
-            $sprog->dateStart = $request->dateStart;
+            $sprog->dateStart = Carbon::parse($request->dateStart)->format('Y-m-d');
             $sprog->rate_id = $request->rate_id;
             $sprog->trainingofficer_id = $request->officer_id;
             $sprog->save();

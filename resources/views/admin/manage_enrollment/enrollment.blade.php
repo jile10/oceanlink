@@ -4,6 +4,7 @@
   <link href="/css/flat/blue.css" rel="stylesheet">
 <link href="vendors/touchspin/dist/jquery.bootstrap-touchspin.css" rel="stylesheet" type="text/css" media="all" />
 <link href="/vendors/datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen" />
+<link href="/vendors/panel/panel.css" rel="stylesheet" type="text/css"/>
 @endsection
 @section('content')
 
@@ -17,8 +18,20 @@
 		margin-bottom: 5px;
 	}
     .rowColor{
-        background-color: #f2dede!important;
+        background-color: #FCF8E3!important;
     }
+    table tbody td form button{
+    	margin-bottom: 2px !important;
+    }
+    .blue th{
+    	background-color: #A6C8E6
+    }
+    .red{
+		background-color: #FFB3BA!important;
+		}
+		.orange{
+			background-color: #FFDFBA!important;
+		}
 </style>
 <!-- Content Header (Page header) -->
 <section class="content-header">
@@ -31,23 +44,31 @@
 			<div class="panel panel-success filterable" style="overflow:auto;">
 				<div class="panel-heading">
 					<h3 class="panel-title">
-						&ensp;&ensp;<big>List of Course for Class</big>
+						&ensp;&ensp;<big>List of Sessions</big>
 					</h3>
 				</div>
 				<div class="panel-body table-responsive">
 					<button class="buttons btn btn-success" data-toggle="modal" data-href="#responsive" href="#responsive"><i class="glyphicon glyphicon-plus"></i>&ensp;New Schedule</button>
 					<button class="buttons btn btn-success" data-toggle="modal" data-href="#NoSession" href="#NoSession"><i class="glyphicon glyphicon-plus"></i>&ensp;No Session Day</button>
-					<a href="/calendar" class="buttons btn btn-info pull-right"><i class="glyphicon glyphicon-calendar"></i>&ensp;Oceanlink Calendar</a>
+					<a href="/calendar" class="buttons btn btn-info"><i class="glyphicon glyphicon-calendar"></i>&ensp;Oceanlink Calendar</a>
+
+						<div class="col-md-3 pull-right">
+							<fieldset>
+              	<legend>Legend</legend>
+              	<span class="badge red">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;Class starts <b>today</b> with insufficient enrolled trainees<br>
+              	<span class="badge orange">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;Less than <b>6 days</b> before class start with insufficient enrolled trainees
+              </fieldset>
+            </div>
 					<table class="table table-striped table-bordered" id="table1">
 						<thead>
 							<tr>
-								<th width="13%">Class Name</th>
-								<th width="20%">Course Name</th>
+								<th width="10%">Class Name</th>
+								<th width="15%">Course Name</th>
 								<th width="12%">Date Start</th>
 								<th width="11%">Date End</th>
-								<th width="20%">Schedule</th>
-								<th width="12%">Total no. of Students</th>
-								<th width="12%">Actions</th>
+								<th width="18%">Schedule</th>
+								<th width="11%">Total no. of Students</th>
+								<th width="10%">Actions</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -66,7 +87,7 @@
 									@endif
 									</td>
 									<td align="center">{{$tclasses['total']}}</td>
-									<td><form action="/manage_enrollment/set" method="get">@if($tclasses['status'] == 0)<input type="hidden" name="id" value="{{$tclasses['id']}}"><button type="submit" class="btn btn-primary col-sm-12">Post</button><br>@endif
+									<td><form action="/manage_enrollment/set" method="get">@if($tclasses['status'] == 0)<input type="hidden" name="id" value="{{$tclasses['id']}}"><button type="submit" class="btn btn-info col-sm-12"><i class="glyphicon glyphicon-pushpin" ></i>&ensp;Post</button><br>@endif
 									@if($tclasses['status'] == 0)
 										<button type="button" class="btn btn-primary col-sm-12" data-toggle="modal" data-href="#updateModal{{$tclasses['id']}}" href="#updateModal{{$tclasses['id']}}" onclick="counter({{$tclasses['id']}})"><i class="glyphicon glyphicon-edit" ></i>&ensp;Update</button><br>
 										<button type="button" onclick="cancelClick({{$tclasses['id']}})" class="btn btn-danger col-sm-12" data-toggle="modal" data-href="#dialog{{$tclasses['id']}}" href="#dialog{{$tclasses['id']}}"><i class="glyphicon glyphicon-remove"></i>&ensp;Cancel</button>
@@ -101,9 +122,16 @@
 				</div>
 				<div class="modal-body">
 					<div class="row">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="alert alert-success">
+									<p><em>Note: <font color="red">*</font> fields are required</em></p>
+								</div>
+							</div>
+						</div>
 						<div class="col-md-12">
 							<div class="form-group">
-								<label for="inputEmail3" class="col-sm-3 control-label">Date &ensp;<font color="red">*</font></label>
+								<label for="inputEmail3" class="col-sm-3 control-label">Date<font color="red">*</font></label>
 								<div class="col-sm-8">
 									<div class="input-group date form_datetime col-sm-7" data-link-field="dtp_input1">
 		                                <input class="form-control hasDatepicker" size="16" type="text" value="{{Carbon\Carbon::now()->format('Y-m-d')}}" name="date" readonly>
@@ -136,71 +164,78 @@
 		<div class="modal-content">
 			<form action="/manage_enrollment/insert" method="post" class="form-horizontal">
 				{{ csrf_field() }} 	
-				<div class="modal-header">
+				<div class="modal-header btn-primary">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 					<h4 class="modal-title">New Course Schedule</h4>
 				</div>
 				<div class="modal-body">
 					<div class="row">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="alert alert-success">
+									<p><em>Note: <font color="red">*</font> fields are required</em></p>
+								</div>
+							</div>
+						</div>
 						<div class="col-md-12">
 							<div class="form-group">
-								<label for="inputEmail3" class="col-sm-3 control-label">Course Name &ensp;*</label>
+								<label for="inputEmail3" class="col-sm-3 control-label">Course Name<font color="red">*</font></label>
 								<div class="col-sm-8">
 									<select required name="rate_id" class="form-control">
-									@foreach($rate as $rates)
+										@foreach($rate as $rates)
 										<option value="{{$rates->id}}">{{$rates->program->programName . ' ( ' . $rates->duration . ' Hours )'}}</option>
-									@endforeach
+										@endforeach
 									</select>
 								</div>
 							</div>
 							<div class="form-group">
-								<label for="inputEmail3" class="col-sm-3 control-label">Training Officer&ensp;*</label>
+								<label for="inputEmail3" class="col-sm-3 control-label">Training Officer<font color="red">*</font></label>
 								<div class="col-sm-8">
 									<select required name="officer_id" class="form-control">
-									@foreach($officer as $officers)
+										@foreach($officer as $officers)
 										<option value="{{$officers->id}}">{{$officers->firstName . ' ' . $officers->middleName . ' ' . $officers->lastName}}</option>
-									@endforeach
+										@endforeach
 									</select>
 								</div>
 							</div>
 							<div class="form-group">
-								<label for="inputEmail3" class="col-sm-3 control-label">Date Start &ensp;*</label>
+								<label for="inputEmail3" class="col-sm-3 control-label">Date Start<font color="red">*</font></label>
 								<div class="col-sm-8">
 									<div class="input-group date form_datetime col-sm-7" data-link-field="dtp_input1">
-		                                <input class="form-control hasDatepicker" size="16" type="text" value="{{Carbon\Carbon::now()->format('Y-m-d')}}" name="dateStart" readonly>
-		                                <span class="input-group-addon">
-		                                    <span class="glyphicon glyphicon-th"></span>
-		                                </span>
-		                            </div>
+										<input class="form-control hasDatepicker" size="16" type="text" value="{{Carbon\Carbon::now()->format('F d,Y')}}" name="dateStart" readonly>
+										<span class="input-group-addon">
+											<span class="glyphicon glyphicon-th"></span>
+										</span>
+									</div>
 								</div>
 							</div>
 							<div class="form-group">
-								<label for="inputEmail3" class="col-sm-3 control-label">Building &ensp;*</label>
+								<label for="inputEmail3" class="col-sm-3 control-label">Building<font color="red">*</font></label>
 								<div class="col-sm-8">
 									<select id="building" onchange="changes()" name="building_id" class="form-control">
 										@foreach($building as $buildings)
-											<option value="{{$buildings->id}}">{{$buildings->buildingName}}</option>
+										<option value="{{$buildings->id}}">{{$buildings->buildingName}}</option>
 										@endforeach
 									</select>
 								</div>
 							</div>
 							<div class="form-group">
-								<label for="inputEmail3" class="col-sm-3 control-label">Floor &ensp;*</label>
+								<label for="inputEmail3" class="col-sm-3 control-label">Floor<font color="red">*</font></label>
 								<div class="col-sm-8">
 									<select id="floor" onchange="floorchange()" name="floor_id" class="form-control">
 										@foreach($firsts as $firsts)
-											<option>{{$firsts->floorName}}</option>
+										<option>{{$firsts->floorName}}</option>
 										@endforeach
 									</select>
 								</div>
 							</div>
 							<div class="form-group">
-								<label for="inputEmail3" class="col-sm-3 control-label">Room &ensp;*</label>
+								<label for="inputEmail3" class="col-sm-3 control-label">Room<font color="red">*</font></label>
 								<div class="col-sm-8">
 									<select required id="rooms" name="room_id" class="form-control">
-									@foreach($room as $rooms)
+										@foreach($room as $rooms)
 										<option value="{{$rooms->id}}">{{$rooms->room_no}}</option>
-									@endforeach
+										@endforeach
 									</select>
 								</div>
 							</div>
@@ -211,11 +246,11 @@
 								<div class="form-group">
 									<div style="margin-left: 10%;">
 										<input tabindex="13" type="checkbox" id="check">
-		                  				<label for="flat-checkbox-1">Date Range</label>
+										<label for="flat-checkbox-1">Date Range</label>
 									</div>
 								</div>
 								<div>
-									<table class="table table-striped table-bordered" id="dynamic_table">
+									<table class="table table-striped table-bordered blue" id="dynamic_table">
 										<thead>
 											<th width="30%">Day<font color="red">*</font></th>
 											<th width="20%">Start<font color="red">*</font></th>
@@ -226,29 +261,29 @@
 										<tbody id="row">
 											<tr >
 												<td><select id="day1" onchange="days(1)" class="form-control" name="day[]">
-												@foreach($day as $days)
+													@foreach($day as $days)
 													<option value="{{$days->id}}">{{$days->dayName}}</option>
 												@endforeach</select>
-												</td>
-												<td><div class="operationTime input-group"><span class="input-group-addon"><i class="fa fa-sun-o"></i></span><select name="morning[]" class="form-control" >@for($i=8; $i<18;$i++)@for($a=0;$a<4;$a++)@if($i<17) @if($a*15 == 0)<option value="{{$i}}:00">{{$i}}:00</option>@else<option value="{{$i}}:{{$a*15}}">{{$i}}:{{$a*15}}</option>@endif @endif @if($i==17 && $a==0)<option value="{{$i}}:00">{{$i}}:00</option>@endif @endfor @endfor</select></div></td>
-												<td><div class="operationTime input-group"><span class="input-group-addon"><i class="fa fa-sun-o"></i></span><select name="afternoon[]" class="form-control" >@for($i=8; $i<18;$i++)@for($a=0;$a<4;$a++)@if($i<17) @if($a*15 == 0)<option value="{{$i}}:00">{{$i}}:00</option>@else<option value="{{$i}}:{{$a*15}}">{{$i}}:{{$a*15}}</option>@endif @endif @if($i==17 && $a==0)<option value="{{$i}}:00">{{$i}}:00</option>@endif @endfor @endfor</select></div></td>
-												<td><select name="breaktime[]" class="form-control" >@for($a=1;$a<5;$a++)<option value="{{$a*15}}">{{$a*15}}</option>@endfor</select></td>
-												<td><button type="button" onclick="clicks()" class="btn btn-primary"><i class="glyphicon glyphicon-plus" ></i></button></td>
-											</tr>
-										</tbody>
-									</table>
-								</div>
+											</td>
+											<td><div class="operationTime input-group"><span class="input-group-addon"><i class="fa fa-sun-o"></i></span><select name="morning[]" class="form-control" >@for($i=8; $i<18;$i++)@for($a=0;$a<4;$a++)@if($i<17) @if($a*15 == 0)<option value="{{$i}}:00">{{$i}}:00</option>@else<option value="{{$i}}:{{$a*15}}">{{$i}}:{{$a*15}}</option>@endif @endif @if($i==17 && $a==0)<option value="{{$i}}:00">{{$i}}:00</option>@endif @endfor @endfor</select></div></td>
+											<td><div class="operationTime input-group"><span class="input-group-addon"><i class="fa fa-sun-o"></i></span><select name="afternoon[]" class="form-control" >@for($i=8; $i<18;$i++)@for($a=0;$a<4;$a++)@if($i<17) @if($a*15 == 0)<option value="{{$i}}:00">{{$i}}:00</option>@else<option value="{{$i}}:{{$a*15}}">{{$i}}:{{$a*15}}</option>@endif @endif @if($i==17 && $a==0)<option value="{{$i}}:00">{{$i}}:00</option>@endif @endfor @endfor</select></div></td>
+											<td><select name="breaktime[]" class="form-control" >@for($a=1;$a<5;$a++)<option value="{{$a*15}}">{{$a*15}}</option>@endfor</select></td>
+											<td><button type="button" onclick="clicks()" class="btn btn-primary"><i class="glyphicon glyphicon-plus" ></i></button></td>
+										</tr>
+									</tbody>
+								</table>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="modal-footer">
-					<button type="button" data-dismiss="modal" class="btn">Close</button>
-					<button type="submit" class="btn btn-primary">Submit</button>
-				</div>
-			</form>
-		</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" data-dismiss="modal" class="btn">Close</button>
+				<button type="submit" class="btn btn-primary">Submit</button>
+			</div>
+		</form>
 	</div>
+</div>
 </div>
 
 <!-- Update Modal -->
@@ -266,9 +301,16 @@
 				</div>
 				<div class="modal-body">
 					<div class="row">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="alert alert-success">
+									<p><em>Note: <font color="red">*</font> fields are required</em></p>
+								</div>
+							</div>
+						</div>
 						<div class="col-md-12">
 							<div class="form-group">
-								<label for="inputEmail3" class="col-sm-3 control-label">Course Name &ensp;*</label>
+								<label for="inputEmail3" class="col-sm-3 control-label">Course Name<font color="red">*</font></label>
 								<div class="col-sm-8">
 									<select required name="rate_id" class="form-control">
 									@foreach($rate as $rates)
@@ -282,7 +324,7 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label for="inputEmail3" class="col-sm-3 control-label">Training Officer&ensp;*</label>
+								<label for="inputEmail3" class="col-sm-3 control-label">Training Officer<font color="red">*</font></label>
 								<div class="col-sm-8">
 									<select required name="officer_id" class="form-control">
 									@foreach($officer as $officers)
@@ -296,10 +338,10 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label for="inputEmail3" class="col-sm-3 control-label">Date Start &ensp;*</label>
+								<label for="inputEmail3" class="col-sm-3 control-label">Date Start<font color="red">*</font></label>
 								<div class="col-sm-8">
 									<div class="input-group date form_datetime col-sm-7" data-link-field="dtp_input1">
-					                    <input class="form-control hasDatepicker" size="16" type="text" value="{{$classes->scheduledprogram->dateStart}}" name="dateStart" readonly>
+					                    <input class="form-control hasDatepicker" size="16" type="text" value="{{Carbon\Carbon::parse($classes->scheduledprogram->dateStart)->format('F d,Y')}}" name="dateStart" readonly>
 					                    <span class="input-group-addon">
 					                        <span class="glyphicon glyphicon-th"></span>
 					                    </span>
@@ -307,7 +349,7 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label for="inputEmail3" class="col-sm-3 control-label">Building &ensp;*</label>
+								<label for="inputEmail3" class="col-sm-3 control-label">Building<font color="red">*</font></label>
 								<div class="col-sm-8">
 									<select id="building" onchange="changes()" name="building_id" class="form-control">
 										@foreach($building as $buildings)
@@ -320,7 +362,7 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label for="inputEmail3" class="col-sm-3 control-label">Floor &ensp;*</label>
+								<label for="inputEmail3" class="col-sm-3 control-label">Floor<font color="red">*</font></label>
 								<div class="col-sm-8">
 									<select id="floor" onchange="floorchange()" name="floor_id" class="form-control">
 										@foreach($classes->trainingroom->building->floor as $floors)
@@ -334,7 +376,7 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label for="inputEmail3" class="col-sm-3 control-label">Room &ensp;*</label>
+								<label for="inputEmail3" class="col-sm-3 control-label">Room<font color="red">*</font></label>
 								<div class="col-sm-8">
 									<select required id="rooms" name="room_id" class="form-control">
 									@foreach($classes->trainingroom->building->trainingroom as $rooms)
@@ -359,7 +401,7 @@
 								</div>
 								<div>
 									<input type="hidden" name="name" value="{{$z=0}}">
-									<table class="table table-striped table-bordered" id="dynamic_table{{$classes->id}}">
+									<table class="table table-striped table-bordered blue" id="dynamic_table{{$classes->id}}">
 										<thead>
 											<th width="30%">Day<font color="red">*</font></th>
 											<th width="20%">Start<font color="red">*</font></th>
@@ -409,7 +451,7 @@
 								<label for="inputEmail3" class="col-sm-3 control-label">Date Start &ensp;*</label>
 								<div class="col-sm-8">
 									<div class="input-group date form_datetime col-sm-7" data-link-field="dtp_input1">
-					                    <input class="form-control hasDatepicker" size="16" type="text" value="{{$classes->scheduledprogram->dateStart}}" name="dateStart" readonly>
+					                    <input class="form-control hasDatepicker" size="16" type="text" value="{{Carbon\Carbon::parse($classes->scheduledprogram->dateStart)->format('F d,Y')}}" name="dateStart" readonly>
 					                    <span class="input-group-addon">
 					                        <span class="glyphicon glyphicon-th"></span>
 					                    </span>
@@ -446,7 +488,7 @@
 						<h4 class="modal-title">Cancel Schedule</h4>
 					</div>
 					<div class="modal-body">
-						<span id="span{{$tclasses['id']}}">Are you sure you want to cancel this schedule?</span>
+						<span id="span{{$tclasses['id']}}">Are you sure you want to cancel the schedule for <b>{{$tclasses['class_name']}}</b>?</span>
 					</div>
 					<div class="modal-footer">
 					<button type="button" data-dismiss="modal" class="btn">No</button>
@@ -591,7 +633,7 @@
 
 <script type="text/javascript">
 	    $(".form_datetime").datetimepicker({
-	        format: "yyyy-mm-dd",
+	        format: "MM dd,yyyy",
 			startDate: "{{Carbon\Carbon::today()->format('Y-m-d')}}",
 			daysOfWeekDisabled: [0],
 	        weekStart: 1,
@@ -608,7 +650,6 @@
 <script>
 	$(document).ready( function(){
 		var table = $('#table1').DataTable({
-			"scrollX": true
 		});
 	});
 	$("#transaction").last().addClass( "active" );
