@@ -435,12 +435,38 @@ class EnrolleeController extends Controller
                 }
             }
             else{
+                $day = $request->day;
+                $morning = $request->morning;
+                $afternoon = $request->afternoon;
+                $breaktime = $request->breaktime;
+                for($i = 0; $i<count($request->day)-1;$i++)
+                {
+                    for($a = $i+1; $a<count($request->day);$a++)
+                    {
+                        if($day[$i] > $day[$a])
+                        {
+                            $temp = $day[$i];
+                            $tempm = $morning[$i];
+                            $tempa = $afternoon[$i];
+                            $tempb = $breaktime[$i];
+                            $day[$i] = $day[$a];
+                            $day[$a] = $temp;
+                            $morning[$i] = $morning[$a];
+                            $morning[$a] = $tempm;
+                            $afternoon[$i] = $afternoon[$a];
+                            $afternoon[$a] = $tempa;
+                            $breaktime[$i] = $breaktime[$a];
+                            $breaktime[$a] = $tempb;
+
+                        }
+                    }
+                }
                 for($i=0; $i<count($request->day); $i++){
                     $sdetail = new Scheduledetail;
-                    $sdetail->day_id = $request->day[$i];
-                    $sdetail->start = $request->morning[$i];
-                    $sdetail->end = $request->afternoon[$i];
-                    $sdetail->breaktime = $request->breaktime[$i];
+                    $sdetail->day_id = $day[$i];
+                    $sdetail->start = $morning[$i];
+                    $sdetail->end = $afternoon[$i];
+                    $sdetail->breaktime = $breaktime[$i];
                     $sdetail->schedule_id = $schedule->id;
                     $sdetail->save();
                 }
@@ -518,12 +544,204 @@ class EnrolleeController extends Controller
 		
     }
 
+    public function updateGEnrollee(Request $request){
+        $validdate = true;
+        $message = "";
+        $tofficer = Trainingofficer::find($request->tofficer_id);
+        $checkconflict = false;
+        $holiday = Holiday::all()->where('active','=',1);
+        $tclass = Trainingclass::find($request->trainingclass_id);
+        foreach($tofficer->scheduledprogram as $classes)
+        {
+            if($tclass->scheduledprogram->id != $classes->id)
+            {
+                // start of date end
+                    $check = true;
+                    $checkdays = 1;
+                    $dateEnd = Carbon::create();
+                    $dateEnd = Carbon::parse($classes->dateStart);
+                    $days = $classes->rate->duration/$classes->rate->classHour;
+                    while ($check) {
+                        $temp = Carbon::parse($dateEnd)->format('l');
+                        $holidaycheck = false;
+                        foreach($holiday as $holidays){
+                            if(Carbon::parse($dateEnd)->between(Carbon::parse($holidays->dateStart), Carbon::parse($holidays->dateEnd)) || Carbon::parse($dateEnd)->format("F d, Y") == Carbon::parse($holidays->dateStart)->format("F d, Y") || Carbon::parse($dateEnd)->format("F d, Y") == Carbon::parse($holidays->dateEnd)->format("F d, Y")){
+                                $holidaycheck = true;
+                            }
+                        }
+                        $check = Nosessionday::where('date',Carbon::parse($dateEnd)->format('Y-m-d'))->get();
+                        if(count($check)>0)
+                        {
+                            $holidaycheck = true;
+                        }
+                        if($holidaycheck == false)
+                        {
+                            foreach ($classes->trainingclass->schedule->scheduledetail as $details) {
+                                if($temp == $details->day->dayName){
+                                    $checkdays++;
+                                }
+                            }
+                        }
+                        if($checkdays == $days)
+                        {
+                            $check = false;
+                        }
+                        else{
+
+                            $dateEnd = Carbon::parse($dateEnd)->addDays(1);
+                        }
+                        if(Carbon::parse($request->dateStart)->eq($dateEnd)){
+                            $checkconflict = true;
+                        }
+                    }
+                // //end of date end
+            }
+        }
+        if($checkconflict)
+        {
+            $validdate = false;
+            $message.="Conflict of Schedule.";
+        }
+        if(count($request->start)!=0){
+            if($request->start>$request->end)
+            {
+                $validdate = false;
+                $message.="Invalid date range.";
+            }
+            if(Carbon::parse($request->morning)->gte(Carbon::parse($request->afternoon)))
+            {
+                $validdate = false;
+                $message.="Invalid time.";
+            }
+        }
+        else{
+            for($i=0; $i<count($request->day)-1; $i++){
+                for($a = $i+1; $a<count($request->day); $a++){
+                    if($request->day[$i] == $request->day[$a]){
+                        $validdate = false;
+                        $message.="Repeating day is not allowed.";
+                        break;
+                    }
+                }
+                if($validdate == false){
+                    break;
+                }
+            }
+            for($i=0; $i<count($request->day); $i++){
+                if(Carbon::parse($request->morning[$i])->gte(Carbon::parse($request->afternoon[$i])))
+                {
+                    $validdate = false;
+                    $message.="Invalid Time.";
+                    break;
+                }
+            }
+        }
+        if($validdate){
+            $message = "New group application is successfully added";
+            $notification = array(
+                    'message' => $message, 
+                    'alert-type' => 'success'
+                );
+            $rate = $tclass->scheduledprogram;
+            $rate->dateStart = Carbon::parse($request->dateStart)->format('Y-m-d');
+            $rate->rate_id = $request->rate_id;
+            $rate->trainingofficer_id = $request->tofficer_id;
+            $rate->save();
+
+            $schedule = $tclass->schedule;
+            foreach($schedule->scheduledetail as $details)
+            {
+                $sdetails = Scheduledetail::find($details->id);
+                $sdetails->delete();
+            }
+            if(count($request->start)!=0){
+                for($i=$request->start; $i<=$request->end; $i++){
+                    $sdetail = new Scheduledetail;
+                    $sdetail->day_id = $i;
+                    $sdetail->start = $request->morning;
+                    $sdetail->end = $request->afternoon;
+                    $sdetail->breaktime = $request->breaktime;
+                    $sdetail->schedule_id = $tclass->schedule_id;
+                    $sdetail->save();
+                }
+            }
+            else{
+                $day = $request->day;
+                $morning = $request->morning;
+                $afternoon = $request->afternoon;
+                $breaktime = $request->breaktime;
+                for($i = 0; $i<count($request->day)-1;$i++)
+                {
+                    for($a = $i+1; $a<count($request->day);$a++)
+                    {
+                        if($day[$i] > $day[$a])
+                        {
+                            $temp = $day[$i];
+                            $tempm = $morning[$i];
+                            $tempa = $afternoon[$i];
+                            $tempb = $breaktime[$i];
+                            $day[$i] = $day[$a];
+                            $day[$a] = $temp;
+                            $morning[$i] = $morning[$a];
+                            $morning[$a] = $tempm;
+                            $afternoon[$i] = $afternoon[$a];
+                            $afternoon[$a] = $tempa;
+                            $breaktime[$i] = $breaktime[$a];
+                            $breaktime[$a] = $tempb;
+
+                        }
+                    }
+                }
+                for($i=0; $i<count($request->day); $i++){
+                    $sdetail = new Scheduledetail;
+                    $sdetail->day_id = $day[$i];
+                    $sdetail->start = $morning[$i];
+                    $sdetail->end = $afternoon[$i];
+                    $sdetail->breaktime = $breaktime[$i];
+                    $sdetail->schedule_id = $tclass->schedule_id;
+                    $sdetail->save();
+                }
+            }
+
+            $gapp = $tclass->groupapplicationdetail->groupapplication;
+            $gapp->orgName = $request->orgName;
+            $gapp->orgAddress = $request->orgAddress;
+            $gapp->orgRepresentative = $request->orgRepresentative;
+            $gapp->save();
+            return redirect('/manage_app/enrollee')->with($notification);
+        }
+        else{
+            $notification = array(
+                    'message' => $message, 
+                    'alert-type' => 'warning'
+                );
+            return redirect('/manage_app/enrollee')->with($notification);
+        }
+        
+    }
+
     public function markGroupEnrollee(Request $request)
     {
         $gapp = Groupapplicationdetail::find($request->id);
-        $gapp->status = 2;
-        $gapp->save();
-        return redirect('/manage_app/genrollee/view/'.$request->id.'');
+        $tclass = $gapp->trainingclass;
+        if(count($tclass->groupclassdetail)>=$tclass->scheduledprogram->rate->min_students)
+        {
+            $gapp->status = 2;
+            $gapp->save();
+            $notification = array(
+                    'message' => "Successfully finalized this class", 
+                    'alert-type' => 'success'
+                );
+            return redirect('/manage_app/genrollee/view/'.$tclass->id.'');    
+        }
+        else
+        {
+            $notification = array(
+                    'message' => "Number of students must be greater than minimun students", 
+                    'alert-type' => 'warning'
+                );
+            return redirect('/manage_app/genrollee/view/'.$tclass->id.'');
+        }
     }
 
     public function viewGroupEnrollee(Request $request){

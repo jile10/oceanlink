@@ -53,8 +53,6 @@ class EmployeeController extends Controller
     	$emp->dob = $request->dob;
     	$emp->gender = $request->gender;
     	$emp->contact = $request->contact;
-    	$emp->position_id = $request->position_id;
-    	$emp->user_id = $request->user_id;
     	$emp->save();
     	return redirect('maintenance/employee');
     }

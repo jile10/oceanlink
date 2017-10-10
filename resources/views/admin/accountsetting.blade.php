@@ -418,6 +418,9 @@
                         switch(data['alert-type']){
                             case 'success':
                                 toastr.success(data['message']);
+                                console.log(street);
+                                $('#street').val(street);
+                                console.log($('#street').val());
                                 break;
 
                             case 'error':

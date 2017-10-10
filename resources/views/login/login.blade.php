@@ -40,7 +40,6 @@
                                 <div class="form-group">
                                 </div>
                                 <button type="submit" class="btn btn-lg btn-primary btn-block" >Login</button>
-                                <a class="btn btn-lg btn-primary btn-block" href="tlogin">Login as Training Officer</a>
                             </fieldset>
                         </form>
                     </div>
@@ -58,7 +57,7 @@
     <!-- begining of page level js-->
     <script src="/assets/js/TweenLite.min.js"></script>
     <script src="assets/vendors/iCheck/icheck.js" type="text/javascript"></script>
-    <script type="text/javascript">
+    <!-- <script type="text/javascript">
     $(document).ready(function() {
         $(document).mousemove(function(event) {
             TweenLite.to($('body'), .5, {css:{'background-position':parseInt(event.pageX/8) + "px "+parseInt(event.pageY/12)+"px, "+parseInt(event.pageX/15)+"px "+parseInt(event.pageY/15)+"px, "+parseInt(event.pageX/30)+"px "+parseInt(event.pageY/30)+"px"}});
@@ -69,7 +68,7 @@
             checkboxClass: 'icheckbox_minimal-blue'
         });
     });
-    </script>
+    </script> -->
     <!-- end of page level js-->
 </body>
 </html>

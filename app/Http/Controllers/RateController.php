@@ -62,7 +62,7 @@ class RateController extends Controller
             $rate->program_id = $request->program_id;
             $rate->duration =  $request->duration;
             $rate->classHour = $request->class_hours;
-            $rate->price =  $request->price;
+            $rate->price =  str_replace(',','',$request->price);
             $rate->min_students = $request->min_students;
             $rate->max_students = $request->max_students;
             $rate->save();
@@ -126,7 +126,7 @@ class RateController extends Controller
             $rate->program_id = $request->program_id;
             $rate->duration =  $request->duration;
             $rate->classHour = $request->class_hours;
-            $rate->price =  $request->price;
+            $rate->price =  str_replace(',','',$request->price);
             $rate->min_students = $request->min_students;
             $rate->max_students = $request->max_students;
             $rate->save();

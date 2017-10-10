@@ -10,6 +10,7 @@ use App\Certificate;
 use App\Groupclassdetail;
 use App\Holiday;
 use App\Classdetail;
+use App\Nosessionday;
 use Image;
 use Auth;
 class AdminController extends Controller
@@ -21,11 +22,50 @@ class AdminController extends Controller
 			if(Carbon::today()->gte(Carbon::parse($tclasses->scheduledprogram->dateStart))){
 				$tclass->status = 2;
 				$tclass->save();
+                if(count($tclasses->groupclassdetail)==0){
+                    foreach($tclasses->classdetail->where('status',1) as $details){
+                        $cdetail = $details;
+                        $cdetail->delete();
+                    }
+                }
+
+                if(count($tclasses->groupclassdetail)>0)
+                {
+                    foreach($tclasses->groupclassdetail as $details){
+                        $certificate = Certificate::all();
+                        $a = count($certificate)+1;
+                        $certificate = new Certificate;
+                        $certificate->certificate_no = "OL-". $classes->scheduledprogram->rate->program->programCode . '-' . $a .'-' .Carbon::now()->format('Y');
+                        $certificate->date_issued = Carbon::now()->format('Y-m-d');
+                        $certificate->save();
+                        $certificate = Certificate::all();
+                        
+                        $groupclassdetail = Groupclassdetail::find($details->id);
+                        $groupclassdetail->certificate_id = $a;
+                        $groupclassdetail->save();
+                    }
+                }
+                else
+                {                    
+                        foreach($tclasses->classdetail as $details){
+                        $certificate = Certificate::all();
+                        $a = count($certificate)+1;
+                        $certificate = new Certificate;
+                        $certificate->certificate_no = "OL-". $tclasses->scheduledprogram->rate->program->programCode . '-' . $a .'-' .Carbon::now()->format('Y');
+                        $certificate->date_issued = Carbon::now()->format('Y-m-d');
+                        $certificate->save();
+                        $certificate = Certificate::all();
+                        
+                        $groupclassdetail = Classdetail::find($details->id);
+                        $groupclassdetail->certificate_id = $a;
+                        $groupclassdetail->save();
+                    }
+                }
 			}
 		}
 		$x=0;
         $y=0;
-        $class = Trainingclass::where('status','=',2)->orWhere('status','=',3)->get();
+        $class = Trainingclass::where('status','=',2)->get();
         $tclass=array();
         $holiday = Holiday::all()->where('active','=',1);
         foreach ($class as $classes) {
@@ -45,6 +85,11 @@ class AdminController extends Controller
                     }
                 }
 
+                $check = Nosessionday::where('date',Carbon::parse($dateEnd)->format('Y-m-d'))->get();
+                if(count($check)>0)
+                {
+                    $holidaycheck = true;
+                }
                 if($holidaycheck == false)
                 {
                     foreach ($classes->schedule->scheduledetail as $details) {
@@ -66,44 +111,6 @@ class AdminController extends Controller
             $x++;
             $tclass = Trainingclass::find($classes->id);
             $end = Carbon::parse($dateEnd);
-            if(Carbon::today()->eq($end)){
-            	if(count($classes->groupclassdetail)>0)
-            	{
-                    $tclass->status = 3;
-                    $tclass->save();
-            		foreach($classes->groupclassdetail as $details){
-	            		$certificate = Certificate::all();
-	            		$a = count($certificate)+1;
-	            		$certificate = new Certificate;
-	            		$certificate->certificate_no = "OL-". $classes->scheduledprogram->rate->program->programCode . '-' . $a .'-' .Carbon::now()->format('Y');
-	            		$certificate->date_issued = Carbon::now()->format('Y-m-d');
-	            		$certificate->save();
-	            		$certificate = Certificate::all();
-	            		
-            			$groupclassdetail = Groupclassdetail::find($details->id);
-            			$groupclassdetail->certificate_id = $a;
-            			$groupclassdetail->save();
-            		}
-            	}
-                else
-                {
-                    $tclass->status = 3;
-                    $tclass->save();
-                    foreach($classes->classdetail as $details){
-                        $certificate = Certificate::all();
-                        $a = count($certificate)+1;
-                        $certificate = new Certificate;
-                        $certificate->certificate_no = "OL-". $classes->scheduledprogram->rate->program->programCode . '-' . $a .'-' .Carbon::now()->format('Y');
-                        $certificate->date_issued = Carbon::now()->format('Y-m-d');
-                        $certificate->save();
-                        $certificate = Certificate::all();
-                        
-                        $groupclassdetail = Classdetail::find($details->id);
-                        $groupclassdetail->certificate_id = $a;
-                        $groupclassdetail->save();
-                    }
-                }
-            }
             //end class
             if(Carbon::today()->gte($end))
             {

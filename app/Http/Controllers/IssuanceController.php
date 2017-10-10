@@ -15,7 +15,7 @@ use PDF;
 class IssuanceController extends Controller
 {
     public function viewClass(){
-        $tclass = Trainingclass::all()->where('status','=',3);
+        $tclass = Trainingclass::all()->where('status','=',2);
         return view("admin/Issuance_Certificate/class",compact('tclass'));
     }
 

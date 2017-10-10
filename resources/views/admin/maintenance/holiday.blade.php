@@ -53,7 +53,7 @@
 						<button class="buttons btn btn-success" data-toggle="modal" data-href="#responsive" href="#responsive"><i class="glyphicon glyphicon-plus"></i>&ensp;New Holiday</button>
 					</div>
 					<div class="col-md-6 text-right">
-						<a href="/maintenance/rate/archive" class="buttons btn btn-success"><i class="glyphicon glyphicon-folder-open"></i>&ensp;Archive</a>
+						<a href="/maintenance/holiday/archive" class="buttons btn btn-success"><i class="glyphicon glyphicon-folder-open"></i>&ensp;Archive</a>
 					</div>
 					
 					<table class="table table-striped table-bordered" id="table1">

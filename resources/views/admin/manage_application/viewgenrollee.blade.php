@@ -54,9 +54,6 @@
 								<button type="submit" class="buttons btn btn-success" ><i class="glyphicon glyphicon-plus"></i>&ensp;New Student</button>
 							</form>
 						</div>
-						<div class="col-md-3">
-							<button type="submit" class="buttons btn btn-success" ><i class="glyphicon glyphicon-edit"></i>&ensp;Update Group Information</button>
-						</div>
 						<div class="col-md-2">
 							<form action="/manage_app/genrollee/view/set" method="post">
 								{{csrf_field()}}

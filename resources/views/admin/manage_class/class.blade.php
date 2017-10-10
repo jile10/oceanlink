@@ -53,7 +53,7 @@
 									<td>{{$tclasses['course_name']}}</td>
 									<td>{{$tclasses['officer']}}</td> 
 									<td>{{$tclasses['dateEnd']}}</td>
-									<td><div class="col-md-6" style="margin-left: -15px;"><form action="/manage_class/setgrade" method="post">{{csrf_field()}}<input type="hidden" name="id" value="{{$tclasses['id']}}">@if(Carbon\Carbon::now()->gte(Carbon\Carbon::parse($tclasses['dateEnd'])->subDays(1)))<button type="submit"  class="btn btn-primary">Set Grade</button>@else <button disabled type="submit"  class="btn btn-primary">Set Grade</button> @endif</form></div><div class="col-md-6 " style="margin-left: -15px;"> <form action="/manage_class/setattendance" method="post">{{csrf_field()}}<input type="hidden" name="id" value="{{$tclasses['id']}}"><button type="submit" class="btn btn-primary">Set Attendance</button></form></div></td>
+									<td><div class="col-md-6" style="margin-left: -15px;"><form action="/manage_class/setgrade" method="post">{{csrf_field()}}<input type="hidden" name="id" value="{{$tclasses['id']}}"><button type="submit"  class="btn btn-primary">Set Grade</button></form></div><div class="col-md-6 " style="margin-left: -15px;"> <form action="/manage_class/setattendance" method="post">{{csrf_field()}}<input type="hidden" name="id" value="{{$tclasses['id']}}"><button type="submit" class="btn btn-primary">Set Attendance</button></form></div></td>
 								</tr>
 							@endforeach
 						</tbody>

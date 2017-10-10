@@ -69,7 +69,7 @@
 								<td>{{$employees->street . ' ' . $employees->barangay . ' ' . $employees->city}}</td>
 								<td>@if($employees->gender == 'F')Female @else Male @endif</td>
 								<td>{{Carbon\Carbon::createFromFormat('Y-m-d',$employees->dob)->age}}</td>
-								<td>{{$employees->position->positionName}}</td>
+								<td>{{$employees->user->position->positionName}}</td>
 								<td align="center"><button class="btn btn-primary" data-toggle="modal" data-href="#update{{$employees->id}}" href="#update{{$employees->id}}">Update</button></td>
 								<td align="center"><form action="/employee/delete" method="post">{{csrf_field()}}<input type="hidden" name="id" value="{{$employees->id}}"><button type="submit" class="btn btn-danger">Deactivate</button></form></td>
 							</tr>
@@ -220,6 +220,13 @@
 						</div>
 						<div class="modal-body">
 							<div class="row">
+								<div class="row">
+									<div class="col-md-12">
+										<div class="alert alert-success">
+												<p><em>Note: <font color="red">*</font> fields are required</em></p>
+										</div>
+									</div>
+								</div>
 								<div class="col-md-6">
 									<input type="hidden" name="id" value="{{$employees->id}}">
 									<input type="hidden" name="user_id" value="{{$employees->user_id}}">
@@ -294,7 +301,7 @@
 										<div class="col-sm-8">
 											<select required name="position_id" class="form-control">
 												@foreach($position as $positions)
-												@if($positions->positionName == $employees->position->positionName)
+												@if($positions->positionName == $employees->user->position->positionName)
 												<option selected value="{{$positions->id}}">{{$positions->positionName}}</option>
 												@else
 												<option value="{{$positions->id}}">{{$positions->positionName}}</option>
@@ -319,18 +326,12 @@
 					            </div>
 					            <div class="col-md-6" id="contactC{{$employees->id}}" style="padding-left: 0px;">
 					            	@if(strlen($employees->contact) >= 11)
-					                <input type="text" id="contact" class="selector cp form-control placeholder" name="contact" placeholder="0999 9999 999">
+					                <input type="text" id="contact" class="selector cp form-control placeholder" value="{{$employees->contact}}" name="contact" placeholder="0999 9999 999">
 					              @else
-					              	<input type="text" id="contact" class="tel form-control placeholder" placeholder="999 9999">
+					              	<input type="text" id="contact" name="contact" class="tel form-control placeholder" value="{{$employees->contact placeholder="999 9999">
 							          @endif 	
 
 											</div>
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="inputEmail3" class="col-sm-4 control-label">Email<font color="red">*</font></label>
-										<div class="col-sm-8">
-											<input required name="email" type="email" class="form-control">
 										</div>
 									</div>
 								</div>
@@ -406,7 +407,7 @@
     function contactTypeChanged(contactType){
       if(contactType.value == "tel"){
         $("#contactC").empty();
-        $("#contactC").append('<input type="text" id="contact" class="tel form-control placeholder" placeholder="999 9999">')
+        $("#contactC").append('<input type="text" id="contact" name="contact" class="tel form-control placeholder" placeholder="999 9999">')
         
         $('.tel').mask('000 0000',
         {
@@ -421,7 +422,7 @@
       else{
         
         $("#contactC").empty();
-        $("#contactC").append('<input type="text" id="contact" class="cp form-control placeholder" placeholder="0999 9999 999">')
+        $("#contactC").append('<input type="text" id="contact" name="contact" class="cp form-control placeholder" placeholder="0999 9999 999">')
         
         $('.tel').mask('000 0000',
         {
@@ -438,7 +439,7 @@
     function contactTypeChanged1(id){
       if($('#contactType'+id).val() == "tel"){
         $("#contactC"+id).empty();
-        $("#contactC"+id).append('<input type="text" id="contact" class="tel form-control placeholder" placeholder="999 9999">')
+        $("#contactC"+id).append('<input type="text" id="contact" name="contact" class="tel form-control placeholder" placeholder="999 9999">')
         
         $('.tel').mask('000 0000',
         {
@@ -453,7 +454,7 @@
       else{
         
         $("#contactC"+id).empty();
-        $("#contactC"+id).append('<input type="text" id="contact" class="cp form-control placeholder" placeholder="0999 9999 999">')
+        $("#contactC"+id).append('<input type="text" id="contact" name="contact" class="cp form-control placeholder" placeholder="0999 9999 999">')
         
         $('.tel').mask('000 0000',
         {

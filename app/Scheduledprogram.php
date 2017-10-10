@@ -18,4 +18,7 @@ class Scheduledprogram extends Model
    		return $this->hasOne('App\Trainingclass','scheduledprogram_id','id');
    	}
    	
+      public function accountdetail(){
+         return $this->hasOne('App\Accountdetail');
+      }
 }

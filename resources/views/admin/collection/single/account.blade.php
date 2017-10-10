@@ -70,7 +70,8 @@
 									@else
 										@if($accounts->scheduledprogram->trainingclass->groupapplicationdetail->status == 2)
 										<tr>
-											<td style="text-align: center;"><input id="{{$accounts->id}}" type="checkbox" name="check"></td>								<td>{{$accounts->scheduledprogram->rate->program->programName . ' (' . $accounts->scheduledprogram->rate->duration .' Hours)'}}</td>
+											<td style="text-align: center;"><input id="{{$accounts->id}}" type="checkbox" name="check"></td>			
+											<td>{{$accounts->scheduledprogram->rate->program->programName . ' (' . $accounts->scheduledprogram->rate->duration .' Hours)'}}</td>
 											<td>@if($accounts->paymentMode == 1)Partial Payment @else Full Payment @endif</td>
 											<td>@if($accounts->status != 3 && $accounts->status !=2)Not yet Paid @elseif($accounts->status == 2)Partially Paid @endif</td>
 											<td style="text-align: center;" id="cell{{$accounts->id}}">@if($accounts->paymentMode == 1) <input type="checkbox" name="" id="overridePaymentMode{{$accounts->id}}">&ensp;Full Payment @endif</td>

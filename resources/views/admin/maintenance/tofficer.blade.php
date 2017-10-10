@@ -164,13 +164,19 @@
 								<div class="col-md-8" style="padding-right: 0px; padding-left: 0px; ">
 									<div class="col-md-6" style="padding-right: 0px;">
 										<select name="contactType" id="contactType" class="selector form-control" style="padding: 0px; width: 80%;" onchange="contactTypeChanged(this)">
-				                <option selected value="mobile">Mobile No.</option>
-				                <option value="tel">Landline No.</option>
-				            </select>
-			            </div>
-			            <div class="col-md-6" id="contactC" style="padding-left: 0px;">
-										<input type="text" id="contact" class="selector cp form-control placeholder" name="contact" placeholder="0999 9999 999" maxlength="11">
-									</div>
+							                <option selected value="mobile">Mobile No.</option>
+							                <option value="tel">Landline No.</option>
+							            </select>
+						            </div>
+						            <div class="col-md-6" id="contactC" style="padding-left: 0px;">
+													<input type="text" id="contact" class="selector cp form-control placeholder" name="contact" placeholder="0999 9999 999">
+												</div>
+											</div>
+										</div>
+								<div class="form-group">
+								<label for="inputEmail3" class="col-sm-4 control-label">Email<font color="red">*</font></label>
+								<div class="col-sm-8">
+									<input required type="email" class="form-control " name="email" required maxlength="100">
 								</div>
 							</div>
 						</div>
@@ -300,6 +306,11 @@
 									</div>
 								</div>
 							</div>
+								<div class="form-group">
+								<label for="inputEmail3" class="col-sm-4 control-label">Email<font color="red">*</font></label>
+								<div class="col-sm-8">
+									<input required type="email" required class="form-control" value="{{$tofficers->user->email}}" name="email" maxlength="100">
+								</div>
 						</div>
 					</div>
 				</div>

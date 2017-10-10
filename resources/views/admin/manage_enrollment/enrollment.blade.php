@@ -66,7 +66,7 @@
 									@endif
 									</td>
 									<td align="center">{{$tclasses['total']}}</td>
-									<td><form action="/manage_enrollment/set" method="get">@if($tclasses['status'] == 0)<input type="hidden" name="id" value="{{$tclasses['id']}}"><button type="submit" class="btn btn-primary col-sm-12">Set as Finalized</button>@endif
+									<td><form action="/manage_enrollment/set" method="get">@if($tclasses['status'] == 0)<input type="hidden" name="id" value="{{$tclasses['id']}}"><button type="submit" class="btn btn-primary col-sm-12">Post</button><br>@endif
 									@if($tclasses['status'] == 0)
 										<button type="button" class="btn btn-primary col-sm-12" data-toggle="modal" data-href="#updateModal{{$tclasses['id']}}" href="#updateModal{{$tclasses['id']}}" onclick="counter({{$tclasses['id']}})"><i class="glyphicon glyphicon-edit" ></i>&ensp;Update</button><br>
 										<button type="button" onclick="cancelClick({{$tclasses['id']}})" class="btn btn-danger col-sm-12" data-toggle="modal" data-href="#dialog{{$tclasses['id']}}" href="#dialog{{$tclasses['id']}}"><i class="glyphicon glyphicon-remove"></i>&ensp;Cancel</button>

@@ -105,6 +105,7 @@ Route::group(['middleware' => ['admin']],function(){
 	//Group Enroll
 	Route::get('/manage_app/genrollee','EnrolleeController@viewGEnrollee');
 	Route::post('/manage_app/genrollee/insert','EnrolleeController@insertGEnrollee');
+	Route::post('/manage_app/genrollee/update','EnrolleeController@updateGEnrollee');
 	Route::get('/manage_app/genrollee/view/{id}','EnrolleeController@viewGroupEnrollee');
 	Route::post('/manage_app/genrollee/view/set','EnrolleeController@markGroupEnrollee');
 	Route::post('/manage_app/genrollee/application','EnrolleeController@viewGApplication');
@@ -161,6 +162,8 @@ Route::group(['middleware' => ['admin']],function(){
 	Route::post('holiday/insert','HolidayController@insertHoliday');
 	Route::post('holiday/update','HolidayController@updateHoliday');
 	Route::post('holiday/delete','HolidayController@deleteHoliday');
+	Route::get('/maintenance/holiday/archive','HolidayController@viewArchive');
+	Route::post('holiday/activate','HolidayController@activateHoliday');
 	//Employee
 	Route::get('/maintenance/employee', 'EmployeeController@viewEmployee' );
 	Route::post('/employee/insert', 'EmployeeController@createEmployee' );

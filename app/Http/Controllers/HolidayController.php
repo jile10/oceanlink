@@ -22,6 +22,12 @@ class HolidayController extends Controller
     		if($holidays->dateStart == $request->dateStart && $holidays->dateEnd == $request->dateEnd){
     			$check= false;
     		}
+            if(Carbon::parse($request->dateStart)->between(Carbon::parse($holidays->dateStart),Carbon::parse($holidays->dateEnd))){
+                $check= false;
+            }
+            if(Carbon::parse($request->dateStart)->between(Carbon::parse($holidays->dateStart),Carbon::parse($holidays->dateEnd))){
+                $check = false;
+            }
     	}
     	if($check)
     	{
@@ -60,6 +66,12 @@ class HolidayController extends Controller
         		if($holidays->dateStart == $request->dateStart && $holidays->dateEnd == $request->dateEnd){
         			$check= false;
         		}
+                if(Carbon::parse($request->dateStart)->between(Carbon::parse($holidays->dateStart),Carbon::parse($holidays->dateEnd))){
+                    $check= false;
+                }
+                if(Carbon::parse($request->dateStart)->between(Carbon::parse($holidays->dateStart),Carbon::parse($holidays->dateEnd))){
+                    $check = false;
+                }
             }
     	}
     	if($check)
@@ -92,6 +104,26 @@ class HolidayController extends Controller
 
     	$notification = array(
             'message' => 'Holiday has been successfully deleted', 
+            'alert-type' => 'success'
+        );
+        
+        return redirect('/maintenance/holiday')->with($notification);
+    }
+
+    public function viewArchive(){
+        $holiday = Holiday::all()->where('active','=',0);
+        return view("/admin/maintenance/archiveholiday",compact('holiday'));
+    }
+
+
+
+    public function activateHoliday(Request $request){
+        $holiday = Holiday::find($request->id);
+        $holiday->active = 1;
+        $holiday->save();
+
+        $notification = array(
+            'message' => 'Holiday has been successfully activated', 
             'alert-type' => 'success'
         );
         

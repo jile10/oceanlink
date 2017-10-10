@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use App\Trainingofficer;
+use Carbon\Carbon;
 class TOfficerController extends Controller
 {
     public function viewTOfficer(){
@@ -44,7 +45,7 @@ class TOfficerController extends Controller
             $tofficer->street = $request->street;
             $tofficer->barangay = $request->barangay;
             $tofficer->city = $request->city;
-            $tofficer->dob = $request->dob;
+            $tofficer->dob = Carbon::parse($request->dob)->format('Y-m-d');
             $tofficer->contact = $request->contact;
             $tofficer->gender = $request->gender;
             $tofficer->user_id = $user_id;
@@ -94,7 +95,7 @@ class TOfficerController extends Controller
         	$tofficer->street = $request->street;
         	$tofficer->barangay = $request->barangay;
         	$tofficer->city = $request->city;
-        	$tofficer->dob = $request->dob;
+            $tofficer->dob = Carbon::parse($request->dob)->format('Y-m-d');
         	$tofficer->contact = $request->contact;
         	$tofficer->gender = $request->gender;
         	$tofficer->save();

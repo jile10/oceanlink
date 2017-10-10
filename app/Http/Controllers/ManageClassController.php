@@ -19,7 +19,7 @@ class ManageClassController extends Controller
     public function viewClass(){
         $x=0;
         $y=0;
-        $class = Trainingclass::where('status','=',2)->orWhere('status','=',3)->get();
+        $class = Trainingclass::where('status','=',2)->orWhere('status','=',4)->get();
         $tclass=array();
         $holiday = Holiday::all()->where('active','=',1);
         foreach ($class as $classes) {
@@ -76,14 +76,25 @@ class ManageClassController extends Controller
                 $scounter = $details->day->id;
             }
             if($scheck){
-                $sched = Scheduledetail::where('schedule_id','=',$classes->schedule->id);
-                $startsched = $sched->first();
-                $startsched = Carbon::parse($startsched->day->dayName)->format("D");
-                $endsched = $sched->orderBy('id','desc')->first();
-                $endsched = Carbon::parse($endsched->day->dayName)->format("D");
-                $schedules = $startsched . '-' . $endsched;
-                $time = $sched->first();
-                $schedules .= ' &ensp;' . Carbon::parse($time->start)->format("g:i A") . '-' . Carbon::parse($time->end)->format("g:i A");
+                if(count(Scheduledetail::where('schedule_id','=',$classes->schedule->id)->get())>0){
+                    $sched = Scheduledetail::where('schedule_id','=',$classes->schedule->id);
+                    $startsched = $sched->first();
+                    $startsched = Carbon::parse($startsched->day->dayName)->format("D");
+                    $schedules = $startsched;
+                    $time = $sched->first();
+                    $schedules .= ' &ensp;' . Carbon::parse($time->start)->format("g:i A") . '-' . Carbon::parse($time->end)->format("g:i A");
+                }
+                else
+                {
+                    $sched = Scheduledetail::where('schedule_id','=',$classes->schedule->id);
+                    $startsched = $sched->first();
+                    $startsched = Carbon::parse($startsched->day->dayName)->format("D");
+                    $endsched = $sched->orderBy('id','desc')->first();
+                    $endsched = Carbon::parse($endsched->day->dayName)->format("D");
+                    $schedules = $startsched . '-' . $endsched;
+                    $time = $sched->first();
+                    $schedules .= ' &ensp;' . Carbon::parse($time->start)->format("g:i A") . '-' . Carbon::parse($time->end)->format("g:i A");
+                }
 
             }
             else
