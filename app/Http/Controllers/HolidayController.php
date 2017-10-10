@@ -19,22 +19,37 @@ class HolidayController extends Controller
     		{
     			$check=false;
     		}
-    		if($holidays->dateStart == $request->dateStart && $holidays->dateEnd == $request->dateEnd){
-    			$check= false;
-    		}
-            if(Carbon::parse($request->dateStart)->between(Carbon::parse($holidays->dateStart),Carbon::parse($holidays->dateEnd))){
-                $check= false;
+            if($request->has('dateEnd'))
+            {
+                if(Carbon::parse($request->dateStart)->between(Carbon::parse($holidays->dateStart),Carbon::parse($holidays->dateEnd))){
+                    $check= false;
+                }
+                if(Carbon::parse($request->dateEnd)->between(Carbon::parse($holidays->dateStart),Carbon::parse($holidays->dateEnd))){
+                    $check = false;
+                }
             }
-            if(Carbon::parse($request->dateStart)->between(Carbon::parse($holidays->dateStart),Carbon::parse($holidays->dateEnd))){
-                $check = false;
+            else
+            {
+                if(Carbon::parse($request->date)->between(Carbon::parse($holidays->dateStart),Carbon::parse($holidays->dateEnd))){
+                    $check= false;
+                }
             }
     	}
     	if($check)
     	{
 	    	$holiday = new Holiday;
 	    	$holiday->holidayName = $request->holidayName;
-	    	$holiday->dateStart = Carbon::parse($request->dateStart)->format("Y-m-d");
-	    	$holiday->dateEnd = Carbon::parse($request->dateEnd)->format("Y-m-d");
+            if($request->has('dateEnd'))
+            {
+    	    	$holiday->dateStart = Carbon::parse($request->dateStart)->format("Y-m-d");
+    	    	$holiday->dateEnd = Carbon::parse($request->dateEnd)->format("Y-m-d");
+
+            }
+            else
+            {
+                $holiday->dateStart = Carbon::parse($request->date)->format("Y-m-d");
+                $holiday->dateEnd = Carbon::parse($request->date)->format("Y-m-d");
+            }
 	    	$holiday->active = 1;
 	    	$holiday->save();
 
@@ -63,14 +78,20 @@ class HolidayController extends Controller
         		{
         			$check=false;
         		}
-        		if($holidays->dateStart == $request->dateStart && $holidays->dateEnd == $request->dateEnd){
-        			$check= false;
-        		}
-                if(Carbon::parse($request->dateStart)->between(Carbon::parse($holidays->dateStart),Carbon::parse($holidays->dateEnd))){
-                    $check= false;
+        		if($request->has('dateEnd'))
+                {
+                    if(Carbon::parse($request->dateStart)->between(Carbon::parse($holidays->dateStart),Carbon::parse($holidays->dateEnd))){
+                        $check= false;
+                    }
+                    if(Carbon::parse($request->dateEnd)->between(Carbon::parse($holidays->dateStart),Carbon::parse($holidays->dateEnd))){
+                        $check = false;
+                    }
                 }
-                if(Carbon::parse($request->dateStart)->between(Carbon::parse($holidays->dateStart),Carbon::parse($holidays->dateEnd))){
-                    $check = false;
+                else
+                {
+                    if(Carbon::parse($request->date)->between(Carbon::parse($holidays->dateStart),Carbon::parse($holidays->dateEnd))){
+                        $check= false;
+                    }
                 }
             }
     	}
@@ -78,8 +99,17 @@ class HolidayController extends Controller
     	{
 	    	$holiday = Holiday::find($request->id);
 	    	$holiday->holidayName = $request->holidayName;
-	    	$holiday->dateStart = Carbon::parse($request->dateStart)->format("Y-m-d");
-	    	$holiday->dateEnd = Carbon::parse($request->dateEnd)->format("Y-m-d");
+            if($request->has('dateEnd'))
+            {
+                $holiday->dateStart = Carbon::parse($request->dateStart)->format("Y-m-d");
+                $holiday->dateEnd = Carbon::parse($request->dateEnd)->format("Y-m-d");
+
+            }
+            else
+            {
+                $holiday->dateStart = Carbon::parse($request->date)->format("Y-m-d");
+                $holiday->dateEnd = Carbon::parse($request->date)->format("Y-m-d");
+            }
 	    	$holiday->active = 1;
 	    	$holiday->save();
 	    	$notification = array(

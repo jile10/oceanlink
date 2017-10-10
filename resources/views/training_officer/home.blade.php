@@ -54,7 +54,7 @@
 												Ended
 											@endif
 										</td>
-										<td><form  action="/tofficer/setclass" method="get"><input type="hidden" name="officer_id" value="{{$officer->id}}"><button style="margin-bottom: 5px;" type="submit" name="tclass_id" value="{{$sprog->trainingclass->id}}" class="btn btn-primary col-sm-8">View Class</button></form>@if($sprog->trainingclass->status == 2) <form action="/enrollmentreport" method="post" target="_blank">{{csrf_field()}}<button type="submit" name="tclass_id" value="{{$sprog->trainingclass->id}}" class="btn btn-primary col-sm-10">Print Enrollment Report</button></form>@endif
+										<td><form  action="/tofficer/setclass" method="get"><input type="hidden" name="officer_id" value="{{$officer->id}}"><button style="margin-bottom: 5px;" type="submit" name="tclass_id" value="{{$sprog->trainingclass->id}}" class="btn btn-primary col-sm-8">View Class</button></form>@if($sprog->trainingclass->status == 2) <form action="/enrollmentreport" method="post" target="_blank">{{csrf_field()}}<button type="submit" name="tclass_id" value="{{$sprog->trainingclass->id}}" class="btn btn-primary col-sm-12">Print Enrollment Report</button></form>@endif
 										</td>
 									</tr>
 								@endif

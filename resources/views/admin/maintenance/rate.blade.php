@@ -160,16 +160,6 @@
 										</div>
 									</div>
 								</div>
-								<div class="col-md-6">
-									<div class="form-group">
-										<label for="inputEmail3" class="col-md-6 control-label">Maximum No. of Students<font color="red">*</font></label>
-										<div class="col-md-6">
-											<div>
-												<input required type="text" name="max_students" id="max_students" class="form-control" maxlength="3">
-											</div>
-										</div>
-									</div>
-								</div>
 							</div>
 							<center><div class="row" id="minMax">
 							</div></center>
@@ -283,16 +273,6 @@
 										<div class="col-md-6">
 											<div>
 												<input required type="text" name="min_students" id="min_students2" value="{{$rates->min_students}}" class="form-control" maxlength="3">
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="form-group">
-										<label for="inputEmail3" class="col-md-6 control-label">Maximum No. of Students<font color="red">*</font></label>
-										<div class="col-md-6">
-											<div>
-												<input required type="text" name="max_students" id="max_students2" value="{{$rates->max_students}}" class="form-control" maxlength="3">
 											</div>
 										</div>
 									</div>
@@ -461,52 +441,6 @@ $.validator.addMethod("regx3", function(value, element, regexpr) {
 $.validator.addMethod("regx4", function(value, element, regexpr) {          
     return regexpr.test(value);
 }, "Invalid");
-$.validator.addMethod("minMax", function(value, element) {          
-	var min = $("#min_students").val();
-	var max = $("#max_students").val();
-
-	if((min!="")&&(max=="")){
-		return true;
-	}
-	else if((max!="")&&(min=="")){
-		return true;
-	}
-	else if(max!="" && min!=""){
-			min = parseInt(min);
-			max = parseInt(max);
-		if(max>min){
-			return true;
-		}
-		else if(min>=max){
-			return false;
-		}
-
-		
-	}
-}, "Minimum no. of students must be less than the maximum.");
-$.validator.addMethod("minMax2", function(value, element) {          
-	var min = $("#min_students2").val();
-	var max = $("#max_students2").val();
-
-	if((min!="")&&(max=="")){
-		return true;
-	}
-	else if((max!="")&&(min=="")){
-		return true;
-	}
-	else if(max!="" && min!=""){
-			min = parseInt(min);
-			max = parseInt(max);
-		if(max>min){
-			return true;
-		}
-		else if(min>=max){
-			return false;
-		}
-
-		
-	}
-}, "Minimum no. of students must be less than the maximum.");
 
 	$(function(){
 		$('#create-form').validate({
@@ -533,13 +467,6 @@ $.validator.addMethod("minMax2", function(value, element) {
 					regx3: /^[0-9]+$/i,
 					required: true,
 					number: true,
-					minMax: true
-				},
-				max_students:{
-					regx3: /^[0-9]+$/i,
-					required: true,
-					number: true,
-					minMax: true
 				}
 			},
 			messages:{
@@ -555,22 +482,8 @@ $.validator.addMethod("minMax2", function(value, element) {
 					maxlength: "Too many to be a minimum",
 					number: "Input a valid number",
 					required: "Fields are required"
-				},
-				max_students:{
-					maxlength: "Too many to be a maximum",
-					number: "Input a valid number",
-					required: "Fields are required"
 				}
 			},
-			groups:{
-				minMax: "min_students max_students"
-			},
-			errorPlacement:function(error,element){
-				 if (element.attr("name") == "min_students" || element.attr("name") =="max_students")
-        		error.insertAfter("#minMax");
-     		 else
-					error.insertAfter(element.parent("div"));
-			}
 		});
 	});
 
@@ -599,13 +512,6 @@ $.validator.addMethod("minMax2", function(value, element) {
 					regx3: /^[0-9]+$/i,
 					required: true,
 					number: true,
-					minMax2: true
-				},
-				max_students:{
-					regx3: /^[0-9]+$/i,
-					required: true,
-					number: true,
-					minMax2: true
 				}
 			},
 			messages:{
@@ -621,22 +527,8 @@ $.validator.addMethod("minMax2", function(value, element) {
 					maxlength: "Too many to be a minimum",
 					number: "Input a valid number",
 					required: "Fields are required"
-				},
-				max_students:{
-					maxlength: "Too many to be a maximum",
-					number: "Input a valid number",
-					required: "Fields are required"
 				}
 			},
-			groups:{
-				minMax: "min_students max_students"
-			},
-			errorPlacement:function(error,element){
-				 if (element.attr("name") == "min_students" || element.attr("name") =="max_students")
-        		error.insertAfter("#minMax2");
-     		 else
-					error.insertAfter(element.parent("div"));
-			}
 		});
 	};
 </script>
