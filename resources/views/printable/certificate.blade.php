@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Oceanlink Institute Inc.</title>
+		<title>Oceanlink</title>
 	</head>
 	@if(count($tclass->groupclassdetail)>0)
 	@foreach($tclass->groupclassdetail as $details)

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title></title>
+		<title>Oceanlink</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	</head>
 	<body>

@@ -86,6 +86,7 @@ Route::get('/maintenance/employee', 'EmployeeController@viewEmployee' );
 //Printable
 Route::get('/voucher','PrintController@voucher');
 Route::get('/regicard','PrintController@regicard');
+Route::post('/enrollmentreport','PrintController@setEnrollmentReport');
 Route::get('/certificate/{id}','PrintController@certificate');
 
 //Issuance of Certificate

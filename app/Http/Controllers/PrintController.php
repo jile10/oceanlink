@@ -165,5 +165,11 @@ class PrintController extends Controller
     	$pdf = PDF::loadView('printable/certificate',['tclass'=>$tclass,'dateEnd'=>$dateEnd])->setPaper([0,0,612,792],'portrait');
     	return $pdf->stream();
     }
+
+    public function setEnrollmentReport(Request $request){
+    	$tclass = Trainingclass::find($request->tclass_id);
+    	$pdf = PDF::loadView('printable/enrollmentreport',['tclass'=>$tclass,'x'=>0])->setPaper([0,0,612,792],'portrait');
+    	return $pdf->stream();
+    }
 }
 
