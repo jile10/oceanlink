@@ -181,6 +181,12 @@
 					Collection Report
 				</a>
 			</li>
+			<li id="accountbalance">
+				<a href="{{url('/reports/accountbalance')}}">
+					<i class="fa fa-angle-double-right"></i>
+					Account with Balance
+				</a>
+			</li>
 		</ul>
 	</li>
 </ul>

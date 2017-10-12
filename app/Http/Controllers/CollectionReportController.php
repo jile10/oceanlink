@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Payment;
 use Carbon\Carbon;
+use App\Accountdetail;
 class CollectionReportController extends Controller
 {
 	public function viewReport(){
@@ -85,4 +86,9 @@ class CollectionReportController extends Controller
     return response()->json($dateRangeArray);
 
 	}
+
+    public function viewAccount(){
+        $accountdetail = Accountdetail::all();
+        return view('admin/reports/accountbalance',compact('accountdetail'));
+    }
 }

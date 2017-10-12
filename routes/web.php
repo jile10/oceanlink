@@ -72,8 +72,6 @@ Route::get('receipt/print/group','CollectionController@printReceiptG');
 Route::get('queries','QueriesController@viewQueries');
 
 //Reports
-
-Route::get('reports/collectionreport','CollectionReportController@viewReport');
 Route::post('reports/collection/print','PrintController@printCollectionReport');
 
 //Utilities
@@ -98,6 +96,10 @@ Route::post('/certificate/individual','IssuanceController@certificate');
 //Enrollee//
 //Single
 Route::group(['middleware' => ['admin']],function(){
+	//Reports
+	Route::get('reports/collectionreport','CollectionReportController@viewReport');
+	Route::get('reports/accountbalance','CollectionReportController@viewAccount');
+
 	Route::get('/manage_app/enrollee','EnrolleeController@viewTrainingclass');
 	Route::get('/manage_app/enrollee/view/{id}','EnrolleeController@viewEnrollee');
 	Route::post('/manage_app/enrollee/insert','EnrolleeController@insertEnrollee');
