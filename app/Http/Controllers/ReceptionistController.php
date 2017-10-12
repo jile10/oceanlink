@@ -75,6 +75,7 @@ class ReceptionistController extends Controller
         {
             $enrollee = Enrollee::find($request->enrollee_id);
             $holiday = Holiday::all()->where('status','=',1);
+            $sessionday = Nosessionday::all();
             $sprog = Scheduledprogram::find($request->sprog_id);
             $checkconflict = false;
             foreach($enrollee->classdetail as $cdetails)
@@ -95,10 +96,10 @@ class ReceptionistController extends Controller
                                 $holidaycheck = true;
                             }
                         }
-                        $check = Nosessionday::where('date',Carbon::parse($dateEnd)->format('Y-m-d'))->get();
-                        if(count($check)>0)
-                        {
-                            $holidaycheck = true;
+                        foreach($sessionday as $sessiondays){
+                            if(Carbon::parse($dateEnd)->between(Carbon::parse($sessiondays->dateStart), Carbon::parse($sessiondays->dateEnd))){
+                                $holidaycheck = true;
+                            }
                         }
                         if($holidaycheck == false)
                         {
@@ -324,6 +325,7 @@ class ReceptionistController extends Controller
         $tofficer = Trainingofficer::find($request->tofficer_id);
         $checkconflict = false;
         $holiday = Holiday::all()->where('active','=',1);
+        $sessionday = Nosessionday::all();
         foreach($tofficer->scheduledprogram as $classes)
         {
             // start of date end
@@ -340,10 +342,10 @@ class ReceptionistController extends Controller
                             $holidaycheck = true;
                         }
                     }
-                    $check = Nosessionday::where('date',Carbon::parse($dateEnd)->format('Y-m-d'))->get();
-                    if(count($check)>0)
-                    {
-                        $holidaycheck = true;
+                    foreach($sessionday as $sessiondays){
+                        if(Carbon::parse($dateEnd)->between(Carbon::parse($sessiondays->dateStart), Carbon::parse($sessiondays->dateEnd))){
+                            $holidaycheck = true;
+                        }
                     }
 
                     if($holidaycheck == false)

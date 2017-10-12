@@ -384,7 +384,6 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <input type="hidden" name="name" value="{{$z=0}}">
                                         <table class="table table-striped table-bordered" id="dynamic_table{{$tclasses->id}}">
                                             <thead>
                                                 <th width="30%">Day<font color="red">*</font></th>
@@ -394,6 +393,7 @@
                                                 <th width="10%"></th>
                                             </thead>
                                             <tbody id="tableRow{{$tclasses->id}}">
+                                                <input type="hidden" name="name" value="{{$z=0}}">
                                             </tbody>
                                         </table>
                                     </div>
@@ -487,7 +487,7 @@
             {
                 $('#tableRow'+id).empty();
                 i = {{count($tclasses->schedule->scheduledetail)}}+1;
-                $('#tableRow'+id).append('@foreach($classes->schedule->scheduledetail as $details)<tr id="updateDelete{{$details->id}}"> <td> <select id="day1" onchange="days(1)" class="form-control" name="day[]"> @foreach ($day as $days) @if ($days->id == $details->day_id)<option selected value="{{$days->id}}">{{$days->dayName}}</option>@else<option value="{{$days->id}}">{{$days->dayName}}</option> @endif @endforeach</select></td><td><div class="operationTime input-group"><span class="input-group-addon"><i class="fa fa-sun-o"></i></span><select name="morning[]" class="form-control" >@for ($i=8; $i<18;$i++) @for ($a=0;$a<4;$a++) @if ($i<17) @if ($a*15 == 0) @if (strval($i) == Carbon\Carbon::parse($details->start)->format("G")) <option selected value="{{$i}}:00">{{$i}}:00</option> @else <option value="{{$i}}:00">{{$i}}:00</option>  @endif @else @if(strval($i) == Carbon\Carbon::parse($details->start)->format("G") && strval($a*15) == Carbon\Carbon::parse($details->start)->format("i")) <option selected value="{{$i}}:{{$a*15}}">{{$i}}:{{$a*15}}</option> @else <option value="{{$i}}:{{$a*15}}">{{$i}}:{{$a*15}}</option> @endif @endif @endif @if ($i==17 && $a==0 ) @if (Carbon\Carbon::parse($details->start)->format("G") == strval($i))<option selected value="{{$i}}:00">{{$i}}:00</option> @else <option value="{{$i}}:00">{{$i}}:00</option> @endif @endif @endfor @endfor</select></div></td><td><div class="operationTime input-group"><span class="input-group-addon"><i class="fa fa-sun-o"></i></span><select name="afternoon[]" class="form-control" > @for ($i=8; $i<18;$i++) @for ($a=0;$a<4;$a++) @if ($i<17) @if ($a*15 == 0) @if(strval($i) == Carbon\Carbon::parse($details->end)->format("G")) <option selected value="{{$i}}:00">{{$i}}:00</option> @else <option value="{{$i}}:00">{{$i}}:00</option>  @endif @else @if(strval($i) == Carbon\Carbon::parse($details->end)->format("G") && strval($a*15) == Carbon\Carbon::parse($details->end)->format("i")) <option selected value="{{$i}}:{{$a*15}}">{{$i}}:{{$a*15}}</option> @else <option value="{{$i}}:{{$a*15}}">{{$i}}:{{$a*15}}</option> @endif @endif @endif @if($i==17 && $a==0 ) @if (Carbon\Carbon::parse($details->end)->format("G") == strval($i))<option selected value="{{$i}}:00">{{$i}}:00</option> @else <option value="{{$i}}:00">{{$i}}:00</option> @endif @endif @endfor @endfor </select></div></td><td><select name="breaktime[]" class="form-control" > @for ($a=1;$a<5;$a++)<option value="{{$a*15}}">{{$a*15}}</option> @endfor </select></td> @if (++$z == 1)<td><button type="button" onclick="updateClick({{$classes->id}})" class="btn btn-primary"><i class="glyphicon glyphicon-plus" ></i></button></td> @else <td><button type="button" onclick="updateRemove({{$details->id}})" class="btn btn-danger"><i class="glyphicon glyphicon-remove" ></i></button></td> @endif </tr>@endforeach');
+                $('#tableRow'+id).append('<input type="hidden" name="name" value="{{$z=0}}">@foreach($classes->schedule->scheduledetail as $details)<tr id="updateDelete{{$details->id}}"> <td> <select id="day1" onchange="days(1)" class="form-control" name="day[]"> @foreach ($day as $days) @if ($days->id == $details->day_id)<option selected value="{{$days->id}}">{{$days->dayName}}</option>@else<option value="{{$days->id}}">{{$days->dayName}}</option> @endif @endforeach</select></td><td><div class="operationTime input-group"><span class="input-group-addon"><i class="fa fa-sun-o"></i></span><select name="morning[]" class="form-control" >@for ($i=8; $i<18;$i++) @for ($a=0;$a<4;$a++) @if ($i<17) @if ($a*15 == 0) @if (strval($i) == Carbon\Carbon::parse($details->start)->format("G")) <option selected value="{{$i}}:00">{{$i}}:00</option> @else <option value="{{$i}}:00">{{$i}}:00</option>  @endif @else @if(strval($i) == Carbon\Carbon::parse($details->start)->format("G") && strval($a*15) == Carbon\Carbon::parse($details->start)->format("i")) <option selected value="{{$i}}:{{$a*15}}">{{$i}}:{{$a*15}}</option> @else <option value="{{$i}}:{{$a*15}}">{{$i}}:{{$a*15}}</option> @endif @endif @endif @if ($i==17 && $a==0 ) @if (Carbon\Carbon::parse($details->start)->format("G") == strval($i))<option selected value="{{$i}}:00">{{$i}}:00</option> @else <option value="{{$i}}:00">{{$i}}:00</option> @endif @endif @endfor @endfor</select></div></td><td><div class="operationTime input-group"><span class="input-group-addon"><i class="fa fa-sun-o"></i></span><select name="afternoon[]" class="form-control" > @for ($i=8; $i<18;$i++) @for ($a=0;$a<4;$a++) @if ($i<17) @if ($a*15 == 0) @if(strval($i) == Carbon\Carbon::parse($details->end)->format("G")) <option selected value="{{$i}}:00">{{$i}}:00</option> @else <option value="{{$i}}:00">{{$i}}:00</option>  @endif @else @if(strval($i) == Carbon\Carbon::parse($details->end)->format("G") && strval($a*15) == Carbon\Carbon::parse($details->end)->format("i")) <option selected value="{{$i}}:{{$a*15}}">{{$i}}:{{$a*15}}</option> @else <option value="{{$i}}:{{$a*15}}">{{$i}}:{{$a*15}}</option> @endif @endif @endif @if($i==17 && $a==0 ) @if (Carbon\Carbon::parse($details->end)->format("G") == strval($i))<option selected value="{{$i}}:00">{{$i}}:00</option> @else <option value="{{$i}}:00">{{$i}}:00</option> @endif @endif @endfor @endfor </select></div></td><td><select name="breaktime[]" class="form-control" > @for ($a=1;$a<5;$a++)<option value="{{$a*15}}">{{$a*15}}</option> @endfor </select></td> @if (++$z == 1)<td><button type="button" onclick="updateClick({{$classes->id}})" class="btn btn-primary"><i class="glyphicon glyphicon-plus" ></i></button></td> @else <td><button type="button" onclick="updateRemove({{$details->id}})" class="btn btn-danger"><i class="glyphicon glyphicon-remove" ></i></button></td> @endif </tr>@endforeach');
             }
             @endforeach
 
@@ -593,5 +593,27 @@
     $("#transaction").last().addClass( "active" );
     $("#manage_app").last().addClass( "active" );
     $("#individual_app").last().addClass( "active" );
+</script>
+<script type="text/javascript">
+     @if(Session::has('message'))
+    var type = "{{ Session::get('alert-type', 'info') }}";
+    switch(type){
+        case 'info':
+            toastr.info("{{ Session::get('message') }}");
+            break;
+        
+        case 'warning':
+            toastr.warning("{{ Session::get('message') }}");
+            break;
+
+        case 'success':
+            toastr.success("{{ Session::get('message') }}");
+            break;
+
+        case 'error':
+            toastr.error("{{ Session::get('message') }}");
+            break;
+    }
+  @endif
 </script>
 @endsection

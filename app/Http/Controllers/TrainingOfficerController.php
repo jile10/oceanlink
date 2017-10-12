@@ -202,6 +202,7 @@ class TrainingOfficerController extends Controller
     public function viewAttendance(){
         $tclass = Trainingclass::where('id','=',session('class_tclass_id'))->first();
         $holiday = Holiday::all()->where('active','=',1);
+        $sessionday = Nosessionday::all();
          // start of date end
         $check = true;
         $checkdays = 1;
@@ -216,10 +217,10 @@ class TrainingOfficerController extends Controller
                     $holidaycheck = true;
                 }
             }
-            $check = Nosessionday::where('date',Carbon::parse($dateEnd)->format('Y-m-d'))->get();
-            if(count($check)>0)
-            {
-                $holidaycheck = true;
+            foreach($sessionday as $sessiondays){
+                if(Carbon::parse($dateEnd)->between(Carbon::parse($sessiondays->dateStart), Carbon::parse($sessiondays->dateEnd))){
+                    $holidaycheck = true;
+                }
             }
 
             if($holidaycheck == false)
@@ -252,6 +253,7 @@ class TrainingOfficerController extends Controller
         $checkattendance = false; 
         $tclass = Trainingclass::find($request->trainingclass_id);
         $holiday = Holiday::all()->where('active','=',1);
+        $sessionday = Nosessionday::all();
         // start of date end
         //end of date end
         $attendanceholidaycheck = true;
@@ -260,97 +262,93 @@ class TrainingOfficerController extends Controller
                 $attendanceholidaycheck = false;
             }
         }
-        if(Carbon::parse($request->attendanceDate)->between(Carbon::parse($tclass->scheduledprogram->dateStart),Carbon::parse($request->attendanceDate)) || Carbon::parse($request->attendanceDate)->eq(Carbon::parse($tclass->scheduledprogram->dateStart)) || Carbon::parse($request->attendanceDate)->eq(Carbon::parse($request->attendanceDate)))
-        {
-            foreach ($tclass->schedule->scheduledetail as $details) {
-                if(Carbon::parse($request->attendanceDate)->format('l')== $details->day->dayName){
-                    $checkattendance = true;
-                }
+        foreach ($tclass->schedule->scheduledetail as $details) {
+            if(Carbon::parse($request->attendanceDate)->format('l')== $details->day->dayName){
+                $checkattendance = true;
             }
         }
-        $check = Nosessionday::where('date',Carbon::parse($request->attendanceDate)->format('Y-m-d'))->get();
-        if(count($check)>0)
-        {
-            $notification = array(
-                    'message' => 'Cannot set attendance in this day', 
-                    'alert-type' => 'error'
-                );
-                return redirect('/tofficer/class/attendance')->with($notification);
-        }
-        else
-        {
-            if($checkattendance && $attendanceholidaycheck){
-                if($request->checkAttendance == 0)
-                {
-                    if(count($request->classdetail_id)!=0)
-                    {  
-                        for($i=0;$i<count($request->classdetail_id);$i++){
-                            $attend = new Attend;
-                            $attend->date = Carbon::parse($request->attendanceDate)->format('Y-m-d');
-                            $attend->status = $request->status[$i];
-                            $attend->attendance_id = $tclass->attendance->id;
-                            $attend->classdetail_id = $request->classdetail_id[$i];
-                            $attend->save();
-                        }
-                    }
-                    else
-                    {
-                        for($i=0;$i<count($request->groupclassdetail_id);$i++){
-                            $attend = new Groupattend;
-                            $attend->date = Carbon::parse($request->attendanceDate)->format('Y-m-d');
-                            $attend->status = $request->status[$i];
-                            $attend->attendance_id = $tclass->attendance->id;
-                            $attend->groupclassdetail_id = $request->groupclassdetail_id[$i];
-                            $attend->save();
-                        }
-                    }
-                    $notification = array(
-                        'message' => 'Attendance in this day has been set', 
-                        'alert-type' => 'success'
+        
+        foreach($sessionday as $sessiondays){
+            if(Carbon::parse($request->attendanceDate)->between(Carbon::parse($sessiondays->dateStart), Carbon::parse($sessiondays->dateEnd))){
+                $notification = array(
+                        'message' => 'Cannot set attendance in this day', 
+                        'alert-type' => 'error'
                     );
-                    return redirect('/tofficer/class/attendance')->with($notification);
+                    return redirect('/manage_class/attendance')->with($notification);
+            }
+        
+        }
+        if($checkattendance && $attendanceholidaycheck){
+            if($request->checkAttendance == 0)
+            {
+                if(count($request->classdetail_id)!=0)
+                {  
+                    for($i=0;$i<count($request->classdetail_id);$i++){
+                        $attend = new Attend;
+                        $attend->date = Carbon::parse($request->attendanceDate)->format('Y-m-d');
+                        $attend->status = $request->status[$i];
+                        $attend->attendance_id = $tclass->attendance->id;
+                        $attend->classdetail_id = $request->classdetail_id[$i];
+                        $attend->save();
+                    }
                 }
                 else
                 {
-                    if(count($request->classdetail_id)!=0)
-                    {  
-                        for($i=0;$i<count($request->classdetail_id);$i++){
-                            $attend = Attend::where('date','=',Carbon::parse($request->attendanceDate)->format('Y-m-d'))->where('classdetail_id','=',$request->classdetail_id[$i])->get();
-                            foreach($attend as $attends)
-                            {
-                                $atten = Attend::find($attends->id);
-                                $atten->status = $request->status[$i];
-                                $atten->save();
-                            }
-                        }
+                    for($i=0;$i<count($request->groupclassdetail_id);$i++){
+                        $attend = new Groupattend;
+                        $attend->date = Carbon::parse($request->attendanceDate)->format('Y-m-d');
+                        $attend->status = $request->status[$i];
+                        $attend->attendance_id = $tclass->attendance->id;
+                        $attend->groupclassdetail_id = $request->groupclassdetail_id[$i];
+                        $attend->save();
                     }
-                    else
-                    {
-                        for($i=0;$i<count($request->groupclassdetail_id);$i++){
-                            $attend = Groupattend::where('date','=',Carbon::parse($request->attendanceDate)->format('Y-m-d'))->where('classdetail_id','=',$request->groupclassdetail_id[$i])->get();
-                            foreach($attend as $attends)
-                            {
-                                $atten = Groupattend::find($attends->id);
-                                $atten->status = $request->status[$i];
-                                $atten->save();
-                            }
-                        }
-                    }
-                    $notification = array(
-                        'message' => 'Attendance in this day has been updated', 
-                        'alert-type' => 'success'
-                    );
-                    return redirect('/tofficer/class/attendance')->with($notification);
                 }
-            }
-            else
-            {
                 $notification = array(
-                    'message' => "Cannot set attendance in this day.", 
-                    'alert-type' => 'error'
+                    'message' => 'Attendance in this day has been set', 
+                    'alert-type' => 'success'
                 );
                 return redirect('/tofficer/class/attendance')->with($notification);
             }
+            else
+            {
+                if(count($request->classdetail_id)!=0)
+                {  
+                    for($i=0;$i<count($request->classdetail_id);$i++){
+                        $attend = Attend::where('date','=',Carbon::parse($request->attendanceDate)->format('Y-m-d'))->where('classdetail_id','=',$request->classdetail_id[$i])->get();
+                        foreach($attend as $attends)
+                        {
+                            $atten = Attend::find($attends->id);
+                            $atten->status = $request->status[$i];
+                            $atten->save();
+                        }
+                    }
+                }
+                else
+                {
+                    for($i=0;$i<count($request->groupclassdetail_id);$i++){
+                        $attend = Groupattend::where('date','=',Carbon::parse($request->attendanceDate)->format('Y-m-d'))->where('classdetail_id','=',$request->groupclassdetail_id[$i])->get();
+                        foreach($attend as $attends)
+                        {
+                            $atten = Groupattend::find($attends->id);
+                            $atten->status = $request->status[$i];
+                            $atten->save();
+                        }
+                    }
+                }
+                $notification = array(
+                    'message' => 'Attendance in this day has been updated', 
+                    'alert-type' => 'success'
+                );
+                return redirect('/tofficer/class/attendance')->with($notification);
+            }
+        }
+        else
+        {
+            $notification = array(
+                'message' => "Cannot set attendance in this day.", 
+                'alert-type' => 'error'
+            );
+            return redirect('/tofficer/class/attendance')->with($notification);
         }
     }
 

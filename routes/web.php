@@ -74,6 +74,7 @@ Route::get('queries','QueriesController@viewQueries');
 //Reports
 
 Route::get('reports/collectionreport','CollectionReportController@viewReport');
+Route::post('reports/collection/print','PrintController@printCollectionReport');
 
 //Utilities
 
@@ -301,3 +302,6 @@ Route::group(['middleware' => ['cashier']],function(){
 	Route::get('/cashier/accountsetting','CashierController@viewAccount');
 	Route::post('/cashier/update-image','CashierController@updateImage');
 });
+
+
+?>

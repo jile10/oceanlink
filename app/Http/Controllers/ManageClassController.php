@@ -22,6 +22,7 @@ class ManageClassController extends Controller
         $class = Trainingclass::where('status','=',2)->orWhere('status','=',4)->get();
         $tclass=array();
         $holiday = Holiday::all()->where('active','=',1);
+        $sessionday = Nosessionday::all();
         foreach ($class as $classes) {
                 // start of date end
                 $check = true;
@@ -37,10 +38,10 @@ class ManageClassController extends Controller
                             $holidaycheck = true;
                         }
                     }
-                    $check = Nosessionday::where('date',Carbon::parse($dateEnd)->format('Y-m-d'))->get();
-                    if(count($check)>0)
-                    {
-                        $holidaycheck = true;
+                    foreach($sessionday as $sessiondays){
+                        if(Carbon::parse($dateEnd)->between(Carbon::parse($sessiondays->dateStart), Carbon::parse($sessiondays->dateEnd))){
+                            $holidaycheck = true;
+                        }
                     }
 
                     if($holidaycheck == false)
@@ -143,7 +144,8 @@ class ManageClassController extends Controller
     public function viewAttendance(Request $request){
     	$id  = session('id');
     	$tclass = Trainingclass::find($id);
-            $holiday = Holiday::all()->where('active','=',1);
+        $holiday = Holiday::all()->where('active','=',1);
+        $sessionday = Nosessionday::all();
         // start of date end
             $check = true;
             $checkdays = 1;
@@ -158,10 +160,10 @@ class ManageClassController extends Controller
                         $holidaycheck = true;
                     }
                 }
-                $check = Nosessionday::where('date',Carbon::parse($dateEnd)->format('Y-m-d'))->get();
-                if(count($check)>0)
-                {
-                    $holidaycheck = true;
+                foreach($sessionday as $sessiondays){
+                    if(Carbon::parse($dateEnd)->between(Carbon::parse($sessiondays->dateStart), Carbon::parse($sessiondays->dateEnd))){
+                        $holidaycheck = true;
+                    }
                 }
 
                 if($holidaycheck == false)
@@ -187,6 +189,7 @@ class ManageClassController extends Controller
         $checkattendance = false; 
         $tclass = Trainingclass::find($request->trainingclass_id);
         $holiday = Holiday::all()->where('active','=',1);
+        $sessionday = Nosessionday::all();
         // start of date end
         //end of date end
         $attendanceholidaycheck = true;
@@ -202,15 +205,16 @@ class ManageClassController extends Controller
                     $checkattendance = true;
                 }
             }
-        }
-        $check = Nosessionday::where('date',Carbon::parse($request->attendanceDate)->format('Y-m-d'))->get();
-        if(count($check)>0)
-        {
-            $notification = array(
-                    'message' => 'Cannot set attendance in this day', 
-                    'alert-type' => 'error'
-                );
-                return redirect('/manage_class/attendance')->with($notification);
+            foreach($sessionday as $sessiondays){
+                if(Carbon::parse($dateEnd)->between(Carbon::parse($sessiondays->dateStart), Carbon::parse($sessiondays->dateEnd))){
+                    $notification = array(
+                            'message' => 'Cannot set attendance in this day', 
+                            'alert-type' => 'error'
+                        );
+                        return redirect('/manage_class/attendance')->with($notification);
+                }
+            
+            }
         }
         else
         {

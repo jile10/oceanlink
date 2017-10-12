@@ -48,8 +48,10 @@
 					<div id="calendar"></div>
 				</div>
 			</div>
-			<!-- /.box --> </div>
-		<!-- /.col --> </div>
+			<!-- /.box --> 
+		</div>
+		<!-- /.col --> 
+	</div>
 	<!-- Modal -->
 </section>
 <!--Create Modal-->

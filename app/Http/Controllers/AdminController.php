@@ -35,7 +35,7 @@ class AdminController extends Controller
                         $certificate = Certificate::all();
                         $a = count($certificate)+1;
                         $certificate = new Certificate;
-                        $certificate->certificate_no = "OL-". $classes->scheduledprogram->rate->program->programCode . '-' . $a .'-' .Carbon::now()->format('Y');
+                        $certificate->certificate_no = "OL-". $tclasses->scheduledprogram->rate->program->programCode . '-' . $a .'-' .Carbon::now()->format('Y');
                         $certificate->date_issued = Carbon::now()->format('Y-m-d');
                         $certificate->save();
                         $certificate = Certificate::all();
@@ -68,6 +68,7 @@ class AdminController extends Controller
         $class = Trainingclass::where('status','=',2)->get();
         $tclass=array();
         $holiday = Holiday::all()->where('active','=',1);
+        $sessionday = Nosessionday::all();
         foreach ($class as $classes) {
 			
             // start of date end
@@ -85,10 +86,10 @@ class AdminController extends Controller
                     }
                 }
 
-                $check = Nosessionday::where('date',Carbon::parse($dateEnd)->format('Y-m-d'))->get();
-                if(count($check)>0)
-                {
-                    $holidaycheck = true;
+                foreach($sessionday as $sessiondays){
+                    if(Carbon::parse($dateEnd)->between(Carbon::parse($sessiondays->dateStart), Carbon::parse($sessiondays->dateEnd))){
+                        $holidaycheck = true;
+                    }
                 }
                 if($holidaycheck == false)
                 {

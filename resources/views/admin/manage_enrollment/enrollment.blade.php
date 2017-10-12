@@ -5,6 +5,8 @@
 <link href="vendors/touchspin/dist/jquery.bootstrap-touchspin.css" rel="stylesheet" type="text/css" media="all" />
 <link href="/vendors/datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen" />
 <link href="/vendors/panel/panel.css" rel="stylesheet" type="text/css"/>
+    <link href="/css/fullcalendar.css" rel="stylesheet" type="text/css" />
+    <link href="/css/calendar_custom.css" rel="stylesheet" type="text/css" />
 @endsection
 @section('content')
 
@@ -99,7 +101,8 @@
 											@endif
 										@endif
 									@endif
-									</form>
+									<button type="button" data-toggle="modal" data-href="#SessionCalendar{{$tclasses['id']}}" href="#SessionCalendar{{$tclasses['id']}}" class="btn btn-info col-sm-12"><i class="glyphicon glyphicon-calendar"></i>&ensp;Session Calendar</button>
+									</form></td>
 								</tr>
 							@endforeach
 						</tbody>
@@ -110,11 +113,51 @@
 	</div>
 </section>
 
+<!-- SESSION CALENDAR -->
+@foreach($tclass as $tclasses)
+<div class="modal fade in" id="SessionCalendar{{$tclasses['id']}}" tabindex="-1" role="dialog" aria-hidden="false" style="display:none;">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header btn-info">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				<h4 class="modal-title">Training Session Calendar</h4>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-md-4">
+						<div class="box">
+							<div class="box-title">
+								<h3>Legends</h3>
+							</div>
+							<div class="box-body">
+								<div >
+									<div class='external-event palette-primary'>Days that have session</div>
+									<div class='external-event palette-warning'>No session day</div>
+									<div class='external-event palette-danger'>Holiday</div>
+								</div>
+							</div>
+						</div>
+						<!-- /.box --> 
+					</div>
+					<div class="col-md-12">
+						<div class="box">
+							<div class="box-body">
+								<div id="calendar{{$tclasses['id']}}"></div>
+							</div>
+						</div>
+						<!-- /.box --> 
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+@endforeach
 <!-- No session day modal -->
 <div class="modal fade in" id="NoSession" tabindex="-1" role="dialog" aria-hidden="false" style="display:none;">
 	<div class="modal-dialog modal-md">
 		<div class="modal-content">
-			<form action="/manage_enrollment/nosession" method="post" class="form-horizontal">
+			<form id="session-form" action="/manage_enrollment/nosession" method="post" class="form-horizontal">
 				{{ csrf_field() }} 	
 				<div class="modal-header btn-primary">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -130,15 +173,25 @@
 							</div>
 						</div>
 						<div class="col-md-12">
-							<div class="form-group">
-								<label for="inputEmail3" class="col-sm-3 control-label">Date<font color="red">*</font></label>
-								<div class="col-sm-8">
-									<div class="input-group date form_datetime col-sm-7" data-link-field="dtp_input1">
-		                                <input class="form-control hasDatepicker" size="16" type="text" value="{{Carbon\Carbon::now()->format('Y-m-d')}}" name="date" readonly>
-		                                <span class="input-group-addon">
-		                                    <span class="glyphicon glyphicon-th"></span>
-		                                </span>
-		                            </div>
+							<div class="row">
+								<div class="col-md-3 col-md-offset-3">
+									<div class="form-group">
+										&ensp;
+										<input type="checkbox" name="dateRange" id="dateRange">&ensp; Date Range
+									</div>
+								</div>
+							</div>
+							<div id="dates">
+								<div class="form-group">
+									<label for="inputEmail3" class="col-sm-3 control-label">Date<font color="red">*</font></label>
+									<div class="col-sm-8">
+										<div class="input-group date form_datetime col-sm-7" data-link-field="dtp_input1">
+			                                <input class="form-control hasDatepicker" size="16" type="text" value="{{Carbon\Carbon::now()->format('F d,Y')}}"  name="sessionDate" readonly>
+											<span class="input-group-addon">
+												<span class="glyphicon glyphicon-th"></span>
+											</span>
+			                            </div>
+									</div>
 								</div>
 							</div>
 							<div class="form-group">
@@ -502,12 +555,75 @@
 
 @endsection
 @section('js')
+	<script src="/js/fullcalendar.min.js" type="text/javascript"></script>
+	<script src="/js/calendarcustom.min.js" type="text/javascript"></script>
     <script src="js/metisMenu.js" type="text/javascript"></script>
     <script src="/vendors/touchspin/dist/jquery.bootstrap-touchspin.js"></script>
     <script src="js/icheck.js" type="text/javascript"></script>
   	<script src="/js/custom.js"></script>
 	<script type="text/javascript" src="/vendors/datetimepicker/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
     <script src="/js/moment.min.js"></script>
+    <script type="text/javascript">
+
+		$.validator.addMethod("valid1", function(value, element) { 
+			var start = Date.parse($("#start").val());
+			var end =Date.parse($("#end").val());
+		    return this.optional(element) || end>=start;
+		}, "End Date must be greater than or equal to Start Date");
+
+    	$('#dateRange').on('ifChecked',function(){
+		$('#dates').empty();
+		$('#dates').append('<div class="form-group"><label class="control-label col-sm-3">Start Date<font color="red">*</font></label><div class="col-md-8"><div class="input-group date form_datetime col-sm-7" data-link-field="dtp_input1"><input class="form-control hasDatepicker" size="16" type="text" value="{{Carbon\Carbon::now()->format("F d,Y")}}" id="start" name="sessionStart" readonly><span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span></div></div></div><div class="form-group"><label class="control-label col-sm-3">End Date<font color="red">*</font></label><div class="col-md-8"><div class="input-group date form_datetime col-sm-7" data-link-field="dtp_input1"><input class="form-control" size="16" type="text" value="{{Carbon\Carbon::now()->format("F d,Y")}}" id="end" name="sessionEnd" readonly><span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span></div></div></div>');
+
+		$(".form_datetime").datetimepicker({
+	        format: "MM dd, yyyy",
+	        weekStart: 1,
+	        todayBtn:  1,
+			autoclose: 1,
+			todayHighlight: 1,
+			startView: 2,
+			minView: 2,
+			maxView: 3,
+			forceParse: 0,
+			viewSelect:'month'
+	    });
+	})
+
+	$('#dateRange').on('ifUnchecked',function(){
+		$('#dates').empty();
+		$('#dates').append('<div class="form-group"><label class="control-label col-sm-3">Date<font color="red">*</font></label><div class="col-md-8"><div class="input-group date form_datetime col-sm-7" data-link-field="dtp_input1"><input class="form-control hasDatepicker" size="16" type="text" value="{{Carbon\Carbon::now()->format('F d,Y')}}" id="start" name="sessionDate" readonly><span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span></div></div></div>');
+
+		$(".form_datetime").datetimepicker({
+	        format: "MM dd, yyyy",
+	        weekStart: 1,
+	        todayBtn:  1,
+			autoclose: 1,
+			todayHighlight: 1,
+			startView: 2,
+			minView: 2,
+			maxView: 3,
+			forceParse: 0,
+			viewSelect:'month'
+	    });
+	});
+	$(function(){
+		$('#session-form').validate({
+			rules:{
+				sessionStart:{
+					required:true,
+					valid1:true
+				},
+				sessionEnd:{
+					required: true,
+					valid1:true
+				},
+			},
+			errorPlacement:function(error,element){
+         		error.insertAfter(element.parent("div"));
+			}
+		});
+	});
+    </script>
 <script>
 	$(document).ready(function(){
 	  $('input').iCheck({
@@ -741,5 +857,107 @@
 			}
 		@endforeach
 	}
+</script>
+<script>
+$(document).ready(function() {
+/* initialize the external events
+         -----------------------------------------------------------------*/
+function ini_events(ele) {
+    ele.each(function() {
+
+        // create an Event Object (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
+        // it doesn't need to have a start or end
+        var eventObject = {
+            title: $.trim($(this).text()) // use the element's text as the event title
+        };
+
+        // store the Event Object in the DOM element so we can get to it later
+        $(this).data('eventObject', eventObject);
+
+        // make the event draggable using jQuery UI
+
+    });
+}
+ini_events($('#external-events div.external-event'));
+
+/* initialize the calendar
+         -----------------------------------------------------------------*/
+//Date for the calendar events (dummy data)
+var date = new Date();
+var d = date.getDate(),
+    m = date.getMonth(),
+    y = date.getFullYear();
+@foreach($tclass as $tclasses)
+$('#calendar{{$tclasses["id"]}}').fullCalendar({
+	
+    header: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'month'
+    },
+    buttonText: {
+        prev: "<span class='fa fa-caret-left'></span>",
+        next: "<span class='fa fa-caret-right'></span>",
+        today: 'today',
+        month: 'month',
+        week: 'week',
+        day: 'day'
+    },
+    //Random events
+	
+    events: [
+		@foreach($tclasses['dayschedule'] as $scheds)
+		{
+			id: '{{Carbon\Carbon::parse($scheds["date"])->format('Y-m-d')}}',
+	        title: '{{$scheds['time']}}',
+	        start: '{{Carbon\Carbon::parse($scheds["date"])->format('Y-m-d')}}',
+	        backgroundColor: "#418BCA"
+    	}, 
+		@endforeach
+		@foreach($holiday as $holidays){
+			id: "{{$holidays->id}}",
+			title: '{{$holidays->holidayName}}',
+			start: "{{Carbon\Carbon::parse($holidays->dateStart)->format('Y-m-d')}}",
+			end: "{{Carbon\Carbon::parse($holidays->dateEnd)->format('Y-m-d')}}"
+		},
+		@endforeach
+		@foreach($sessionday as $sessiondays){
+			id: "{{$sessiondays->id}}",
+			title: '{{$sessiondays->description}}',
+			start: "{{Carbon\Carbon::parse($sessiondays->dateStart)->format('Y-m-d')}}",
+			end: "{{Carbon\Carbon::parse($sessiondays->dateEnd)->format('Y-m-d')}}",
+            backgroundColor: "#F89A14"
+		},
+		@endforeach
+		
+	],
+	eventClick: function(event, jsEvent, view){
+		console.log(event.start);
+	},
+    drop: function(date, allDay) { // this function is called when something is dropped
+
+        // retrieve the dropped element's stored Event Object
+        var originalEventObject = $(this).data('eventObject');
+
+        // we need to copy it, so that multiple events don't have a reference to the same object
+        var copiedEventObject = $.extend({}, originalEventObject);
+
+        // assign it the date that was reported
+        copiedEventObject.start = date;
+        copiedEventObject.allDay = allDay;
+        copiedEventObject.backgroundColor = $(this).css("background-color");
+        copiedEventObject.borderColor = $(this).css("border-color");
+
+        // render the event on the calendar
+        // the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
+        $('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
+
+    }
+});
+@endforeach
+/* ADDING EVENTS */
+var currColor = "#418BCA"; //default
+//Color chooser button
+});
 </script>
 @endsection
