@@ -8,6 +8,7 @@ use App\Trainingclass;
 use Carbon\Carbon;
 use App\Holiday;
 use App\Scheduledetail;
+use App\Payment;
 class PrintController extends Controller
 {
     public function voucher(){
@@ -170,6 +171,20 @@ class PrintController extends Controller
     	$tclass = Trainingclass::find($request->tclass_id);
     	$pdf = PDF::loadView('printable/enrollmentreport',['tclass'=>$tclass,'x'=>0])->setPaper([0,0,612,792],'portrait');
     	return $pdf->stream();
+    }
+
+    public function printCollectionReport(Request $request)
+    {
+    	$timePeriod ="";
+    	switch($request->timePeriod)
+    	{
+    		case 'yearly':
+    			$timePeriod = "Yearly";
+				$report = Payment::whereYear('paymentDate', '=', $request->yearly_year )->get();
+		    	$pdf = PDF::loadView('printable/collectionreport',["report"=>$report,"timePeriod" => $timePeriod])->setPaper([0,0,612,792],'portrait');
+		    	return $pdf->stream();
+    			break;
+    	}
     }
 }
 

@@ -74,6 +74,7 @@ Route::get('queries','QueriesController@viewQueries');
 //Reports
 
 Route::get('reports/collectionreport','CollectionReportController@viewReport');
+Route::post('reports/collection/print','PrintController@printCollectionReport');
 
 //Utilities
 
