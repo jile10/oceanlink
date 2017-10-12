@@ -83,7 +83,7 @@
                             <div class="panel-heading">
                                 <h3 class="panel-title">
                                         <i class="livicon" data-name="user" data-size="18" data-loop="true" data-c="#fff" data-hc="white"></i>
-                                        Selected Courses
+                                        Select Payment Mode
                                 </h3>
                                 <span class="pull-right clickable">
                                     <i class="glyphicon glyphicon-chevron-up"></i>
@@ -98,7 +98,7 @@
                                                 <th width="15%">Date Start</th>
                                                 <th width="15%">Date End</th>
                                                 <th width="15%" style="text-align:right;">Fee &ensp;(Php)</th>
-                                                <th width="25%">Payment Mode</th>
+                                                <th width="25%" style="text-align: center;">Payment Mode</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -129,7 +129,7 @@
                         </div>
                         <div class="form-horizontal" id="checks">
                             <div class="form-group" style="margin-left: 20px;">
-                                <input  type="checkbox" name="alumni">&ensp;I'm an Alumni/Student
+                                <input  type="checkbox" name="alumni">&ensp;I'm an Alumni/Trainee
                                 <input type="hidden" name="enrollee_id" id="enrollee_id" value="">
                             </div>
                         </div>
@@ -203,10 +203,20 @@
                                     <div class="col-md-4">
                                         <div class="input-group date form_datetime"  data-date-format="MM dd, yyyy" data-link-field="dtp_input1">
                                             <span class="input-group-addon">Birthdate<font color="red">*</font></span>
-                                            <input class="form-control" size="16" type="text" value="" readonly name="dob" id="1dob">
+                                            <input class="form-control" size="16" type="text" value="" readonly name="dob" id="1dob" onchange="dobChanged(this)">
                                             <span class="input-group-addon">
                                                 <span class="glyphicon glyphicon-th"></span>
                                             </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <div>
+                                            <div class="input-group">
+                                                <span class="input-group-addon">Age</span>
+                                                <input required type="text" id="age" class="form-control" name="age" readonly="readonly" maxlength="3">
+                                            </div>
+                                        </div>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
@@ -281,19 +291,22 @@
                                 <div class="panel-body">
                                     <h2 class="hidden">&nbsp;</h2>
                                     <div class="row">
-                                        <div class="col-md-8">
-                                            <div class="form-group">
-                                                <div id="contactC" class="input-group">
-                                                    <span class="input-group-addon">Contact<font color="red">*</font></span>
-                                                    <input type="text" id="1contactI" name="contact" class="cp form-control placeholder selector" placeholder="e.g: 0999 9999 999">
-                                                </div>
+                                        <div class="form-group">
+                                            <div class="col-md-2">
+                                                <label>Contact<font color="red">*</font></label>
+                                                </select>
                                             </div>
-                                        </div>
-                                        <div class="col-md-4">
+                                            <div class="col-md-4">
                                                 <select name="contactType" id="contactType" class="selector form-control" onchange="changeContactType(this)">
                                                     <option selected value="mobile">Mobile No.</option>
                                                     <option value="tel">Landline No.</option>
                                                 </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div id="contactC">
+                                                    <input type="text" id="1contactI" name="contact" class="cp form-control placeholder selector" placeholder="e.g: 0999 9999 999">
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -344,19 +357,20 @@
                                 </div>
                                 <div class="row">
                                     <div class="form-group">
-                                        <div class="col-md-8">
-                                            <div class="form-group">
-                                                <div id="contactE" class="input-group">
-                                                    <span class="input-group-addon">Contact<font color="red">*</font></span>
-                                                    <input type="text" id="1Econtact" class="selector cp form-control placeholder" name="Econtact" placeholder="e.g: 0999 9999 999">
-                                                </div>
-                                            </div>
+                                        <div class="col-md-2">
+                                            <label>Contact<font color="red">*</font></label>
+                                            </select>
                                         </div>
                                         <div class="col-md-4">
                                             <select name="EContactType" id="1EContactType" class="selector form-control" onchange="EchangeContactType(this)">
                                                 <option selected value="mobile">Mobile No.</option>
                                                 <option value="tel">Landline No.</option>
                                             </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div id="contactE">
+                                                <input type="text" id="1EContact" name="Econtact" class="cp form-control placeholder selector" placeholder="e.g: 0999 9999 999">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -411,7 +425,7 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <div class="input-group">
-                                                <span class="input-group-addon">Course<font color="red">*</font></span>
+                                                <span class="input-group-addon">Course</span>
                                                 <input type="text" id="1EBcourse" class="selector form-control capital" name="EBcourse">
                                             </div>
                                         </div>
@@ -483,7 +497,14 @@
                                             <tr>
                                                 <td><input type="text" class="selector form-control capital" name="trainingTitle[]"></td>
                                                 <td><input type="text" class="selector form-control capital" name="trainingCenter[]"></td>
-                                                <td><input type="date" class="selector form-control" name="dateTaken[]"></td>
+                                                <td>
+                                                    <div class="input-group date form_datetime"  data-date-format="MM dd, yyyy" data-link-field="dtp_input1">
+                                                        <input class="form-control" size="16" type="text" value="" readonly name="dateTaken[]">
+                                                        <span class="input-group-addon">
+                                                            <span class="glyphicon glyphicon-th"></span>
+                                                        </span>
+                                                    </div>
+                                                </td>
                                                 <td><button type="button" class="selector btn btn-success" onclick="clicks()" id="add">Add more</button></td>
                                             </tr>
                                         </tbody>
@@ -520,10 +541,11 @@
     <script src="{{ asset('/js/jquery.dataTables.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('/js/dataTables.bootstrap.min.js') }}" type="text/javascript"></script>
     <script src="/js/toastr.min.js"></script>
+    <script type="text/javascript" src="/js/moment.min.js" charset="UTF-8"></script>
 
     <script type="text/javascript">
         $('input[type=checkbox]').on('ifChecked', function(event){
-            $('#checks').append('<div class="form-group" id="checked"><label class="control-label col-md-3" >Enter Student Number/alumni</label><div class="col-md-3"><input id="enrollee" type="text" class="form-control"/></div><div class="col-md-2"><button type="button" onclick="enrolleechange()" class="btn btn-block btn-primary">Enter</button></div></div>');
+            $('#checks').append('<div class="form-group" id="checked"><label class="control-label col-md-3" >Enter Trainee Number</label><div class="col-md-3"><input id="enrollee" type="text" class="form-control"/></div><div class="col-md-2"><button type="button" onclick="enrolleechange()" class="btn btn-block btn-primary">Enter</button></div></div>');
 
             $('#civilStatus').attr('disabled',false);
             $('#option1').attr('disabled',false);
@@ -712,7 +734,7 @@
         var i = 1;
         function clicks(){
             i++;
-            $('#dynamic_field').append('<tr id="row'+i+'"><td><input type="text" class="form-control" name="trainingTitle[]"></td><td><input type="text"class="form-control" name="trainingCenter[]"></td><td><input type="date" class="form-control" name="dateTaken[]"></td><td><button name="remove" type="button" id="'+i+'" class="btn btn-danger remove" >X</button></td></tr>');
+            $('#dynamic_field').append('<tr id="row'+i+'"><td><input type="text" class="form-control" name="trainingTitle[]"></td><td><input type="text"class="form-control" name="trainingCenter[]"></td><td><div class="input-group date form_datetime"  data-date-format="MM dd, yyyy" data-link-field="dtp_input1"><input class="form-control" size="16" type="text" value="" readonly name="dateTaken[]"><span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span></div></td><td><button name="remove" type="button" id="'+i+'" class="btn btn-danger remove" >X</button></td></tr>');
             
             $(document).on('click','.remove',function(){
                 var btn_id = $(this).attr('id');
@@ -729,6 +751,17 @@
 </script>
 
 <script type="text/javascript">
+    function dobChanged(dob){
+        // var age = moment(dob.value,"MMM D, YYYY").fromNow(true);
+        // $('#age').val(age+' old');
+        var bday=  moment(dob.value,"MMM D, YYYY");
+        var today = moment();
+        $('#age').val(today.diff(bday,"years"));
+        $('#age').valid();
+    }
+</script>
+
+<script type="text/javascript">
     
     function changeContactType(contactType){
         if(contactType.value == "tel"){
@@ -736,7 +769,8 @@
             $("#contact").removeClass("cp").addClass("tel").attr("placeholder":"e.g: 0999 9999 999");
             console.log("tel");   --}}
             $("#contactC").empty();
-            $("#contactC").append('<span class="input-group-addon">Contact<font color="red">*</font></span><input type="text" id="contact" name="contact" class="tel form-control placeholder" placeholder="e.g: 999 9999">')
+            $("#contactC").append('<input type="text" id="1contactI" name="1contactI" class="tel form-control placeholder selector" placeholder="e.g: 999 9999">')
+            
             
             $('.tel').mask('000 0000',
             {
@@ -754,7 +788,7 @@
             console.log("cp");  --}}
             
             $("#contactC").empty();
-            $("#contactC").append('<span class="input-group-addon">Contact<font color="red">*</font></span><input type="text" id="contact" name="contact" class="cp form-control placeholder" placeholder="e.g: 0999 9999 999">')
+            $("#contactC").append('<input type="text" id="1contactI" name="contact" class="cp form-control placeholder selector" placeholder="e.g: 0999 9999 999">')
             
             $('.tel').mask('000 0000',
             {
@@ -777,7 +811,8 @@
             $("#contact").removeClass("cp").addClass("tel").attr("placeholder":"e.g: 0999 9999 999");
             console.log("tel");   --}}
             $("#contactE").empty();
-            $("#contactE").append('<span class="input-group-addon">Contact<font color="red">*</font></span><input type="text" id="contactE" class="tel form-control placeholder" placeholder="e.g: 999 9999">')
+            $("#contactE").append('<input type="text" id="1Econtact" name="Econtact" class="tel form-control placeholder selector" placeholder="e.g: 999 9999">')
+
             
             $('.tel').mask('000 0000',
             {
@@ -795,7 +830,7 @@
             console.log("cp");  --}}
             
             $("#contactE").empty();
-            $("#contactE").append('<span class="input-group-addon">Contact<font color="red">*</font></span><input type="text" id="contactE" class="cp form-control placeholder" placeholder="e.g: 0999 9999 999">')
+            $("#contactE").append('<input type="text" id="1EContact" name="Econtact" class="cp form-control placeholder selector" placeholder="e.g: 0999 9999 999">')
             
             $('.tel').mask('000 0000',
             {
@@ -861,6 +896,13 @@ $.validator.addMethod("regx3", function(value, element) {
 $.validator.addMethod("regx4", function(value, element) {          
     return this.optional(element) || ((/(^[0-9]+$)/i.test(value)) && (value.length == 7 || value.length == 11));
 }, "Invalid Input");
+
+$.validator.addMethod("adult", function(value, element) {          
+if(value>=18)
+    return true;
+}, "Must be 18 years old and above");
+
+
 jQuery(function ($){
     @foreach($tclass as $tclasses)
     $('#PP{{$tclasses["id"]}}').iCheck('check');
@@ -878,13 +920,102 @@ jQuery(function ($){
         $('#mode{{$tclasses["id"]}}').remove();
     });
     @endforeach
+
     $('#form').validate({
         rules:{
+            firstName:{
+                required: true,
+                regx1: /(^[a-zA-Z0-9 -\'\Ñ\ñ]+$)/i,
+                space: true,
+            },
+            middleName:{
+                regx3: true,
+                space: true,
+            },
+            lastName:{
+                required: true,
+                regx1: /(^[a-zA-Z0-9 \'\-\Ñ\ñ]+$)/i,
+                space: true,
+            },
+            civilStatus:{
+                required: true
+            },
+            dob:{
+                required: true
+            },
+            age:{
+                adult: true
+            },
+            dop:{
+                required: true,
+                space: true,
+                regx2: /(^[a-zA-Z0-9 \'\-\Ñ\ñ\#\.\,]+$)/i,
+            },
+            street:{
+                required: true,
+                regx2: /(^[a-zA-Z0-9 \'\-\Ñ\ñ\#\.\,]+$)/i,
+                space: true,
+            },
+            barangay:{
+                required: true,
+                regx2: /(^[a-zA-Z0-9 \'\-\Ñ\ñ\#\.\,]+$)/i,
+                space: true,
+            },
+            city:{
+                required: true,
+                regx2: /(^[a-zA-Z0-9 \'\-\Ñ\ñ\#\.\,]+$)/i,
+                space: true,
+            },
+            contact:{
+                required: true
+            },
+            Ename:{
+                required: true,
+                regx1: /(^[a-zA-Z0-9 -\'\Ñ\ñ]+$)/i,
+                space: true,
+            },
+            Erel:{
+                required: true,
+                regx1: /(^[a-zA-Z0-9 -\'\Ñ\ñ]+$)/i,
+                space: true,
+            },
+            contact:{
+                required: true
+            },
+            Eaddress:{
+                required: true,
+                regx2: /(^[a-zA-Z0-9 \'\-\Ñ\ñ\#\.\,]+$)/i,
+                space: true,
+            },
+            EBattainment:{
+                required: true,
+                regx2: /(^[a-zA-Z0-9 \'\-\Ñ\ñ\#\.\,]+$)/i,
+                space: true,
+            },
+            EBschool:{
+                required: true,
+                regx2: /(^[a-zA-Z0-9 \'\-\Ñ\ñ\#\.\,]+$)/i,
+                space: true,
+            },
+            EBcourse:{
+                regx2: /(^[a-zA-Z0-9 \'\-\Ñ\ñ\#\.\,]+$)/i,
+                space: true,
+            },
+            noYears:{
+                number: true,
+                space: true
+            },
+            rank:{
+                space: true,
+                regx2: /(^[a-zA-Z0-9 \'\-\Ñ\ñ\#\.\,]+$)/i,
+            },
+            
+
         },
-        errorPlacement: function(error,element){
+
+        errorPlacement:function(error,element){
             error.insertAfter(element.parent("div"));
-        },
-        
+        }
     });
 });
 </script>

@@ -47,7 +47,7 @@
                     </fieldset>
                   </div>
                   <form id="form-table" action="/next" method="get">
-                    {{csrf_token()}}
+                    {{csrf_field()}}
 	                  <div class="col-md-12 table-responded" style="margin-top: 50px;">
 	                    <table class="striped bordered" id="table1">
 	                      <thead>
