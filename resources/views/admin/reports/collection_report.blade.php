@@ -118,58 +118,57 @@
 												<select name="monthly_year" id="monthly_year" class="form-control">
 													<option disabled>--Select a Year--</option>
 													@for($i=2000;$i<=Carbon\Carbon::now()->format('Y'); $i++)
-													@if($i < (Carbon\Carbon::now()->format('Y'))){
+													@if($i < (Carbon\Carbon::now()->format('Y')))
 													<option value="{{$i}}">{{$i}}</option>
+													@else
+													<option value="{{$i}}" selected>{{$i}}</option>
+													
+													@endif
 												}
-												@else{
-												<option value="{{$i}}" selected>{{$i}}</option>
-											}
-											@endif
-										}
+												@endfor
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-8" style="display: block;" id="yearly">
+								<label class="col-md-2 control-label" for="yearly_year">Year</label>
+								<div class="col-md-5">
+									<select name="yearly_year" id="yearly_year" class="form-control">
+										<option disabled>--Select a Year--</option>
+										@for($i=2000;$i<=Carbon\Carbon::now()->format('Y'); $i++)
+										@if($i < (Carbon\Carbon::now()->format('Y')))
+										<option value="{{$i}}">{{$i}}</option>
+										
+										@else
+										<option value="{{$i}}" selected>{{$i}}</option>
+										
+										@endif
+										
 										@endfor
 									</select>
 								</div>
 							</div>
 						</div>
+						<div class="col-md-12" style="margin-top: 20px;">
+							<div class="col-md-4 col-md-offset-4">
+								<button type="button" class="btn btn-info" onclick="previewClicked()">
+									<i class="livicon pull-left" data-name="eye-open" data-hc="#fff" data-c="#fff" data-size="25"></i>Preview
+								</button>
+								<button type="submit" class="btn btn-primary">
+									<i class="livicon pull-left" data-name="printer" data-hc="#fff" data-c="#fff" data-size="25"></i>Generate
+								</button>
+							</div>
+						</div>
+						<div class="col-md-12" style="margin-top: 20px;" id="title"></div>
+						<table id="queryTable">
+						</table>
+						<table id="total"></table>
 					</div>
-					<div class="col-md-8" style="display: block;" id="yearly">
-						<label class="col-md-2 control-label" for="yearly_year">Year</label>
-						<div class="col-md-5">
-							<select name="yearly_year" id="yearly_year" class="form-control">
-								<option disabled>--Select a Year--</option>
-								@for($i=2000;$i<=Carbon\Carbon::now()->format('Y'); $i++)
-								@if($i < (Carbon\Carbon::now()->format('Y'))){
-								<option value="{{$i}}">{{$i}}</option>
-							}
-							@else{
-							<option value="{{$i}}" selected>{{$i}}</option>
-						}
-						@endif
-					}
-					@endfor
-				</select>
+				</form>
 			</div>
 		</div>
 	</div>
-	<div class="col-md-12" style="margin-top: 20px;">
-		<div class="col-md-4 col-md-offset-4">
-			<button type="button" class="btn btn-info" onclick="previewClicked()">
-				<i class="livicon pull-left" data-name="eye-open" data-hc="#fff" data-c="#fff" data-size="25"></i>Preview
-			</button>
-			<button type="submit" class="btn btn-primary">
-				<i class="livicon pull-left" data-name="printer" data-hc="#fff" data-c="#fff" data-size="25"></i>Generate
-			</button>
-		</div>
-	</div>
-	<div class="col-md-12" style="margin-top: 20px;" id="title"></div>
-	<table id="queryTable">
-	</table>
-	<table id="total"></table>
-</div>
-</form>
-</div>
-</div>
-</div>
 </div>
 </div>
 </section>

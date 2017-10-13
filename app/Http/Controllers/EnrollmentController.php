@@ -302,11 +302,11 @@ class EnrollmentController extends Controller
                 echo Carbon::parse("2018-01-".$days)->format("l") .' '. Carbon::parse($request->dateStart)->format("l") .'<br>';
                 if(Carbon::parse("2018-01-".$days)->format("l") == Carbon::parse($request->dateStart)->format("l"))
                 {
-                    $checkdatestart == true;
+                    $checkdatestart = true;
                 }
             }   
         }
-        if($checkdatestart)
+        if($checkdatestart == false)
         {
             $validdate = false;
             $message.=" Invalid Starting Schedule.";
@@ -519,10 +519,10 @@ class EnrollmentController extends Controller
         {
             if(Carbon::parse("2018-01-".$days->day_id)->format("l") == Carbon::parse($request->datestart)->format("l"))
                 {
-                    $checkdatestart == true;
+                    $checkdatestart = true;
                 }
         }
-        if($checkdatestart)
+        if($checkdatestart  == false)
         {
             $validdate = false;
             $message.=" Invalid Starting Schedule.";
@@ -697,11 +697,11 @@ class EnrollmentController extends Controller
             {
                 if(Carbon::parse("2018-01-".$days)->format("l") == Carbon::parse($request->dateStart)->format("l"))
                     {
-                        $checkdatestart == true;
+                        $checkdatestart = true;
                     }
             }
         }
-        if($checkdatestart)
+        if($checkdatestart  == false)
         {
             $validdate = false;
             $message.=" Invalid Starting Schedule.";

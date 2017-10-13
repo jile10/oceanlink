@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Payment;
 use Carbon\Carbon;
 use App\Accountdetail;
+use App\Account;
 class CollectionReportController extends Controller
 {
 	public function viewReport(){
@@ -47,11 +48,18 @@ class CollectionReportController extends Controller
 		$x=0;
 
     foreach($result as $results){
+        $accountName = "";
+        if ($results->account->has('enrollee')) {
+            $accountName = $results->account->enrollee->firstName . ' '. 
+                                            $results->account->enrollee->middleName .' '. 
+                                            $results->account->enrollee->lastName;
+        }
+        else{
+            $accountName = $results->account->groupapplication->orgName;
+        }
         $yearlyArray[$x] = [
             "accountNumber" =>$results->account->accountNumber,
-            "accountName" =>$results->account->enrollee->firstName . ' '. 
-            								$results->account->enrollee->middleName .' '. 
-            								$results->account->enrollee->lastName,
+            "accountName" => $accountName,
             "paymentDate" =>$results->paymentDate,
             "amount" =>$results->amount
         ];
@@ -88,7 +96,36 @@ class CollectionReportController extends Controller
 	}
 
     public function viewAccount(){
-        $accountdetail = Accountdetail::all();
-        return view('admin/reports/accountbalance',compact('accountdetail'));
+        $account = Account::all();
+        $accountAll = array();
+        $x=0;
+        foreach($account as $accounts){
+            $total=0;
+            foreach ($accounts->accountdetail as $details) {
+                if($details->scheduledprogram->trainingclass->status != 1 && $details->scheduledprogram->trainingclass->status != 0)
+                {
+                    $total += $details->balance;
+                }
+            }
+            $name = "";
+            if(count($accounts->enrollee)>0)
+            {
+                $name = $accounts->enrollee->firstName . ' '. 
+                                            $accounts->enrollee->middleName .' '. 
+                                            $accounts->enrollee->lastName;
+            }
+            else
+                $name = $accounts->groupapplication->orgName;
+            if($total>0)
+            {
+                $accountAll[$x] = [
+                    "accountNumber" => $accounts->accountNumber,
+                    "accountName" =>$name,
+                    "balance"=>$total,
+                ];
+                $x++;
+            }
+        }
+        return view('admin/reports/accountbalance',compact('accountAll'));
     }
 }

@@ -198,98 +198,92 @@ class ManageClassController extends Controller
                 $attendanceholidaycheck = false;
             }
         }
-        if(Carbon::parse($request->attendanceDate)->between(Carbon::parse($tclass->scheduledprogram->dateStart),Carbon::parse($request->attendanceDate)) || Carbon::parse($request->attendanceDate)->eq(Carbon::parse($tclass->scheduledprogram->dateStart)) || Carbon::parse($request->attendanceDate)->eq(Carbon::parse($request->attendanceDate)))
-        {
-            foreach ($tclass->schedule->scheduledetail as $details) {
-                if(Carbon::parse($request->attendanceDate)->format('l')== $details->day->dayName){
-                    $checkattendance = true;
-                }
+        foreach ($tclass->schedule->scheduledetail as $details) {
+            if(Carbon::parse($request->attendanceDate)->format('l')== $details->day->dayName){
+                $checkattendance = true;
             }
-            foreach($sessionday as $sessiondays){
-                if(Carbon::parse($dateEnd)->between(Carbon::parse($sessiondays->dateStart), Carbon::parse($sessiondays->dateEnd))){
-                    $notification = array(
-                            'message' => 'Cannot set attendance in this day', 
-                            'alert-type' => 'error'
-                        );
-                        return redirect('/manage_class/attendance')->with($notification);
+        }
+        foreach($sessionday as $sessiondays){
+            if(Carbon::parse($request->attendanceDate)->between(Carbon::parse($sessiondays->dateStart), Carbon::parse($sessiondays->dateEnd))){
+                $notification = array(
+                        'message' => 'Cannot set attendance in this day', 
+                        'alert-type' => 'error'
+                    );
+                    return redirect('/manage_class/attendance')->with($notification);
+            }
+        
+        }
+        if($checkattendance && $attendanceholidaycheck){
+            if($request->attendanceCheck == 0)
+            {
+                if(count($request->classdetail_id)!=0)
+                {  
+                    for($i=0;$i<count($request->classdetail_id);$i++){
+                        $attend = new Attend;
+                        $attend->date = Carbon::parse($request->attendanceDate)->format('Y-m-d');
+                        $attend->status = $request->status[$i];
+                        $attend->attendance_id = $tclass->attendance->id;
+                        $attend->classdetail_id = $request->classdetail_id[$i];
+                        $attend->save();
+                    }
                 }
-            
+                else
+                {
+                    for($i=0;$i<count($request->groupclassdetail_id);$i++){
+                        $attend = new Groupattend;
+                        $attend->date = Carbon::parse($request->attendanceDate)->format('Y-m-d');
+                        $attend->status = $request->status[$i];
+                        $attend->attendance_id = $tclass->attendance->id;
+                        $attend->groupclassdetail_id = $request->groupclassdetail_id[$i];
+                        $attend->save();
+                    }
+                }
+                $notification = array(
+                    'message' => 'Attendance in this day has been set', 
+                    'alert-type' => 'success'
+                );
+                return redirect('/manage_class/attendance')->with($notification);
+            }
+            else
+            {
+                if(count($request->classdetail_id)!=0)
+                {  
+                    for($i=0;$i<count($request->classdetail_id);$i++){
+                        $attend = Attend::where('date','=',Carbon::parse($request->attendanceDate)->format('Y-m-d'))->where('classdetail_id','=',$request->classdetail_id[$i])->get();
+                        foreach($attend as $attends)
+                        {
+                            $atten = Attend::find($attends->id);
+                            $atten->status = $request->status[$i];
+                            $atten->save();
+                        }
+                    }
+                }
+                else
+                {
+                    for($i=0;$i<count($request->groupclassdetail_id);$i++){
+                        $attend = Groupattend::where('date','=',Carbon::parse($request->attendanceDate)->format('Y-m-d'))->where('groupclassdetail_id','=',$request->groupclassdetail_id[$i])->get();
+                        foreach($attend as $attends)
+                        {
+                            $atten = Groupattend::find($attends->id);
+                            $atten->status = $request->status[$i];
+                            $atten->save();
+                        }
+                    }
+                }
+                $notification = array(
+                    'message' => 'Attendance in this day has been updated', 
+                    'alert-type' => 'success'
+                );
+                return redirect('/manage_class/attendance')->with($notification);
             }
         }
         else
         {
-            if($checkattendance && $attendanceholidaycheck){
-                if($request->checkAttendance == 0)
-                {
-                    if(count($request->classdetail_id)!=0)
-                    {  
-                        for($i=0;$i<count($request->classdetail_id);$i++){
-                            $attend = new Attend;
-                            $attend->date = Carbon::parse($request->attendanceDate)->format('Y-m-d');
-                            $attend->status = $request->status[$i];
-                            $attend->attendance_id = $tclass->attendance->id;
-                            $attend->classdetail_id = $request->classdetail_id[$i];
-                            $attend->save();
-                        }
-                    }
-                    else
-                    {
-                        for($i=0;$i<count($request->groupclassdetail_id);$i++){
-                            $attend = new Groupattend;
-                            $attend->date = Carbon::parse($request->attendanceDate)->format('Y-m-d');
-                            $attend->status = $request->status[$i];
-                            $attend->attendance_id = $tclass->attendance->id;
-                            $attend->groupclassdetail_id = $request->groupclassdetail_id[$i];
-                            $attend->save();
-                        }
-                    }
-                    $notification = array(
-                        'message' => 'Attendance in this day has been set', 
-                        'alert-type' => 'success'
-                    );
-                    return redirect('/manage_class/attendance')->with($notification);
-                }
-                else
-                {
-                    if(count($request->classdetail_id)!=0)
-                    {  
-                        for($i=0;$i<count($request->classdetail_id);$i++){
-                            $attend = Attend::where('date','=',Carbon::parse($request->attendanceDate)->format('Y-m-d'))->where('classdetail_id','=',$request->classdetail_id[$i])->get();
-                            foreach($attend as $attends)
-                            {
-                                $atten = Attend::find($attends->id);
-                                $atten->status = $request->status[$i];
-                                $atten->save();
-                            }
-                        }
-                    }
-                    else
-                    {
-                        for($i=0;$i<count($request->groupclassdetail_id);$i++){
-                            $attend = Groupattend::where('date','=',Carbon::parse($request->attendanceDate)->format('Y-m-d'))->where('classdetail_id','=',$request->groupclassdetail_id[$i])->get();
-                            foreach($attend as $attends)
-                            {
-                                $atten = Groupattend::find($attends->id);
-                                $atten->status = $request->status[$i];
-                                $atten->save();
-                            }
-                        }
-                    }
-                    $notification = array(
-                        'message' => 'Attendance in this day has been updated', 
-                        'alert-type' => 'success'
-                    );
-                    return redirect('/manage_class/attendance')->with($notification);
-                }
-            }
-            else
-            {
-                $notification = array(
-                    'message' => "Cannot set attendance in this day.", 
-                    'alert-type' => 'error'
-                );
-                return redirect('/manage_class/attendance')->with($notification);
-            }
+            $notification = array(
+                'message' => "Cannot set attendance in this day.", 
+                'alert-type' => 'error'
+            );
+            return redirect('/manage_class/attendance')->with($notification);
         }
     }
     public function insertGrade(Request $request){
@@ -334,13 +328,39 @@ class ManageClassController extends Controller
         }
         else
         {
-            for($i = 0; $i<count($request->groupclassdetail_id);$i++)
+            if(count($request->updateGrade) == 1)
             {
-                $grade = new Groupgrade;
-                $grade->grade = strtoupper($request->grade[$i]);
-                $grade->groupclassdetail_id = $request->groupclassdetail_id[$i];
-                $grade->remark = $request->remark[$i];
-                $grade->save();
+                $a = count($request->groupclassdetail_id);
+                for($i = 0; $i < $a ; $i++)
+                {
+                    $detail = Groupclassdetail::find($request->groupclassdetail_id[$i]);
+                    $grade = Groupgrade::find($detail->groupgrade->id);
+                    $grade->grade = strtoupper($request->grade[$i]);
+                    $grade->remark = $request->remark[$i];
+                    $grade->save();
+                }
+
+                $notification = array(
+                    'message' => 'Grade in this class has been updated', 
+                    'alert-type' => 'success'
+                );
+                return redirect('/manage_class/grade')->with($notification);
+            }
+            else
+            {
+                for($i = 0; $i<count($request->groupclassdetail_id);$i++)
+                {
+                    $grade = new Groupgrade;
+                    $grade->grade = strtoupper($request->grade[$i]);
+                    $grade->groupclassdetail_id = $request->groupclassdetail_id[$i];
+                    $grade->remark = $request->remark[$i];
+                    $grade->save();
+                }
+                $notification = array(
+                    'message' => 'Grade in this class has been set', 
+                    'alert-type' => 'success'
+                );
+                return redirect('/manage_class/grade')->with($notification);
             }
         }
     }
@@ -348,6 +368,13 @@ class ManageClassController extends Controller
     public function getAttendance(Request $request){
         if($request->class_type == 1){
              $data = Attend::where("date",'=',Carbon::parse($request->attendanceDate)->format("Y-m-d"))
+                             ->where("attendance_id", "=", $request->attendance_id)
+                             ->get();
+            return response()->json($data);
+        }
+        else
+        {
+            $data = Groupattend::where("date",'=',Carbon::parse($request->attendanceDate)->format("Y-m-d"))
                              ->where("attendance_id", "=", $request->attendance_id)
                              ->get();
             return response()->json($data);

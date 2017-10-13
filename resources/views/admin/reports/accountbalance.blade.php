@@ -46,21 +46,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                		@foreach($accountdetail as $details)
-                		@if($details->scheduledprogram->trainingclass->status != 1 && $details->scheduledprogram->trainingclass->status != 0)
-                		@if($details->balance>0)
+                		@foreach($accountAll as $accounts)
                 		<tr>
-                				<td>{{$details->account->accountNumber}}</td>
-                				@if($details->account->has('enrollee'))
-                				<td>{{$details->account->enrollee->firstName . ' ' . $details->account->enrollee->middleName . ' '. $details->account->enrollee->lastName}}</td>
-                				@else
-                				<td>{{$details->account->groupapplication->orgName}}</td>
-                				@endif
-                				<td style="text-align: right;">{{number_format($details->balance,2)}}</td>
+                				<td>{{$accounts['accountNumber']}}</td>
+                				<td>{{$accounts['accountName']}}</td>
+                				<td style="text-align: right;">{{number_format($accounts['balance'],2)}}</td>
                 				<td><form>{{csrf_field()}}<button class="btn btn-primary"><i class="glyphicon glyphicon-print"></i>&ensp;Notify</button></form></td>
                 		</tr>
-                		@endif
-                		@endif
                 		@endforeach
                 </tbody>
             </table>
