@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use App\Holiday;
 use App\Scheduledetail;
 use App\Payment;
+use App\Account;
 class PrintController extends Controller
 {
     public function voucher(){
@@ -186,7 +187,7 @@ class PrintController extends Controller
     			break;
     		case 'monthly':
 	    		$month = $request->monthly_month;
-					$year = $request->monthly_year;
+				$year = $request->monthly_year;
     			$timePeriod = "(" .Carbon::parse($month)->format('F'). ' '.$request->yearly_year . ')';
 					$report = Payment::whereYear('paymentDate', '=', $year )
 														->whereMonth('paymentDate', '=', Carbon::parse($month)->format('m'))
@@ -206,6 +207,179 @@ class PrintController extends Controller
 		    	return $pdf->stream();
 		    	break;
     	}
+    }
+
+    public function printAccountBalanceReport(Request $request)
+    {
+    	$timePeriod ="";
+    	switch($request->timePeriod)
+    	{
+    		case 'yearly':
+    			$timePeriod = "(Year " .$request->yearly_year . ')';
+				$year = $request->yearly_year;
+		        $account = Account::all();
+		        $accountAll = array();
+		        $totalbalance=0;
+		        $x=0;
+		        foreach($account as $accounts){
+		            $total=0;
+		            foreach ($accounts->accountdetail as $details) {
+		                if($details->scheduledprogram->trainingclass->status != 1 && $details->scheduledprogram->trainingclass->status != 0)
+		                {
+		                    if($year == Carbon::parse($details->created_at)->format('Y')){
+		                        $total += $details->balance;
+		                    }
+		                }
+		            }
+		            $name = "";
+		            if(count($accounts->enrollee)>0)
+		            {
+		                $name = $accounts->enrollee->firstName . ' '. 
+		                                            $accounts->enrollee->middleName .' '. 
+		                                            $accounts->enrollee->lastName;
+		            }
+		            else
+		                $name = $accounts->groupapplication->orgName;
+		            if($total>0)
+		            {
+		                $accountAll[$x] = [
+		                    "accountNumber" => $accounts->accountNumber,
+		                    "accountName" =>$name,
+		                    "balance"=>number_format($total,2),
+		                ];
+		                $x++;
+		            	$totalbalance+=$total;
+		            }
+		        }
+		    	$pdf = PDF::loadView('printable/accountbalance',["account"=>$accountAll,"timePeriod" => $timePeriod,"total"=>$totalbalance])->setPaper([0,0,612,792],'portrait');
+		    	return $pdf->stream();
+    			break;
+    		case 'monthly':
+	    		$month = $request->monthly_month;
+		        $year = $request->monthly_year;
+    			$timePeriod = "(" .Carbon::parse($month)->format('F'). ' '.$request->yearly_year . ')';
+		        $account = Account::all();
+		        $accountAll = array();
+		        $totalbalance=0;
+		        $x=0;
+		        foreach($account as $accounts){
+		            $total=0;
+		            foreach ($accounts->accountdetail as $details) {
+		                if($details->scheduledprogram->trainingclass->status != 1 && $details->scheduledprogram->trainingclass->status != 0)
+		                {
+		                    if($year == Carbon::parse($details->created_at)->format('Y') && $month == Carbon::parse($details->created_at)->format('F')){
+		                        $total += $details->balance;
+		                    }
+		                }
+		            }
+		            $name = "";
+		            if(count($accounts->enrollee)>0)
+		            {
+		                $name = $accounts->enrollee->firstName . ' '. 
+		                                            $accounts->enrollee->middleName .' '. 
+		                                            $accounts->enrollee->lastName;
+		            }
+		            else
+		                $name = $accounts->groupapplication->orgName;
+		            if($total>0)
+		            {
+		                $accountAll[$x] = [
+		                    "accountNumber" => $accounts->accountNumber,
+		                    "accountName" =>$name,
+		                    "balance"=>number_format($total,2),
+		                ];
+		                $x++;
+		            	$totalbalance+=$total;
+		            }
+		        }
+		    	$pdf = PDF::loadView('printable/accountbalance',["account"=>$accountAll,"timePeriod" => $timePeriod,"total"=>$totalbalance])->setPaper([0,0,612,792],'portrait');
+		    	return $pdf->stream();
+    			break;
+  			case 'dateRange':
+    			$dateFrom = Carbon::parse($request->dateFrom)->format("Y-m-d");
+				$dateTo = Carbon::parse($request->dateTo)->format("Y-m-d");
+				echo $dateFrom .' ' . $dateTo;
+    			$timePeriod = "(From " .Carbon::parse($dateFrom)->format('F d,Y'). ' to '.Carbon::parse($dateTo)->format('F d,Y') . ')';
+    			$dateFrom = Carbon::parse($request->dateFrom);
+				$dateTo = Carbon::parse($request->dateTo);
+    			$account = Account::all();
+		        $accountAll = array();
+		        $x=0;
+		        $totalbalance=0;
+		        foreach($account as $accounts){
+		            $total=0;
+		            foreach ($accounts->accountdetail as $details) {
+		                if($details->scheduledprogram->trainingclass->status != 1 && $details->scheduledprogram->trainingclass->status != 0)
+		                {
+		                    if(Carbon::parse($details->created_at)->between($dateFrom,$dateTo)){
+		                        $total += $details->balance;
+		                    }
+		                }
+		            }
+		            $name = "";
+		            if(count($accounts->enrollee)>0)
+		            {
+		                $name = $accounts->enrollee->firstName . ' '. 
+		                                            $accounts->enrollee->middleName .' '. 
+		                                            $accounts->enrollee->lastName;
+		            }
+		            else
+		                $name = $accounts->groupapplication->orgName;
+		            if($total>0)
+		            {
+		                $accountAll[$x] = [
+		                    "accountNumber" => $accounts->accountNumber,
+		                    "accountName" =>$name,
+		                    "balance"=>number_format($total,2),
+		                ];
+		                $x++;
+		            	$totalbalance+=$total;
+		            }
+		        }
+		    	$pdf = PDF::loadView('printable/accountbalance',["account"=>$accountAll,"timePeriod" => $timePeriod,"total"=>$totalbalance])->setPaper([0,0,612,792],'portrait');
+		    	return $pdf->stream();
+    			break;
+    	}
+    }
+
+    public function printNotification(Request $request){
+    	$account = Account::find($request->id);
+        $accountAll = array();
+        $courses = array();
+        $x = 0;
+        $name ="";
+        $address = "";
+        $totalbalance=0;
+        if(count($account->enrollee)>0)
+        {
+        	$name = $account->enrollee->firstName . ' ' . $account->enrollee->middleName . ' ' . $account->enrollee->lastName;
+        	$address = $account->enrollee->street . ' ' . $account->enrollee->barangay . ' ' . $account->enrollee->city;
+        }
+
+        foreach($account->accountdetail as $details)
+        {
+        	$total = 0;
+        	if($details->scheduledprogram->trainingclass->status != 1 && $details->scheduledprogram->trainingclass->status != 0)
+            {	
+                $total = $details->balance;
+                if($total > 0)
+                {
+                	$totalbalance += $total;
+	                $courses[$x] = [
+	                	"course_name"=> $details->scheduledprogram->rate->program->programName .' ('.$details->scheduledprogram->rate->duration.' Hours)',
+	                	"balance"=>$total,
+	                ];
+	                $x++;
+                }
+            }	
+        }
+        $accountAll[0]= [
+        	"name"=>$name,
+        	"address"=>$address,
+        	"courses"=>$courses,
+        ];
+    	$pdf = PDF::loadView('printable/notification',["account"=>$accountAll,"total"=>$totalbalance])->setPaper([0,0,612,792],'portrait');
+    	return $pdf->stream();
     }
 }
 

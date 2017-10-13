@@ -128,4 +128,122 @@ class CollectionReportController extends Controller
         }
         return view('admin/reports/accountbalance',compact('accountAll'));
     }
+
+    public function getAccountYearly(Request $request){
+        $year = $request->yearly_year;
+        $account = Account::all();
+        $accountAll = array();
+        $x=0;
+        foreach($account as $accounts){
+            $total=0;
+            foreach ($accounts->accountdetail as $details) {
+                if($details->scheduledprogram->trainingclass->status != 1 && $details->scheduledprogram->trainingclass->status != 0)
+                {
+                    if($year == Carbon::parse($details->created_at)->format('Y')){
+                        $total += $details->balance;
+                    }
+                }
+            }
+            $name = "";
+            if(count($accounts->enrollee)>0)
+            {
+                $name = $accounts->enrollee->firstName . ' '. 
+                                            $accounts->enrollee->middleName .' '. 
+                                            $accounts->enrollee->lastName;
+            }
+            else
+                $name = $accounts->groupapplication->orgName;
+            if($total>0)
+            {
+                $accountAll[$x] = [
+                    "id"=>$accounts->id,
+                    "accountNumber" => $accounts->accountNumber,
+                    "accountName" =>$name,
+                    "balance"=>number_format($total,2),
+                ];
+                $x++;
+            }
+        }
+        return response()->json($accountAll);
+    }
+
+    public function getAccountMonthly(Request $request){
+        $month = $request->monthly_month;
+        $year = $request->monthly_year;
+
+        $account = Account::all();
+        $accountAll = array();
+        $x=0;
+        foreach($account as $accounts){
+            $total=0;
+            foreach ($accounts->accountdetail as $details) {
+                if($details->scheduledprogram->trainingclass->status != 1 && $details->scheduledprogram->trainingclass->status != 0)
+                {
+                    if($year == Carbon::parse($details->created_at)->format('Y') && $month == Carbon::parse($details->created_at)->format('F')){
+                        $total += $details->balance;
+                    }
+                }
+            }
+            $name = "";
+            if(count($accounts->enrollee)>0)
+            {
+                $name = $accounts->enrollee->firstName . ' '. 
+                                            $accounts->enrollee->middleName .' '. 
+                                            $accounts->enrollee->lastName;
+            }
+            else
+                $name = $accounts->groupapplication->orgName;
+            if($total>0)
+            {
+                $accountAll[$x] = [
+                    "id"=>$accounts->id,
+                    "accountNumber" => $accounts->accountNumber,
+                    "accountName" =>$name,
+                    "balance"=>number_format($total,2),
+                ];
+                $x++;
+            }
+        }
+        return response()->json($accountAll);
+    }
+
+    public function getAccountDateRange(Request $request){
+        $dateFrom = Carbon::parse($request->range_dateFrom);
+        $dateTo = Carbon::parse($request->range_dateTo);
+
+        $account = Account::all();
+        $accountAll = array();
+        $x=0;
+        foreach($account as $accounts){
+            $total=0;
+            foreach ($accounts->accountdetail as $details) {
+                if($details->scheduledprogram->trainingclass->status != 1 && $details->scheduledprogram->trainingclass->status != 0)
+                {
+                    if(Carbon::parse($details->created_at)->between($dateFrom,$dateTo)){
+                        $total += $details->balance;
+                    }
+                }
+            }
+            $name = "";
+            if(count($accounts->enrollee)>0)
+            {
+                $name = $accounts->enrollee->firstName . ' '. 
+                                            $accounts->enrollee->middleName .' '. 
+                                            $accounts->enrollee->lastName;
+            }
+            else
+                $name = $accounts->groupapplication->orgName;
+            if($total>0)
+            {
+                $accountAll[$x] = [
+                    "id"=>$accounts->id,
+                    "accountNumber" => $accounts->accountNumber,
+                    "accountName" =>$name,
+                    "balance"=>number_format($total,2),
+                ];
+                $x++;
+            }
+        }
+        return response()->json($accountAll);
+    }
 }
