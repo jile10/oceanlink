@@ -215,7 +215,7 @@
 <div class="modal fade in" id="responsive" tabindex="-1" role="dialog" aria-hidden="false" style="display:none;">
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
-			<form action="/manage_enrollment/insert" method="post" class="form-horizontal">
+			<form id="create-form" action="/manage_enrollment/insert" method="post" class="form-horizontal">
 				{{ csrf_field() }} 	
 				<div class="modal-header btn-primary">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -564,12 +564,12 @@
 	<script type="text/javascript" src="/vendors/datetimepicker/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
     <script src="/js/moment.min.js"></script>
     <script type="text/javascript">
-
-		$.validator.addMethod("valid1", function(value, element) { 
-			var start = Date.parse($("#start").val());
-			var end =Date.parse($("#end").val());
-		    return this.optional(element) || end>=start;
-		}, "End Date must be greater than or equal to Start Date");
+    	$('#create-form').validate({
+    		morning: "required",
+    		afternoon: "required",
+    	});
+    </script>
+    <script type="text/javascript">
 
     	$('#dateRange').on('ifChecked',function(){
 		$('#dates').empty();

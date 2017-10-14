@@ -279,7 +279,7 @@ class TrainingOfficerController extends Controller
         
         }
         if($checkattendance && $attendanceholidaycheck){
-            if($request->checkAttendance == 0)
+            if($request->attendanceCheck == 0)
             {
                 if(count($request->classdetail_id)!=0)
                 {  
@@ -395,20 +395,40 @@ class TrainingOfficerController extends Controller
         }
         else
         {
-            for($i = 0; $i<count($request->groupclassdetail_id);$i++)
+            if(count($request->updateGrade) == 1)
             {
-                $grade = new Groupgrade;
-                $grade->grade = strtoupper($request->grade[$i]);
-                $grade->groupclassdetail_id = $request->groupclassdetail_id[$i];
-                $grade->remark = $request->remark[$i];
-                $grade->save();
-            }
+                $a = count($request->groupclassdetail_id);
+                for($i = 0; $i < $a ; $i++)
+                {
+                    $detail = Groupclassdetail::find($request->groupclassdetail_id[$i]);
+                    $grade = Groupgrade::find($detail->groupgrade->id);
+                    $grade->grade = strtoupper($request->grade[$i]);
+                    $grade->remark = $request->remark[$i];
+                    $grade->save();
+                }
 
-            $notification = array(
-                'message' => 'Grade in this class has been set', 
-                'alert-type' => 'success'
-            );
-            return redirect('/tofficer/class/grade')->with($notification);
+                $notification = array(
+                    'message' => 'Grade in this class has been updated', 
+                    'alert-type' => 'success'
+                );
+                return redirect('/tofficer/class/grade')->with($notification);
+            }
+            else
+            {
+                for($i = 0; $i<count($request->groupclassdetail_id);$i++)
+                {
+                    $grade = new Groupgrade;
+                    $grade->grade = strtoupper($request->grade[$i]);
+                    $grade->groupclassdetail_id = $request->groupclassdetail_id[$i];
+                    $grade->remark = $request->remark[$i];
+                    $grade->save();
+                }
+                $notification = array(
+                    'message' => 'Grade in this class has been set', 
+                    'alert-type' => 'success'
+                );
+                return redirect('/tofficer/class/grade')->with($notification);
+            }
         }
     }
 

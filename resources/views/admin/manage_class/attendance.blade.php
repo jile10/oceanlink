@@ -54,6 +54,7 @@ h2{
 								<h4><b>Training Officer : &ensp;{{$tclass->scheduledprogram->trainingofficer->firstName . ' ' . $tclass->scheduledprogram->trainingofficer->middleName . ' ' .$tclass->scheduledprogram->trainingofficer->lastName}}</b></h4>
 								<h4><b>{{$tclass->class_name}}</b></h4>
 								<input type="hidden" id="checkAttendance" name="checkAttendance" value="0">
+								<input type="hidden" id="attendanceCheck" name="attendanceCheck" value="0">
 							</div>
 							<div class="row form-group">
 								<div class="col-md-4">
@@ -276,24 +277,28 @@ h2{
 					if(data.length != 0){
 						$('#update').removeClass("disabled");
 						$('#checkAttendance').val('1');
+						$('#attendanceCheck').val('1');
 						for(var i=0; i<data.length; i++){
-							if(data[i].status == 1)
+							if(data[i].classdetail_id>0)
 							{
-								$('#blue'+data[i].classdetail_id).iCheck('check');
-								$('#red'+data[i].classdetail_id).iCheck('disable');
-								$('#orange'+data[i].classdetail_id).iCheck('disable');
-							}
-							else if(data[i].status == 2)
-							{
-								$('#red'+data[i].classdetail_id).iCheck('check');
-								$('#blue'+data[i].classdetail_id).iCheck('disable');
-								$('#orange'+data[i].classdetail_id).iCheck('disable');
-							}
-							else
-							{
-								$('#red'+data[i].classdetail_id).iCheck('disable');
-								$('#blue'+data[i].classdetail_id).iCheck('disable');
-								$('#orange'+data[i].classdetail_id).iCheck('check');
+								if(data[i].status == 1)
+								{
+									$('#blue'+data[i].groupclassdetail_id).iCheck('check');
+									$('#red'+data[i].groupclassdetail_id).iCheck('disable');
+									$('#orange'+data[i].groupclassdetail_id).iCheck('disable');
+								}
+								else if(data[i].status == 2)
+								{
+									$('#red'+data[i].groupclassdetail_id).iCheck('check');
+									$('#blue'+data[i].groupclassdetail_id).iCheck('disable');
+									$('#orange'+data[i].groupclassdetail_id).iCheck('disable');
+								}
+								else
+								{
+									$('#red'+data[i].groupclassdetail_id).iCheck('disable');
+									$('#blue'+data[i].groupclassdetail_id).iCheck('disable');
+									$('#orange'+data[i].groupclassdetail_id).iCheck('check');
+								}
 							}
 						}
 					}
@@ -301,6 +306,7 @@ h2{
 					{
 						$('#update').addClass("disabled");
 						$('#checkAttendance').val('0');
+						$('#attendanceCheck').val('0');
 					}
 				},
 				error:function(){
@@ -417,34 +423,63 @@ h2{
 				if(data.length != 0){
 					$('#update').removeClass("disabled");
 					$('#checkAttendance').val('1');
+					$('#attendanceCheck').val('1');
 					for(var i=0; i<data.length; i++){
 						console.log(data[i].status);
-						if(data[i].status == 1)
+						if(data[i].classdetail_id>0)
 						{
-							$('#blue'+data[i].classdetail_id).iCheck('check');
-							$('#blue'+data[i].classdetail_id).iCheck('enable');
-							$('#red'+data[i].classdetail_id).iCheck('disable');
-							$('#orange'+data[i].classdetail_id).iCheck('disable');
-						}
-						else if(data[i].status == 2)
-						{	
-							$('#red'+data[i].classdetail_id).iCheck('check');
-							$('#red'+data[i].classdetail_id).iCheck('enable');
-							$('#blue'+data[i].classdetail_id).iCheck('disable');
-							$('#orange'+data[i].classdetail_id).iCheck('disable');
+							if(data[i].status == 1)
+							{
+								$('#blue'+data[i].classdetail_id).iCheck('check');
+								$('#blue'+data[i].classdetail_id).iCheck('enable');
+								$('#red'+data[i].classdetail_id).iCheck('disable');
+								$('#orange'+data[i].classdetail_id).iCheck('disable');
+							}
+							else if(data[i].status == 2)
+							{	
+								$('#red'+data[i].classdetail_id).iCheck('check');
+								$('#red'+data[i].classdetail_id).iCheck('enable');
+								$('#blue'+data[i].classdetail_id).iCheck('disable');
+								$('#orange'+data[i].classdetail_id).iCheck('disable');
+							}
+							else
+							{
+								$('#red'+data[i].classdetail_id).iCheck('disable');
+								$('#blue'+data[i].classdetail_id).iCheck('disable');
+								$('#orange'+data[i].classdetail_id).iCheck('check');
+								$('#orange'+data[i].classdetail_id).iCheck('enable');
+							}
 						}
 						else
 						{
-							$('#red'+data[i].classdetail_id).iCheck('disable');
-							$('#blue'+data[i].classdetail_id).iCheck('disable');
-							$('#orange'+data[i].classdetail_id).iCheck('check');
-							$('#orange'+data[i].classdetail_id).iCheck('enable');
+							if(data[i].status == 1)
+							{
+								$('#blue'+data[i].groupclassdetail_id).iCheck('check');
+								$('#blue'+data[i].groupclassdetail_id).iCheck('enable');
+								$('#red'+data[i].groupclassdetail_id).iCheck('disable');
+								$('#orange'+data[i].groupclassdetail_id).iCheck('disable');
+							}
+							else if(data[i].status == 2)
+							{	
+								$('#red'+data[i].groupclassdetail_id).iCheck('check');
+								$('#red'+data[i].groupclassdetail_id).iCheck('enable');
+								$('#blue'+data[i].groupclassdetail_id).iCheck('disable');
+								$('#orange'+data[i].groupclassdetail_id).iCheck('disable');
+							}
+							else
+							{
+								$('#red'+data[i].groupclassdetail_id).iCheck('disable');
+								$('#blue'+data[i].groupclassdetail_id).iCheck('disable');
+								$('#orange'+data[i].groupclassdetail_id).iCheck('check');
+								$('#orange'+data[i].groupclassdetail_id).iCheck('enable');
+							}
 						}
 					}
 				}
 				else{
 					$('#update').addClass("disabled");
 					$('#checkAttendance').val('0');
+					$('#attendanceCheck').val('0');
 					@if(count($tclass->groupclassdetail)!=0)
 					@foreach($tclass->groupclassdetail as $details)
 					$('#blue{{$details->id}}').iCheck('enable');

@@ -19,6 +19,9 @@ Route::get('/ajax-query-account-balance','QueriesController@getBalance');
 Route::get('/ajax-query-collection-monthly','CollectionReportController@getMonthly');
 Route::get('/ajax-query-collection-yearly','CollectionReportController@getYearly');
 Route::get('/ajax-query-collection-dateRange','CollectionReportController@getDateRange');
+Route::get('/ajax-query-accountbalance-monthly','CollectionReportController@getAccountMonthly');
+Route::get('/ajax-query-accountbalance-yearly','CollectionReportController@getAccountYearly');
+Route::get('/ajax-query-accountbalance-dateRange','CollectionReportController@getAccountDateRange');
 
 //Ajax
 Route::get('/ajax-building','FloorController@getbuilding');
@@ -99,6 +102,8 @@ Route::group(['middleware' => ['admin']],function(){
 	//Reports
 	Route::get('reports/collectionreport','CollectionReportController@viewReport');
 	Route::get('reports/accountbalance','CollectionReportController@viewAccount');
+	Route::post('reports/accountbalance/print','PrintController@printAccountBalanceReport');
+	Route::post('accountbalance/notification','PrintController@printNotification');
 
 	Route::get('/manage_app/enrollee','EnrolleeController@viewTrainingclass');
 	Route::get('/manage_app/enrollee/view/{id}','EnrolleeController@viewEnrollee');

@@ -52,12 +52,12 @@
 								</div>
 
 								<div class="pull-right col-md-3">
-                    <fieldset>
-                    	<legend>Legend</legend>
-                    	<span class="badge" style="background-color: #dff0d8!important">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;Passed<br>
-                    	<span class="badge" style="background-color: #f2dede!important;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;Failed
-                    </fieldset>
-                </div>
+									<fieldset>
+										<legend>Legend</legend>
+										<span class="badge" style="background-color: #dff0d8!important">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;Passed<br>
+										<span class="badge" style="background-color: #f2dede!important;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;Failed
+									</fieldset>
+								</div>
 							</div>
 						</div>
 						<div class="col-md-12 table-responded" style="margin-top: 50px;">
@@ -73,7 +73,16 @@
 								<tbody id="tbody">
 									@if(count($tclass->groupclassdetail)!=0)
 										@foreach($tclass->groupclassdetail as $details)
+											@if(count($details->groupgrade)!= 0)
+											<input type="hidden" name="updateGrade" value="{{$i=1}}">
+												@if($details->groupgrade->remark == "P")
+												<tr class="paid">
+												@else
+												<tr class="unpaid">
+												@endif
+											@else
 											<tr>
+											@endif
 												<td>{{$details->groupenrollee->studentNumber}}</td>
 												<input type="hidden" name="groupclassdetail_id[]" value="{{$details->id}}">
 												<td>{{$details->groupenrollee->lastName . ', ' .$details->groupenrollee->firstName}}</td>
@@ -82,7 +91,8 @@
 												<td id="remarks{{$details->id}}"></td><input type="hidden" name="remark[]" id="remark{{$details->id}}" value="">
 												@else
 												<td>{{$details->groupgrade->grade}}</td>
-												<td id="remarks{{$details->id}}">{{$details->groupgrade->remark}}</td>
+												<td id="remarks{{$details->id}}">{{$details->groupgrade->remark}}
+												</td>
 												@endif
 											</tr>
 										@endforeach
@@ -138,7 +148,7 @@
 		$('#button').empty();
 		$('#button').append('<button type="button" onclick="tanga()" class="btn col-md-6 col-md-offset-3 btn-primary"><i class="glyphicon glyphicon-edit"></i>&ensp;Update Grade</button>');
 		$('#tbody').empty();
-		$('#tbody').append(' @if(count($tclass->groupclassdetail)!=0) @foreach($tclass->groupclassdetail as $details) <tr> <td>{{$details->groupenrollee->studentNumber}}</td> <input type="hidden" name="groupclassdetail_id[]" value="{{$details->id}}"> <td>{{$details->groupenrollee->lastName . ', ' .$details->groupenrollee->firstName}}</td> @if(count($details->groupgrade)!=0) <td>{{$details->groupgrade->grade}}</td> <td id="remarks{{$details->id}}">{{$details->groupgrade->remark}}</td> @endif </tr> @endforeach @else @foreach($tclass->classdetail->where('status','!=',1) as $details) @if(count($details->grade)!= 0) <input type="hidden" name="updateGrade" value="{{$i=1}}"> @if($details->grade->remark == "P") <tr class="paid"> @else <tr class="unpaid"> @endif @else <tr> @endif <td>{{$details->enrollee->studentNumber}}</td> <input type="hidden" name="classdetail_id[]" value="{{$details->id}}"> <td>{{$details->enrollee->firstName . ' ' . $details->enrollee->middleName . ' ' .$details->enrollee->lastName}}</td> @if(count($details->grade)!=0) <td>{{$details->grade->grade}}</td> <td id="remarks{{$details->id}}">{{$details->grade->remark}}</td> @endif </tr> @endforeach @endif');
+		$('#tbody').append(' @if(count($tclass->groupclassdetail)!=0)@foreach($tclass->groupclassdetail as $details)<@if(count($details->groupgrade)!= 0)@if($details->groupgrade->remark == "P")<tr class="paid">@else<tr class="unpaid">@endif @else<tr>@endif<td>{{$details->groupenrollee->studentNumber}}</td> <input type="hidden" name="groupclassdetail_id[]" value="{{$details->id}}"> <td>{{$details->groupenrollee->lastName . ', ' .$details->groupenrollee->firstName}}</td> @if(count($details->groupgrade)!=0) <td>{{$details->groupgrade->grade}}</td> <td id="remarks{{$details->id}}">{{$details->groupgrade->remark}}<input type="hidden" name="updateGrade" value="{{$i=1}}" ></td> @endif </tr> @endforeach @else @foreach($tclass->classdetail->where('status','!=',1) as $details) @if(count($details->grade)!= 0) <input type="hidden" name="updateGrade" value="{{$i=1}}"> @if($details->grade->remark == "P") <tr class="paid"> @else <tr class="unpaid"> @endif @else <tr> @endif <td>{{$details->enrollee->studentNumber}}</td> <input type="hidden" name="classdetail_id[]" value="{{$details->id}}"> <td>{{$details->enrollee->firstName . ' ' . $details->enrollee->middleName . ' ' .$details->enrollee->lastName}}</td> @if(count($details->grade)!=0) <td>{{$details->grade->grade}}</td> <td id="remarks{{$details->id}}">{{$details->grade->remark}}</td> @endif </tr> @endforeach @endif');
 	}
 	function tanga()
 	{
@@ -146,7 +156,7 @@
 			$('#button').empty();
 			$('#button').append('<button id="submit" class="btn col-md-5 btn-primary">Submit Grade</button><div id="div" class="col-md-2"></div><button id="cancel" type="button" onclick="cancelUpdate()" class="btn col-md-5 btn-danger"><i class="glyphicon glyphicon-remove"></i>&ensp;Cancel Update</button>');
 			$('#tbody').empty();
-			$('#tbody').append('@if(count($tclass->groupclassdetail)!=0)@foreach($tclass->groupclassdetail as $details)<tr><td>{{$details->groupenrollee->studentNumber}}</td><input type="hidden" name="groupclassdetail_id[]" value="{{$details->id}}"><td>{{$details->groupenrollee->lastName . ', ' .$details->groupenrollee->firstName}}</td>@if(count($details->groupgrade)!=0)<td><input id="grade{{$details->id}}" onkeyup="upkey({{$details->id}})" type="text" name="grade[]" class="form-control" value="{{$details->groupgrade->grade}}"></td><td id="remarks{{$details->id}}">{{$details->groupgrade->remark}}<input type="hidden" name="remark[]" id="remark{{$details->id}}" value="{{$details->groupgrade->remark}}"></td>@endif</tr>@endforeach @else @foreach($tclass->classdetail->where('status','!=',1) as $details)@if(count($details->grade)!= 0)<input type="hidden" name="updateGrade" value="{{$i=1}}">@if($details->grade->remark == "P") <tr class="paid"> @else <tr class="unpaid"> @endif @else <tr> @endif <td>{{$details->enrollee->studentNumber}}</td> <input type="hidden" name="classdetail_id[]" value="{{$details->id}}"> <td>{{$details->enrollee->firstName . ' ' . $details->enrollee->middleName . ' ' .$details->enrollee->lastName}}</td> @if(count($details->grade)!=0) <td><input id="grade{{$details->id}}" onkeyup="upkey({{$details->id}})" type="text" name="grade[]" class="form-control" value="{{$details->grade->grade}}"></td> <td id="remarks{{$details->id}}">{{$details->grade->remark}}<input type="hidden" name="remark[]" id="remark{{$details->id}}" value="{{$details->grade->remark}}"></td> @endif </tr> @endforeach @endif');
+			$('#tbody').append('@if(count($tclass->groupclassdetail)!=0)@foreach($tclass->groupclassdetail as $details)<tr><td>{{$details->groupenrollee->studentNumber}}</td><input type="hidden" name="groupclassdetail_id[]" value="{{$details->id}}"><td>{{$details->groupenrollee->lastName . ', ' .$details->groupenrollee->firstName}}</td>@if(count($details->groupgrade)!=0)<td><input id="grade{{$details->id}}" onkeyup="upkey({{$details->id}})" type="text" name="grade[]" class="form-control" value="{{$details->groupgrade->grade}}"></td><td id="remarks{{$details->id}}">{{$details->groupgrade->remark}}</td><input type="hidden" name="remark[]" id="remark{{$details->id}}" value="{{$details->groupgrade->remark}}"><input type="hidden" name="updateGrade" value="{{$i=1}}" >@endif</tr>@endforeach @else @foreach($tclass->classdetail->where('status','!=',1) as $details)@if(count($details->grade)!= 0)<input type="hidden" name="updateGrade" value="{{$i=1}}">@if($details->grade->remark == "P") <tr class="paid"> @else <tr class="unpaid"> @endif @else <tr> @endif <td>{{$details->enrollee->studentNumber}}</td> <input type="hidden" name="classdetail_id[]" value="{{$details->id}}"> <td>{{$details->enrollee->firstName . ' ' . $details->enrollee->middleName . ' ' .$details->enrollee->lastName}}</td> @if(count($details->grade)!=0) <td><input id="grade{{$details->id}}" onkeyup="upkey({{$details->id}})" type="text" name="grade[]" class="form-control" value="{{$details->grade->grade}}"></td> <td id="remarks{{$details->id}}">{{$details->grade->remark}}</td><input type="hidden" name="remark[]" id="remark{{$details->id}}" value="{{$details->grade->remark}}"> @endif </tr> @endforeach @endif');
 	}
 	$(document).ready(function(){
 		$('#update').click(function(){
@@ -154,7 +164,7 @@
 			$('#button').empty();
 			$('#button').append('<button id="submit" class="btn col-md-5 btn-primary">Submit Grade</button><div id="div" class="col-md-2"></div><button id="cancel" type="button" onclick="cancelUpdate()" class="btn col-md-5 btn-danger"><i class="glyphicon glyphicon-remove"></i>&ensp;Cancel Update</button>');
 			$('#tbody').empty();
-			$('#tbody').append('@if(count($tclass->groupclassdetail)!=0)@foreach($tclass->groupclassdetail as $details)<tr><td>{{$details->groupenrollee->studentNumber}}</td><input type="hidden" name="groupclassdetail_id[]" value="{{$details->id}}"><td>{{$details->groupenrollee->lastName . ', ' .$details->groupenrollee->firstName}}</td>@if(count($details->groupgrade)!=0)<td><input id="grade{{$details->id}}" onkeyup="upkey({{$details->id}})" type="text" name="grade[]" class="form-control" value="{{$details->groupgrade->grade}}"></td><td id="remarks{{$details->id}}">{{$details->groupgrade->remark}}<input type="hidden" name="remark[]" id="remark{{$details->id}}" value="{{$details->groupgrade->remark}}"></td>@endif</tr>@endforeach @else @foreach($tclass->classdetail->where('status','!=',1) as $details)@if(count($details->grade)!= 0)<input type="hidden" name="updateGrade" value="{{$i=1}}">@if($details->grade->remark == "P") <tr class="paid"> @else <tr class="unpaid"> @endif @else <tr> @endif <td>{{$details->enrollee->studentNumber}}</td> <input type="hidden" name="classdetail_id[]" value="{{$details->id}}"> <td>{{$details->enrollee->firstName . ' ' . $details->enrollee->middleName . ' ' .$details->enrollee->lastName}}</td> @if(count($details->grade)!=0) <td><input id="grade{{$details->id}}" onkeyup="upkey({{$details->id}})" type="text" name="grade[]" class="form-control" value="{{$details->grade->grade}}"></td> <td id="remarks{{$details->id}}">{{$details->grade->remark}}<input type="hidden" name="remark[]" id="remark{{$details->id}}" value="{{$details->grade->remark}}"></td> @endif </tr> @endforeach @endif');
+			$('#tbody').append('@if(count($tclass->groupclassdetail)!=0)@foreach($tclass->groupclassdetail as $details)<tr><td>{{$details->groupenrollee->studentNumber}}</td><input type="hidden" name="groupclassdetail_id[]" value="{{$details->id}}"><td>{{$details->groupenrollee->lastName . ', ' .$details->groupenrollee->firstName}}</td>@if(count($details->groupgrade)!=0)<td><input id="grade{{$details->id}}" onkeyup="upkey({{$details->id}})" type="text" name="grade[]" class="form-control" value="{{$details->groupgrade->grade}}"></td><td id="remarks{{$details->id}}">{{$details->groupgrade->remark}}</td><input type="hidden" name="remark[]" id="remark{{$details->id}}" value="{{$details->groupgrade->remark}}"><input type="hidden" name="updateGrade" value="{{$i=1}}" >@endif</tr>@endforeach @else @foreach($tclass->classdetail->where('status','!=',1) as $details)@if(count($details->grade)!= 0)<input type="hidden" name="updateGrade" value="{{$i=1}}">@if($details->grade->remark == "P") <tr class="paid"> @else <tr class="unpaid"> @endif @else <tr> @endif <td>{{$details->enrollee->studentNumber}}</td> <input type="hidden" name="classdetail_id[]" value="{{$details->id}}"> <td>{{$details->enrollee->firstName . ' ' . $details->enrollee->middleName . ' ' .$details->enrollee->lastName}}</td> @if(count($details->grade)!=0) <td><input id="grade{{$details->id}}" onkeyup="upkey({{$details->id}})" type="text" name="grade[]" class="form-control" value="{{$details->grade->grade}}"></td> <td id="remarks{{$details->id}}">{{$details->grade->remark}}</td><input type="hidden" name="remark[]" id="remark{{$details->id}}" value="{{$details->grade->remark}}"> @endif </tr> @endforeach @endif');
 		});
 	});
 </script>
