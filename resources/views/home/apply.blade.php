@@ -489,8 +489,8 @@
                                             <tr>
                                                 <th width="35%">Training Title</th>
                                                 <th width="35%">Training Center</th>
-                                                <th width="20%">Date Taken</th>
-                                                <th width="10%">Action</th>
+                                                <th width="25%">Date Taken</th>
+                                                <th width="5%">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody id="dynamic_field">
@@ -498,14 +498,17 @@
                                                 <td><input type="text" class="selector form-control capital" name="trainingTitle[]"></td>
                                                 <td><input type="text" class="selector form-control capital" name="trainingCenter[]"></td>
                                                 <td>
-                                                    <div class="input-group date form_datetime"  data-date-format="MM dd, yyyy" data-link-field="dtp_input1">
-                                                        <input class="form-control" size="16" type="text" value="" readonly name="dateTaken[]">
+                                                    <div class="input-group date form_datetime selector"  data-date-format="MM dd, yyyy" data-link-field="dtp_input1">
+                                                        <input class="form-control selector" size="16" type="text" value="" readonly name="dateTaken[]">
                                                         <span class="input-group-addon">
-                                                            <span class="glyphicon glyphicon-th"></span>
+                                                            <span class="glyphicon glyphicon-remove selector"></span>
+                                                        </span>
+                                                        <span class="input-group-addon">
+                                                            <span class="glyphicon glyphicon-th selector"></span>
                                                         </span>
                                                     </div>
                                                 </td>
-                                                <td><button type="button" class="selector btn btn-success" onclick="clicks()" id="add">Add more</button></td>
+                                                <td><button type="button" class="selector btn btn-success" onclick="clicks()" id="add"><span class="glyphicon glyphicon-plus"></span></button></td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -544,6 +547,20 @@
     <script type="text/javascript" src="/js/moment.min.js" charset="UTF-8"></script>
 
     <script type="text/javascript">
+    $(".form_datetime").datetimepicker({
+        format: "MM dd, yyyy",
+        weekStart: 1,
+        todayBtn:  1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        maxView: 4,
+        forceParse: 0,
+    });
+</script> 
+
+    <script type="text/javascript">
         $('input[type=checkbox]').on('ifChecked', function(event){
             $('#checks').append('<div class="form-group" id="checked"><label class="control-label col-md-3" >Enter Trainee Number</label><div class="col-md-3"><input id="enrollee" type="text" class="form-control"/></div><div class="col-md-2"><button type="button" onclick="enrolleechange()" class="btn btn-block btn-primary">Enter</button></div></div>');
 
@@ -556,6 +573,9 @@
             $('.selector').attr("disabled",true);
             $('#male').iCheck('uncheck');
             $('#female').iCheck('uncheck');
+            $('#dynamic_head').empty();
+            $('#dynamic_field').empty();
+            $('#dynamic_head').append('<tr><th width="35%">Training Title</th><th width="35%">Training Center</th><th width="25%">Date Taken</th><th width="5%">Action</th></tr>');
         });
         $('input[type=checkbox]').on('ifUnchecked', function(event){
             $('#checked').remove();
@@ -589,8 +609,22 @@
             $('#1EBcourse').attr('value','');
             $('#dynamic_head').empty();
             $('#dynamic_field').empty();
-            $('#dynamic_head').append('<tr><th width="35%">Training Title</th><th width="35%">Training Center</th><th width="20%">Date Taken</th><th width="10%">Action</th></tr>');
-            $('#dynamic_field').append('<tr><td><input type="text" class="selector form-control capital" name="trainingTitle[]"></td><td><input type="text" class="selector form-control capital" name="trainingCenter[]"></td><td><input type="date" class="selector form-control" name="dateTaken[]"></td><td><button type="button" class="selector btn btn-success" onclick="clicks()" id="add">Add more</button></td></tr>');
+            $('#dynamic_head').append('<tr><th width="35%">Training Title</th><th width="35%">Training Center</th><th width="25%">Date Taken</th><th width="5%">Action</th></tr>');
+            $('#dynamic_field').append('<tr><td><input type="text" class="selector form-control capital" name="trainingTitle[]"></td><td><input type="text" class="selector form-control capital" name="trainingCenter[]"></td><td><div class="input-group date form_datetime selector"  data-date-format="MM dd, yyyy" data-link-field="dtp_input1"><input class="form-control" size="16" type="text" value="" readonly name="dateTaken[]"><span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span><span class="input-group-addon"><span class="glyphicon glyphicon-th selector"></span></span></div></td><td><button type="button" class="selector btn btn-success" onclick="clicks()" id="add"><span class="glyphicon glyphicon-plus"></span></button></td></tr>');
+            $('.form_datetime').prop('enable');
+
+            
+            $(".form_datetime").datetimepicker({
+                format: "MM dd, yyyy",
+                weekStart: 1,
+                todayBtn:  1,
+                autoclose: 1,
+                todayHighlight: 1,
+                startView: 2,
+                minView: 2,
+                maxView: 4,
+                forceParse: 0,
+            });
             
         });
         function enrolleechange(){
@@ -639,8 +673,9 @@
                                 $('#dynamic_field').append('<tr><td>'+data[0]['tattend'][a]['trainingTitle']+'</td><td>'+data[0]['tattend'][a]['trainingCenter']+'</td><td>'+data[0]['tattend'][a]['dateTaken']+'</td></tr>')
                             }
                         }
-
+                        $('.form_datetime').prop('disable');
                         toastr.success("Student Information found");
+
                     }
                     else{
                         toastr.warning("This student number doesn't exist");
@@ -674,7 +709,9 @@
                         $('#dynamic_head').empty();
                         $('#dynamic_field').empty();
                         $('#dynamic_head').append('<tr><th width="35%">Training Title</th><th width="35%">Training Center</th><th width="20%">Date Taken</th><th width="10%">Action</th></tr>');
-                        $('#dynamic_field').append('<tr><td><input type="text" class="selector form-control capital" name="trainingTitle[]"></td><td><input type="text" class="selector form-control capital" name="trainingCenter[]"></td><td><input type="date" class="selector form-control" name="dateTaken[]"></td><td><button type="button" class="selector btn btn-success" onclick="clicks()" id="add">Add more</button></td></tr>');
+                        $('#dynamic_field').append('<tr><td><input type="text" class="selector form-control capital" name="trainingTitle[]"></td><td><input type="text" class="selector form-control capital" name="trainingCenter[]"></td><td><div class="input-group date form_datetime"  data-date-format="MM dd, yyyy" data-link-field="dtp_input1"><input class="form-control" size="16" type="text" value="" readonly name="dateTaken[]"><span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span><span class="input-group-addon"><span class="glyphicon glyphicon-th selector"></span></span></div></td><td><button type="button" class="selector btn btn-success" onclick="clicks()" id="add"><span class="glyphicon glyphicon-plus"></span></button></td></tr>');
+
+                        $('.form_datetime').prop('disable');
                     }
                 },
                 error:function(){
@@ -734,11 +771,23 @@
         var i = 1;
         function clicks(){
             i++;
-            $('#dynamic_field').append('<tr id="row'+i+'"><td><input type="text" class="form-control" name="trainingTitle[]"></td><td><input type="text"class="form-control" name="trainingCenter[]"></td><td><div class="input-group date form_datetime"  data-date-format="MM dd, yyyy" data-link-field="dtp_input1"><input class="form-control" size="16" type="text" value="" readonly name="dateTaken[]"><span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span></div></td><td><button name="remove" type="button" id="'+i+'" class="btn btn-danger remove" >X</button></td></tr>');
+            $('#dynamic_field').append('<tr id="row'+i+'"><td><input type="text" class="form-control" name="trainingTitle[]"></td><td><input type="text"class="form-control" name="trainingCenter[]"></td><td><div class="input-group date form_datetime" data-date-format="MM dd, yyyy" data-link-field="dtp_input1"><input class="form-control" size="16" type="text" value="" readonly name="dateTaken[]"><span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span><span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span></div></td><td><button name="remove" type="button" id="'+i+'" class="btn btn-danger remove" ><span class="glyphicon glyphicon-remove"></span></button></td></tr>');
             
             $(document).on('click','.remove',function(){
                 var btn_id = $(this).attr('id');
                 $('#row'+btn_id+'').remove();
+            });
+
+            $(".form_datetime").datetimepicker({
+                format: "MM dd, yyyy",
+                weekStart: 1,
+                todayBtn:  1,
+                autoclose: 1,
+                todayHighlight: 1,
+                startView: 2,
+                minView: 2,
+                maxView: 4,
+                forceParse: 0,
             });
         }
         
@@ -769,7 +818,7 @@
             $("#contact").removeClass("cp").addClass("tel").attr("placeholder":"e.g: 0999 9999 999");
             console.log("tel");   --}}
             $("#contactC").empty();
-            $("#contactC").append('<input type="text" id="1contactI" name="1contactI" class="tel form-control placeholder selector" placeholder="e.g: 999 9999">')
+            $("#contactC").append('<input type="text" id="1contactI" name="contact" class="tel form-control placeholder selector" placeholder="e.g: 999 9999">')
             
             
             $('.tel').mask('000 0000',
@@ -849,20 +898,6 @@
 <script type="text/javascript">
   $("#application").addClass(" active ");
 </script>
-
-<script type="text/javascript">
-    $(".form_datetime").datetimepicker({
-        format: "MM dd, yyyy",
-        weekStart: 1,
-        todayBtn:  1,
-        autoclose: 1,
-        todayHighlight: 1,
-        startView: 2,
-        minView: 2,
-        maxView: 4,
-        forceParse: 0,
-    });
-</script> 
 
 <script type="text/javascript">
         $('.tel').mask('000 0000',
@@ -1008,11 +1043,8 @@ jQuery(function ($){
             rank:{
                 space: true,
                 regx2: /(^[a-zA-Z0-9 \'\-\Ñ\ñ\#\.\,]+$)/i,
-            },
-            
-
+            }
         },
-
         errorPlacement:function(error,element){
             error.insertAfter(element.parent("div"));
         }

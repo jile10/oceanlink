@@ -529,7 +529,7 @@ class HomeController extends Controller
                         $tattend = new Trainingattend;
                         $tattend->trainingTitle = $request->trainingTitle[$x];
                         $tattend->trainingCenter = $request->trainingCenter[$x];
-                        $tattend->dateTaken = $request->dateTaken[$x];
+                        $tattend->dateTaken = Carbon::parse($request->dateTaken[$x])->format('Y-m-d');
                         $tattend->enrollee_id = $enrollee_last->id;
                         $tattend->save();
                     }
