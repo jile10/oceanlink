@@ -21,7 +21,7 @@
 	<div class="header">
 		<img src="images/header.jpg" width="820px;">
 	</div>
-	<h1 style="text-align: center; margin-top: 120px;">Collection Report</h1>
+	<h1 style="text-align: center; margin-top: 120px;">Account with Balance Report</h1>
 	<h3 style="text-align: center; padding-top: -20px">{{$timePeriod}}</h3>
 	<div style="width: 100%; border-bottom: 2px solid black;"></div>
 	<table width="100%"  style="border: 1px solid black; border-collapse: collapse;">

@@ -43,66 +43,65 @@
         font-size
     }
     SPAN.textbox
-{
-    background-color: #FFF;
-    color: #888;
-    line-height:20px;
-    height:20px;
-    padding:3px;
-    border:1px #888 solid;
-    font-size:9pt;
-}
+    {
+        background-color: #FFF;
+        color: #888;
+        line-height:20px;
+        height:20px;
+        padding:3px;
+        border:1px #888 solid;
+        font-size:9pt;
+    }
 </style>
 
 <section class="content">
-  <!--main content-->
-  <div class="row" >
-    <div class="col-md-12">
-    <div class="col-md-12"> 
-          <!--main content-->
-          <div class="row">
-            <div class="col-md-12">
-              <h1 class="text-center">Trainee Information Form</h1>
-                <br><br>
-
-              <!-- BEGIN FORM WIZARD WITH VALIDATION -->
-              <form id="form" action="/iApply/insert" method="post">
-              {{csrf_field()}}
-                <div class="col-md-4">
-                    <div class="panel panel-lightgreen">
-                        <div class="panel-heading">
-                            <h4 class="panel-title"><em>Note: <font color="red">*</font> fields are required</em></h4>
+    <!--main content-->
+    <div class="row" >
+        <div class="col-md-12">
+            <div class="col-md-12"> 
+            <!--main content-->
+                <div class="row">
+                    <div class="col-md-12">
+                      <h1 class="text-center">Trainee Information Form</h1>
+                      <br><br>
+                      <!-- BEGIN FORM WIZARD WITH VALIDATION -->
+                      <form id="apply-form" action="/iApply/insert" method="post">
+                          {{csrf_field()}}
+                        <div class="col-md-4">
+                            <div class="panel panel-lightgreen">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title"><em>Note: <font color="red">*</font> fields are required</em></h4>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                @foreach(session('sprogram_id') as $ids)
-                    <input type="hidden" name="sprogram_id[]" value="{{$ids}}">
-                @endforeach
-                <div class="col-md-12">
-                        <div class="panel panel-primary" style="margin-top: 0px;">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">
+                        @foreach(session('sprogram_id') as $ids)
+                        <input type="hidden" name="sprogram_id[]" value="{{$ids}}">
+                        @endforeach
+                        <div class="col-md-12">
+                            <div class="panel panel-primary" style="margin-top: 0px;">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">
                                         <i class="livicon" data-name="user" data-size="18" data-loop="true" data-c="#fff" data-hc="white"></i>
                                         Select Payment Mode
-                                </h3>
-                                <span class="pull-right clickable">
-                                    <i class="glyphicon glyphicon-chevron-up"></i>
-                                </span>
-                            </div>
-                            <div class="panel-body">
-                                <div class="col-md-12 table-responded">
-                                    <table class="striped bordered" id="table1">
-                                        <thead>
-                                            <tr>
-                                                <th width="30%">Course</th>
-                                                <th width="15%">Date Start</th>
-                                                <th width="15%">Date End</th>
-                                                <th width="15%" style="text-align:right;">Fee &ensp;(Php)</th>
-                                                <th width="25%" style="text-align: center;">Payment Mode</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach($tclass as $tclasses)
+                                    </h3>
+                                    <span class="pull-right clickable">
+                                        <i class="glyphicon glyphicon-chevron-up"></i>
+                                    </span>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="col-md-12 table-responded">
+                                        <table class="striped bordered" id="table1">
+                                            <thead>
+                                                <tr>
+                                                    <th width="30%">Course</th>
+                                                    <th width="15%">Date Start</th>
+                                                    <th width="15%">Date End</th>
+                                                    <th width="15%" style="text-align:right;">Fee &ensp;(Php)</th>
+                                                    <th width="25%" style="text-align: center;">Payment Mode</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach($tclass as $tclasses)
                                                 @foreach(session('sprogram_id') as $ids)
                                                 @if($tclasses['id'] == $ids)
                                                 <tr id="row{{$tclasses['id']}}">
@@ -121,169 +120,25 @@
                                                 </tr>
                                                 @endif
                                                 @endforeach
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-horizontal" id="checks">
-                            <div class="form-group" style="margin-left: 20px;">
-                                <input  type="checkbox" name="alumni">&ensp;I'm an Alumni/Trainee
-                                <input type="hidden" name="enrollee_id" id="enrollee_id" value="">
-                            </div>
-                        </div>
-                        <div class="panel panel-primary" style="margin-top: 0px;">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">
-                                        <i class="livicon" data-name="user" data-size="18" data-loop="true" data-c="#fff" data-hc="white"></i>
-                                        Personal Information
-                                </h3>
-                                <span class="pull-right clickable">
-                                    <i class="glyphicon glyphicon-chevron-up"></i>
-                                </span>
-                            </div>
-                            <div class="panel-body">
-                                <h2 class="hidden">&nbsp;</h2>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div  class="form-group">
-                                            <div class="input-group">
-                                                <span class="input-group-addon">First Name<font color="red">*</font></span>
-                                                <input id="1firstName" type="text" class="selector form-control capital" name="firstName">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                <span class="input-group-addon">Middle Name</span>
-                                                <input id="1middleName" type="text" class="selector form-control capital" name="middleName">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                <span class="input-group-addon">Last Name<font color="red">*</font></span>
-                                                <input id="1lastName" type="text" class="selector form-control capital" name="lastName">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                    <span>Gender<font color="red">*</font></span>
-                                                    <label class="radio-inline">
-                                                        <input class="selector" type="radio" name="gender" required id="male" value="M" checked>Male
-                                                    </label>
-                                                    <label class="radio-inline">
-                                                        <input class="selector" type="radio" name="gender" required id="female" value="F">Female
-                                                    </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                <span class="input-group-addon">Civil Status<font color="red">*</font></span>
-                                                <select name="civilStatus" id="civilStatus" class="selector form-control">
-                                                <option  id="option1" selected disabled>--Select Civil Status--</option>
-                                                @foreach($cstatus as $cstatuses)
-                                                    <option value="{{$cstatuses->id}}">{{$cstatuses->statusName}}</option>
                                                 @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="input-group date form_datetime"  data-date-format="MM dd, yyyy" data-link-field="dtp_input1">
-                                            <span class="input-group-addon">Birthdate<font color="red">*</font></span>
-                                            <input class="form-control" size="16" type="text" value="" readonly name="dob" id="1dob" onchange="dobChanged(this)">
-                                            <span class="input-group-addon">
-                                                <span class="glyphicon glyphicon-th"></span>
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <div>
-                                            <div class="input-group">
-                                                <span class="input-group-addon">Age</span>
-                                                <input required type="text" id="age" class="form-control" name="age" readonly="readonly" maxlength="3">
-                                            </div>
-                                        </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                <span class="input-group-addon">Birthplace<font color="red">*</font></span>
-                                                <input type="text" id="1dop" class="selector form-control" name="dop">
-                                            </div>
-                                        </div>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-md-12">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">
-                                    <i class="livicon" data-name="home" data-size="18" data-c="#fff" data-hc="white" data-loop="true"></i>
-                                        Home Address
-                                    </h3>
-                                
-                                <span class="pull-right clickable">
-                                    <i class="glyphicon glyphicon-chevron-up"></i>
-                                </span>
-                            </div>
-                            <div class="panel-body">
-                                <h2 class="hidden">&nbsp;</h2>
 
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                <span class="input-group-addon">Street<font color="red">*</font></span>
-                                                <input type="text" id="1street" class="selector form-control capital" name="street">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                <span class="input-group-addon">Barangay<font color="red">*</font></span>
-                                                <input type="text" id="1barangay" class="selector form-control capital" name="barangay">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                <span class="input-group-addon">City<font color="red">*</font></span>
-                                                <input type="text" id="1city" class="selector form-control capital" name="city">
-                                            </div>
-                                        </div>
-                                    </div>
+                            <div class="form-horizontal" id="checks">
+                                <div class="form-group" style="margin-left: 20px;">
+                                    <input  type="checkbox" name="alumni">&ensp;I'm an Alumni/Trainee
+                                    <input type="hidden" name="enrollee_id" id="enrollee_id" value="">
                                 </div>
                             </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="panel panel-primary">
+                            <div class="panel panel-primary" style="margin-top: 0px;">
                                 <div class="panel-heading">
                                     <h3 class="panel-title">
-                                        <span class="glyphicon glyphicon-earphone"></span>&ensp; Contact Information
-                                        </h3>
-                                    
+                                        <i class="livicon" data-name="user" data-size="18" data-loop="true" data-c="#fff" data-hc="white"></i>
+                                        Personal Information
+                                    </h3>
                                     <span class="pull-right clickable">
                                         <i class="glyphicon glyphicon-chevron-up"></i>
                                     </span>
@@ -291,10 +146,153 @@
                                 <div class="panel-body">
                                     <h2 class="hidden">&nbsp;</h2>
                                     <div class="row">
-                                        <div class="form-group">
-                                            <div class="col-md-2">
-                                                <label>Contact<font color="red">*</font></label>
-                                                </select>
+                                        <div class="col-md-4">
+                                            <div  class="form-group">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">First Name<font color="red">*</font></span>
+                                                    <input id="1firstName" type="text" class="selector form-control capital" name="firstName">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">Middle Name</span>
+                                                    <input id="1middleName" type="text" class="selector form-control capital" name="middleName">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">Last Name<font color="red">*</font></span>
+                                                    <input id="1lastName" type="text" class="selector form-control capital" name="lastName">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <span>Gender<font color="red">*</font></span>
+                                                    <label class="radio-inline">
+                                                        <input class="selector" type="radio" name="gender" required id="male" value="M" checked>Male
+                                                    </label>
+                                                    <label class="radio-inline">
+                                                        <input class="selector" type="radio" name="gender" required id="female" value="F">Female
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">Civil Status<font color="red">*</font></span>
+                                                    <select name="civilStatus" id="civilStatus" class="selector form-control">
+                                                        <option  id="option1" selected disabled>--Select Civil Status--</option>
+                                                        @foreach($cstatus as $cstatuses)
+                                                        <option value="{{$cstatuses->id}}">{{$cstatuses->statusName}}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="input-group date form_datetime"  data-date-format="MM dd, yyyy" data-link-field="dtp_input1">
+                                                <span class="input-group-addon">Birthdate<font color="red">*</font></span>
+                                                <input class="form-control" size="16" type="text" value="" readonly name="dob" id="1dob" onchange="dobChanged(this)">
+                                                <span class="input-group-addon">
+                                                    <span class="glyphicon glyphicon-th"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <div>
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">Age</span>
+                                                        <input type="text" id="age" class="form-control" name="age" readonly="readonly" maxlength="3">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">Birthplace<font color="red">*</font></span>
+                                                    <input type="text" id="1dop" class="selector form-control" name="dop">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">
+                                            <i class="livicon" data-name="home" data-size="18" data-c="#fff" data-hc="white" data-loop="true"></i>
+                                            Home Address
+                                        </h3>
+
+                                        <span class="pull-right clickable">
+                                            <i class="glyphicon glyphicon-chevron-up"></i>
+                                        </span>
+                                    </div>
+                                    <div class="panel-body">
+                                        <h2 class="hidden">&nbsp;</h2>
+
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">Street<font color="red">*</font></span>
+                                                        <input type="text" id="1street" class="selector form-control capital" name="street">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">Barangay<font color="red">*</font></span>
+                                                        <input type="text" id="1barangay" class="selector form-control capital" name="barangay">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">City<font color="red">*</font></span>
+                                                        <input type="text" id="1city" class="selector form-control capital" name="city">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">
+                                            <span class="glyphicon glyphicon-earphone"></span>&ensp; Contact Information
+                                        </h3>
+
+                                        <span class="pull-right clickable">
+                                            <i class="glyphicon glyphicon-chevron-up"></i>
+                                        </span>
+                                    </div>
+                                    <div class="panel-body">
+                                        <h2 class="hidden">&nbsp;</h2>
+                                        <div class="row">
+                                            <div class="form-group">
+                                                <div class="col-md-2">
+                                                    <label>Contact<font color="red">*</font></label>
+                                                </div>
                                             </div>
                                             <div class="col-md-4">
                                                 <select name="contactType" id="contactType" class="selector form-control" onchange="changeContactType(this)">
@@ -308,225 +306,224 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <div class="input-group">
-                                                    <span class="input-group-addon">Email<font color="red">*</font></span>
-                                                    <input type="email" id="1email" class="form-control selector" name="email">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">Email<font color="red">*</font></span>
+                                                        <input type="email" id="1email" class="form-control selector" name="email">
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-        <!-- EMERGENCY CONTACT -->
-                        <div class="col-md-6">
-                            <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">
-                                    <span class="glyphicon glyphicon-phone-alt"></span>&ensp;Contact In Case Of Emergency
-                                </h3>
-                                <span class="pull-right clickable">
-                                    <i class="glyphicon glyphicon-chevron-up"></i>
-                                </span>
-                            </div>
-                            <div class="panel-body">
-                                <h2 class="hidden">&nbsp;</h2>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                <span class="input-group-addon">Name<font color="red">*</font></span>
-                                                <input type="text" id="1Ename" class="selector form-control capital" name="Ename">
-                                            </div>
-                                        </div>
+                            <!-- EMERGENCY CONTACT -->
+                            <div class="col-md-6">
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">
+                                            <span class="glyphicon glyphicon-phone-alt"></span>&ensp;Contact In Case Of Emergency
+                                        </h3>
+                                        <span class="pull-right clickable">
+                                            <i class="glyphicon glyphicon-chevron-up"></i>
+                                        </span>
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                <span class="input-group-addon">Relationship<font color="red">*</font></span>
-                                                <input type="text" id="1Erel" class="selector form-control capital" name="Erel">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="form-group">
-                                        <div class="col-md-2">
-                                            <label>Contact<font color="red">*</font></label>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <select name="EContactType" id="1EContactType" class="selector form-control" onchange="EchangeContactType(this)">
-                                                <option selected value="mobile">Mobile No.</option>
-                                                <option value="tel">Landline No.</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div id="contactE">
-                                                <input type="text" id="1EContact" name="Econtact" class="cp form-control placeholder selector" placeholder="e.g: 0999 9999 999">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                <span class="input-group-addon">Address<font color="red">*</font></span>
-                                                <textarea class="selector form-control" name="Eaddress" id="1Eaddress"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-        <!-- Educational Background -->
-                    <div class="col-md-6">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">
-                                    <span><i class="ion-university" style="font-size:20px;"></i></span>&ensp;Educational Background
-                                </h3>
-                                <span class="pull-right clickable">
-                                    <i class="glyphicon glyphicon-chevron-up"></i>
-                                </span>
-                            </div>
-                            <div class="panel-body">
-                                <h2 class="hidden">&nbsp;</h2>
-
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                <span class="input-group-addon">Attainment<font color="red">*</font></span>
-                                                <input type="text" id="1EBattainment" class="selector form-control capital" name="EBattainment">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                <span class="input-group-addon">School<font color="red">*</font></span>
-                                                <input type="text" id="1EBschool" class="selector form-control capital" name="EBschool">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                <span class="input-group-addon">Course</span>
-                                                <input type="text" id="1EBcourse" class="selector form-control capital" name="EBcourse">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-        <!-- Sea Experience -->
-                    <div class="col-md-6">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">
-                                    <span><i class="ion-help-buoy" style="font-size:20px;"></i></span>&ensp;Sea Experience
-                                </h3>
-                                <span class="pull-right clickable">
-                                    <i class="glyphicon glyphicon-chevron-up"></i>
-                                </span>
-                            </div>
-                            <div class="panel-body">
-                                <h2 class="hidden">&nbsp;</h2>
-
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                <span class="input-group-addon">No. of Years</span>
-                                                <input id="years" type="text" class="selector form-control" name="noYears">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                <span class="input-group-addon">Rank/Position</span>
-                                                <input id="rank" type="text" class="selector form-control capital" name="rank">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-        <!-- Trainings Attended  -->
-                    <div class="col-md-12">
-                        <div class="panel panel-primary filterable" style="overflow:auto;">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">
-                                    <span><i class="ion-ribbon-b" style="font-size:20px;"></i></span>&ensp;Trainings Attended
-                                </h3>
-                                <span class="pull-right clickable">
-                                    <i class="glyphicon glyphicon-chevron-up"></i>
-                                </span>
-                            </div>
-                            <div class="panel-body">
-                                <div class="col-md-12 table-responded">
-                                    <table class="table table-striped table-bordered">
-                                        <thead id="dynamic_head">
-                                            <tr>
-                                                <th width="35%">Training Title</th>
-                                                <th width="35%">Training Center</th>
-                                                <th width="25%">Date Taken</th>
-                                                <th width="5%">Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="dynamic_field">
-                                            <tr>
-                                                <td><input type="text" class="selector form-control capital" name="trainingTitle[]"></td>
-                                                <td><input type="text" class="selector form-control capital" name="trainingCenter[]"></td>
-                                                <td>
-                                                    <div class="input-group date form_datetime selector"  data-date-format="MM dd, yyyy" data-link-field="dtp_input1">
-                                                        <input class="form-control selector" size="16" type="text" value="" readonly name="dateTaken[]">
-                                                        <span class="input-group-addon">
-                                                            <span class="glyphicon glyphicon-remove selector"></span>
-                                                        </span>
-                                                        <span class="input-group-addon">
-                                                            <span class="glyphicon glyphicon-th selector"></span>
-                                                        </span>
+                                    <div class="panel-body">
+                                        <h2 class="hidden">&nbsp;</h2>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">Name<font color="red">*</font></span>
+                                                        <input type="text" id="1Ename" class="selector form-control capital" name="Ename">
                                                     </div>
-                                                </td>
-                                                <td><button type="button" class="selector btn btn-success" onclick="clicks()" id="add"><span class="glyphicon glyphicon-plus"></span></button></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">Relationship<font color="red">*</font></span>
+                                                        <input type="text" id="1Erel" class="selector form-control capital" name="Erel">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group">
+                                                <div class="col-md-2">
+                                                    <label>Contact<font color="red">*</font></label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <select name="EContactType" id="1EContactType" class="selector form-control" onchange="EchangeContactType(this)">
+                                                    <option selected value="mobile">Mobile No.</option>
+                                                    <option value="tel">Landline No.</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div id="contactE">
+                                                    <input type="text" id="1EContact" name="Econtact" class="cp form-control placeholder selector" placeholder="e.g: 0999 9999 999">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">Address<font color="red">*</font></span>
+                                                        <textarea class="selector form-control" name="Eaddress" id="1Eaddress"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Educational Background -->
+                            <div class="col-md-6">
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">
+                                            <span><i class="ion-university" style="font-size:20px;"></i></span>&ensp;Educational Background
+                                        </h3>
+                                        <span class="pull-right clickable">
+                                            <i class="glyphicon glyphicon-chevron-up"></i>
+                                        </span>
+                                    </div>
+                                    <div class="panel-body">
+                                        <h2 class="hidden">&nbsp;</h2>
+
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">Attainment<font color="red">*</font></span>
+                                                        <input type="text" id="1EBattainment" class="selector form-control capital" name="EBattainment">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">School<font color="red">*</font></span>
+                                                        <input type="text" id="1EBschool" class="selector form-control capital" name="EBschool">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">Course</span>
+                                                        <input type="text" id="1EBcourse" class="selector form-control capital" name="EBcourse">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Sea Experience -->
+                            <div class="col-md-6">
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">
+                                            <span><i class="ion-help-buoy" style="font-size:20px;"></i></span>&ensp;Sea Experience
+                                        </h3>
+                                        <span class="pull-right clickable">
+                                            <i class="glyphicon glyphicon-chevron-up"></i>
+                                        </span>
+                                    </div>
+                                    <div class="panel-body">
+                                        <h2 class="hidden">&nbsp;</h2>
+
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">No. of Years</span>
+                                                        <input id="years" type="text" class="selector form-control" name="noYears">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">Rank/Position</span>
+                                                        <input id="rank" type="text" class="selector form-control capital" name="rank">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Trainings Attended  -->
+                            <div class="col-md-12">
+                                <div class="panel panel-primary filterable" style="overflow:auto;">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">
+                                            <span><i class="ion-ribbon-b" style="font-size:20px;"></i></span>&ensp;Trainings Attended
+                                        </h3>
+                                        <span class="pull-right clickable">
+                                            <i class="glyphicon glyphicon-chevron-up"></i>
+                                        </span>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="col-md-12 table-responded">
+                                            <table class="table table-striped table-bordered">
+                                                <thead id="dynamic_head">
+                                                    <tr>
+                                                        <th width="35%">Training Title</th>
+                                                        <th width="35%">Training Center</th>
+                                                        <th width="25%">Date Taken</th>
+                                                        <th width="5%">Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="dynamic_field">
+                                                    <tr>
+                                                        <td><div><input type="text" class="selector form-control capital training" name="trainingTitle[]" onblur="validateTraining(this)"></div></td>
+                                                        <td><div><input type="text" class="selector form-control capital training" name="trainingCenter[]"  onblur="validateTraining(this)"></div></td>
+                                                        <td>
+                                                            <div class="input-group date form_datetime selector"  data-date-format="MM dd, yyyy" data-link-field="dtp_input1">
+                                                                <input class="form-control selector training" size="16" type="text" value="" readonly name="dateTaken[]" id="dateTaken" onchange="validateTraining(this)">
+                                                                <span class="input-group-addon">
+                                                                    <span class="glyphicon glyphicon-remove selector"></span>
+                                                                </span>
+                                                                <span class="input-group-addon">
+                                                                    <span class="glyphicon glyphicon-th selector"></span>
+                                                                </span>
+                                                            </div>
+                                                        </td>
+                                                        <td><button type="button" class="selector btn btn-success" onclick="clicks()" id="add"><span class="glyphicon glyphicon-plus"></span></button></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <button type="submit" class="btn btn-block btn-lg btn-info pull-right" style="margin-bottom: 15px;">Submit</button>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <button type="submit" class="btn btn-block btn-lg btn-info pull-right" style="margin-bottom: 15px;">Submit</button>
-                        </div>
-                    </div>
-                </form>
-              </div>
-          </div>
-          <!--main content end--> 
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
+</div>
 </section>
 @endsection
 @section("js")   
@@ -545,6 +542,7 @@
     <script src="{{ asset('/js/dataTables.bootstrap.min.js') }}" type="text/javascript"></script>
     <script src="/js/toastr.min.js"></script>
     <script type="text/javascript" src="/js/moment.min.js" charset="UTF-8"></script>
+    <script src="{{ asset('/js/nowhitespace.js') }}"></script>
 
     <script type="text/javascript">
     $(".form_datetime").datetimepicker({
@@ -558,7 +556,7 @@
         maxView: 4,
         forceParse: 0,
     });
-</script> 
+    </script> 
 
     <script type="text/javascript">
         $('input[type=checkbox]').on('ifChecked', function(event){
@@ -748,307 +746,399 @@
           }
         });
         </script>
-<script type="text/javascript">
-    //panel hide
-    $('.showhide').attr('title','Hide Panel content');      
-    $(document).on('click', '.panel-heading .clickable', function(e){
-    var $this = $(this);
-    if(!$this.hasClass('panel-collapsed')) {
-     $this.parents('.panel').find('.panel-body').slideUp();
-     $this.addClass('panel-collapsed');
-     $this.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
-     $('.showhide').attr('title','Show Panel content');
-    } else {
-     $this.parents('.panel').find('.panel-body').slideDown();
-     $this.removeClass('panel-collapsed');
-     $this.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
-     $('.showhide').attr('title','Hide Panel content');
-    }
-    });
-</script>
-    
-<script type="text/javascript">
-        var i = 1;
-        function clicks(){
-            i++;
-            $('#dynamic_field').append('<tr id="row'+i+'"><td><input type="text" class="form-control" name="trainingTitle[]"></td><td><input type="text"class="form-control" name="trainingCenter[]"></td><td><div class="input-group date form_datetime" data-date-format="MM dd, yyyy" data-link-field="dtp_input1"><input class="form-control" size="16" type="text" value="" readonly name="dateTaken[]"><span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span><span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span></div></td><td><button name="remove" type="button" id="'+i+'" class="btn btn-danger remove" ><span class="glyphicon glyphicon-remove"></span></button></td></tr>');
-            
-            $(document).on('click','.remove',function(){
-                var btn_id = $(this).attr('id');
-                $('#row'+btn_id+'').remove();
-            });
-
-            $(".form_datetime").datetimepicker({
-                format: "MM dd, yyyy",
-                weekStart: 1,
-                todayBtn:  1,
-                autoclose: 1,
-                todayHighlight: 1,
-                startView: 2,
-                minView: 2,
-                maxView: 4,
-                forceParse: 0,
-            });
-        }
-        
-	$(document).ready(function(){
-	  $('input').iCheck({
-	    checkboxClass: 'icheckbox_flat-blue',
-	    radioClass: 'iradio_flat-blue'
-	  });
-	});
-</script>
-
-<script type="text/javascript">
-    function dobChanged(dob){
-        // var age = moment(dob.value,"MMM D, YYYY").fromNow(true);
-        // $('#age').val(age+' old');
-        var bday=  moment(dob.value,"MMM D, YYYY");
-        var today = moment();
-        $('#age').val(today.diff(bday,"years"));
-        $('#age').valid();
-    }
-</script>
-
-<script type="text/javascript">
-    
-    function changeContactType(contactType){
-        if(contactType.value == "tel"){
-             {{--  document.getElementById('contact').value = "";
-            $("#contact").removeClass("cp").addClass("tel").attr("placeholder":"e.g: 0999 9999 999");
-            console.log("tel");   --}}
-            $("#contactC").empty();
-            $("#contactC").append('<input type="text" id="1contactI" name="contact" class="tel form-control placeholder selector" placeholder="e.g: 999 9999">')
-            
-            
-            $('.tel').mask('000 0000',
-            {
-                "placeholder": "--- ----"
-            });
-
-            $('.cp').mask('0000 0000 000',
-            {
-                "placeholder": "---- ---- ---"
-            });
-        }
-        else{
-            {{--  document.getElementById('contact').value = "";
-            $("#contact").removeClass("tel").addClass("cp").attr("placeholder":"e.g: 999 9999");
-            console.log("cp");  --}}
-            
-            $("#contactC").empty();
-            $("#contactC").append('<input type="text" id="1contactI" name="contact" class="cp form-control placeholder selector" placeholder="e.g: 0999 9999 999">')
-            
-            $('.tel').mask('000 0000',
-            {
-                "placeholder": "--- ----"
-            });
-
-            $('.cp').mask('0000 0000 000',
-            {
-                "placeholder": "---- ---- ---"
-            });
-        }
-    }
-
-</script>
-
-<script type="text/javascript">
-    function EchangeContactType(contactType){
-        if(contactType.value == "tel"){
-             {{--  document.getElementById('Econtact').value = "";
-            $("#contact").removeClass("cp").addClass("tel").attr("placeholder":"e.g: 0999 9999 999");
-            console.log("tel");   --}}
-            $("#contactE").empty();
-            $("#contactE").append('<input type="text" id="1Econtact" name="Econtact" class="tel form-control placeholder selector" placeholder="e.g: 999 9999">')
-
-            
-            $('.tel').mask('000 0000',
-            {
-                "placeholder": "--- ----"
-            });
-
-            $('.cp').mask('0000 0000 000',
-            {
-                "placeholder": "---- ---- ---"
-            });
-        }
-        else{
-            {{--  document.getElementById('contact').value = "";
-            $("#contact").removeClass("tel").addClass("cp").attr("placeholder":"e.g: 999 9999");
-            console.log("cp");  --}}
-            
-            $("#contactE").empty();
-            $("#contactE").append('<input type="text" id="1EContact" name="Econtact" class="cp form-control placeholder selector" placeholder="e.g: 0999 9999 999">')
-            
-            $('.tel').mask('000 0000',
-            {
-                "placeholder": "--- ----"
-            });
-
-            $('.cp').mask('0000 0000 000',
-            {
-                "placeholder": "---- ---- ---"
-            });
-        }
-    }
-
-</script>
-
-<script type="text/javascript">
-  $("#application").addClass(" active ");
-</script>
-
-<script type="text/javascript">
-        $('.tel').mask('000 0000',
-        {
-              "placeholder": "--- ----"
-        });
-
-        $('.cp').mask('0000 0000 000',
-        {
-              "placeholder": "---- ---- ---"
-        });
-</script>
-
-<script>
-$.validator.addMethod("regx", function(value, element, regexpr) {          
-    return regexpr.test(value);
-}, "No special characters except(hypen ( - ))");
-
-$.validator.addMethod("regx1", function(value, element, regexpr) {          
-    return regexpr.test(value);
-}, "No special characters except(hypen ( - ) and apostrophe ( ' ))");
-
-$.validator.addMethod("regx2", function(value, element, regexpr) {          
-    return regexpr.test(value);
-}, "Invalid Input");
-
-$.validator.addMethod("regx3", function(value, element) {          
-    return this.optional(element) || /(^[a-zA-Z0-9 \'\-\Ñ\ñ]+$)/i.test(value) || value == "";
-}, "Invalid Input");
-
-$.validator.addMethod("regx4", function(value, element) {          
-    return this.optional(element) || ((/(^[0-9]+$)/i.test(value)) && (value.length == 7 || value.length == 11));
-}, "Invalid Input");
-
-$.validator.addMethod("adult", function(value, element) {          
-if(value>=18)
-    return true;
-}, "Must be 18 years old and above");
-
-
-jQuery(function ($){
-    @foreach($tclass as $tclasses)
-    $('#PP{{$tclasses["id"]}}').iCheck('check');
-    $('#col{{$tclasses["id"]}}').append('<input id="mode{{$tclasses["id"]}}" type="hidden" name="paymentMode[]" value="'+$('#PP{{$tclasses["id"]}}').val()+'">');
-    $('#PP{{$tclasses["id"]}}').on('ifChecked',function(){
-        $('#col{{$tclasses["id"]}}').append('<input id="mode{{$tclasses["id"]}}" type="hidden" name="paymentMode[]" value="'+$('#PP{{$tclasses["id"]}}').val()+'">');
-    });
-    $('#PP{{$tclasses["id"]}}').on('ifUnchecked',function(){
-        $('#mode{{$tclasses["id"]}}').remove();
-    });
-    $('#FP{{$tclasses["id"]}}').on('ifChecked',function(){
-        $('#col{{$tclasses["id"]}}').append('<input id="mode{{$tclasses["id"]}}" type="hidden" name="paymentMode[]" value="'+$('#FP{{$tclasses["id"]}}').val()+'">');
-    });
-    $('#FP{{$tclasses["id"]}}').on('ifUnchecked',function(){
-        $('#mode{{$tclasses["id"]}}').remove();
-    });
-    @endforeach
-
-    $('#form').validate({
-        rules:{
-            firstName:{
-                required: true,
-                regx1: /(^[a-zA-Z0-9 -\'\Ñ\ñ]+$)/i,
-                space: true,
-            },
-            middleName:{
-                regx3: true,
-                space: true,
-            },
-            lastName:{
-                required: true,
-                regx1: /(^[a-zA-Z0-9 \'\-\Ñ\ñ]+$)/i,
-                space: true,
-            },
-            civilStatus:{
-                required: true
-            },
-            dob:{
-                required: true
-            },
-            age:{
-                adult: true
-            },
-            dop:{
-                required: true,
-                space: true,
-                regx2: /(^[a-zA-Z0-9 \'\-\Ñ\ñ\#\.\,]+$)/i,
-            },
-            street:{
-                required: true,
-                regx2: /(^[a-zA-Z0-9 \'\-\Ñ\ñ\#\.\,]+$)/i,
-                space: true,
-            },
-            barangay:{
-                required: true,
-                regx2: /(^[a-zA-Z0-9 \'\-\Ñ\ñ\#\.\,]+$)/i,
-                space: true,
-            },
-            city:{
-                required: true,
-                regx2: /(^[a-zA-Z0-9 \'\-\Ñ\ñ\#\.\,]+$)/i,
-                space: true,
-            },
-            contact:{
-                required: true
-            },
-            Ename:{
-                required: true,
-                regx1: /(^[a-zA-Z0-9 -\'\Ñ\ñ]+$)/i,
-                space: true,
-            },
-            Erel:{
-                required: true,
-                regx1: /(^[a-zA-Z0-9 -\'\Ñ\ñ]+$)/i,
-                space: true,
-            },
-            contact:{
-                required: true
-            },
-            Eaddress:{
-                required: true,
-                regx2: /(^[a-zA-Z0-9 \'\-\Ñ\ñ\#\.\,]+$)/i,
-                space: true,
-            },
-            EBattainment:{
-                required: true,
-                regx2: /(^[a-zA-Z0-9 \'\-\Ñ\ñ\#\.\,]+$)/i,
-                space: true,
-            },
-            EBschool:{
-                required: true,
-                regx2: /(^[a-zA-Z0-9 \'\-\Ñ\ñ\#\.\,]+$)/i,
-                space: true,
-            },
-            EBcourse:{
-                regx2: /(^[a-zA-Z0-9 \'\-\Ñ\ñ\#\.\,]+$)/i,
-                space: true,
-            },
-            noYears:{
-                number: true,
-                space: true
-            },
-            rank:{
-                space: true,
-                regx2: /(^[a-zA-Z0-9 \'\-\Ñ\ñ\#\.\,]+$)/i,
+        <script type="text/javascript">
+            //panel hide
+            $('.showhide').attr('title','Hide Panel content');      
+            $(document).on('click', '.panel-heading .clickable', function(e){
+            var $this = $(this);
+            if(!$this.hasClass('panel-collapsed')) {
+             $this.parents('.panel').find('.panel-body').slideUp();
+             $this.addClass('panel-collapsed');
+             $this.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+             $('.showhide').attr('title','Show Panel content');
+            } else {
+             $this.parents('.panel').find('.panel-body').slideDown();
+             $this.removeClass('panel-collapsed');
+             $this.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+             $('.showhide').attr('title','Hide Panel content');
             }
-        },
-        errorPlacement:function(error,element){
-            error.insertAfter(element.parent("div"));
-        }
-    });
-});
-</script>
+            });
+        </script>
+    
+        <script type="text/javascript">
+                var i = 1;
+                function clicks(){
+                    i++;
+                    $('#dynamic_field').append('<tr id="row'+i+'"><td><div><input type="text" class="selector form-control capital training" name="trainingTitle[]" onblur="validateTraining(this)"></div></td><td><div><input type="text" class="selector form-control capital training" name="trainingCenter[]"  onblur="validateTraining(this)"></div></td><td><div class="input-group date form_datetime selector"  data-date-format="MM dd, yyyy" data-link-field="dtp_input1"><input class="form-control selector training" size="16" type="text" value="" readonly name="dateTaken[]" id="dateTaken" onchange="validateTraining(this)"><span class="input-group-addon"><span class="glyphicon glyphicon-remove selector"></span></span><span class="input-group-addon"><span class="glyphicon glyphicon-th selector"></span></span></div></td><td><button type="button" name="remove" id="'+i+'" class="btn btn-danger remove"><span class="glyphicon glyphicon-remove"></span></button></td></tr>');
+                    
+                    $(document).on('click','.remove',function(){
+                        var btn_id = $(this).attr('id');
+                        $('#row'+btn_id+'').remove();
+                    });
+
+                    $(".form_datetime").datetimepicker({
+                        format: "MM dd, yyyy",
+                        weekStart: 1,
+                        todayBtn:  1,
+                        autoclose: 1,
+                        todayHighlight: 1,
+                        startView: 2,
+                        minView: 2,
+                        maxView: 4,
+                        forceParse: 0,
+                    });
+                }
+                
+        	$(document).ready(function(){
+        	  $('input').iCheck({
+        	    checkboxClass: 'icheckbox_flat-blue',
+        	    radioClass: 'iradio_flat-blue'
+        	  });
+        	});
+        </script>
+
+        <script type="text/javascript">
+            function dobChanged(dob){
+                // var age = moment(dob.value,"MMM D, YYYY").fromNow(true);
+                // $('#age').val(age+' old');
+                var bday=  moment(dob.value,"MMM D, YYYY");
+                var today = moment();
+                $('#age').val(today.diff(bday,"years"));
+                $('#age').valid();
+            }
+        </script>
+
+        <script type="text/javascript">
+            
+            function changeContactType(contactType){
+                if(contactType.value == "tel"){
+                     {{--  document.getElementById('contact').value = "";
+                    $("#contact").removeClass("cp").addClass("tel").attr("placeholder":"e.g: 0999 9999 999");
+                    console.log("tel");   --}}
+                    $("#contactC").empty();
+                    $("#contactC").append('<input type="text" id="1contactI" name="contact" class="tel form-control placeholder selector" placeholder="e.g: 999 9999">')
+                    
+                    
+                    $('.tel').mask('000 0000',
+                    {
+                        "placeholder": "--- ----"
+                    });
+
+                    $('.cp').mask('0000 0000 000',
+                    {
+                        "placeholder": "---- ---- ---"
+                    });
+                }
+                else{
+                    {{--  document.getElementById('contact').value = "";
+                    $("#contact").removeClass("tel").addClass("cp").attr("placeholder":"e.g: 999 9999");
+                    console.log("cp");  --}}
+                    
+                    $("#contactC").empty();
+                    $("#contactC").append('<input type="text" id="1contactI" name="contact" class="cp form-control placeholder selector" placeholder="e.g: 0999 9999 999">')
+                    
+                    $('.tel').mask('000 0000',
+                    {
+                        "placeholder": "--- ----"
+                    });
+
+                    $('.cp').mask('0000 0000 000',
+                    {
+                        "placeholder": "---- ---- ---"
+                    });
+                }
+            }
+
+        </script>
+
+        <script type="text/javascript">
+            function EchangeContactType(contactType){
+                if(contactType.value == "tel"){
+                     {{--  document.getElementById('Econtact').value = "";
+                    $("#contact").removeClass("cp").addClass("tel").attr("placeholder":"e.g: 0999 9999 999");
+                    console.log("tel");   --}}
+                    $("#contactE").empty();
+                    $("#contactE").append('<input type="text" id="1Econtact" name="Econtact" class="tel form-control placeholder selector" placeholder="e.g: 999 9999">')
+
+                    
+                    $('.tel').mask('000 0000',
+                    {
+                        "placeholder": "--- ----"
+                    });
+
+                    $('.cp').mask('0000 0000 000',
+                    {
+                        "placeholder": "---- ---- ---"
+                    });
+                }
+                else{
+                    {{--  document.getElementById('contact').value = "";
+                    $("#contact").removeClass("tel").addClass("cp").attr("placeholder":"e.g: 999 9999");
+                    console.log("cp");  --}}
+                    
+                    $("#contactE").empty();
+                    $("#contactE").append('<input type="text" id="1EContact" name="Econtact" class="cp form-control placeholder selector" placeholder="e.g: 0999 9999 999">')
+                    
+                    $('.tel').mask('000 0000',
+                    {
+                        "placeholder": "--- ----"
+                    });
+
+                    $('.cp').mask('0000 0000 000',
+                    {
+                        "placeholder": "---- ---- ---"
+                    });
+                }
+            }
+
+        </script>
+
+        <script type="text/javascript">
+          $("#application").addClass(" active ");
+        </script>
+
+        <script type="text/javascript">
+                $('.tel').mask('000 0000',
+                {
+                      "placeholder": "--- ----"
+                });
+
+                $('.cp').mask('0000 0000 000',
+                {
+                      "placeholder": "---- ---- ---"
+                });
+        </script>
+
+        <script>
+
+            jQuery(function ($){
+                @foreach($tclass as $tclasses)
+                $('#PP{{$tclasses["id"]}}').iCheck('check');
+                $('#col{{$tclasses["id"]}}').append('<input id="mode{{$tclasses["id"]}}" type="hidden" name="paymentMode[]" value="'+$('#PP{{$tclasses["id"]}}').val()+'">');
+                $('#PP{{$tclasses["id"]}}').on('ifChecked',function(){
+                    $('#col{{$tclasses["id"]}}').append('<input id="mode{{$tclasses["id"]}}" type="hidden" name="paymentMode[]" value="'+$('#PP{{$tclasses["id"]}}').val()+'">');
+                });
+                $('#PP{{$tclasses["id"]}}').on('ifUnchecked',function(){
+                    $('#mode{{$tclasses["id"]}}').remove();
+                });
+                $('#FP{{$tclasses["id"]}}').on('ifChecked',function(){
+                    $('#col{{$tclasses["id"]}}').append('<input id="mode{{$tclasses["id"]}}" type="hidden" name="paymentMode[]" value="'+$('#FP{{$tclasses["id"]}}').val()+'">');
+                });
+                $('#FP{{$tclasses["id"]}}').on('ifUnchecked',function(){
+                    $('#mode{{$tclasses["id"]}}').remove();
+                });
+                @endforeach
+            });
+        </script>
+
+        <script type="text/javascript">
+            $.validator.addMethod("regx", function(value, element, regexpr) {          
+                return regexpr.test(value);
+            }, "No special characters except(hypen ( - ))");
+
+            $.validator.addMethod("regx1", function(value, element, regexpr) {          
+                return regexpr.test(value);
+            }, "No special characters except(hypen ( - ) and apostrophe ( ' ))");
+
+            $.validator.addMethod("regx2", function(value, element, regexpr) {          
+                return regexpr.test(value);
+            }, "Invalid Input");
+
+            $.validator.addMethod("regx3", function(value, element) {          
+                return this.optional(element) || /(^[a-zA-Z0-9 \'\-\Ñ\ñ]+$)/i.test(value) || value == "";
+            }, "Invalid Input");
+
+            $.validator.addMethod("regx4", function(value, element) {          
+                return this.optional(element) || ((/(^[0-9]+$)/i.test(value)) && (value.length == 7 || value.length == 11));
+            }, "Invalid Input");
+
+            $.validator.addMethod("adult", function(value, element) {          
+            if(value>=18)
+                return true;
+            }, "Must be 18 years old and above");
+
+            $(function(){
+                $('#apply-form').validate({
+                    ignore:[],
+                    rules:{
+                        firstName:{
+                            required: true,
+                            regx1: /(^[a-zA-Z0-9 -\'\Ñ\ñ]+$)/i,
+                            space: true,
+                        },
+                        middleName:{
+                            regx3: true,
+                            space: true,
+                        },
+                        lastName:{
+                            required: true,
+                            regx1: /(^[a-zA-Z0-9 \'\-\Ñ\ñ]+$)/i,
+                            space: true,
+                        },
+                        civilStatus:{
+                            required: true
+                        },
+                        dob:{
+                            required: true
+                        },
+                        age:{
+                            adult: true
+                        },
+                        dop:{
+                            required: true,
+                            space: true,
+                            regx2: /(^[a-zA-Z0-9 \'\-\Ñ\ñ\#\.\,]+$)/i,
+                        },
+                        street:{
+                            required: true,
+                            regx2: /(^[a-zA-Z0-9 \'\-\Ñ\ñ\#\.\,]+$)/i,
+                            space: true,
+                        },
+                        barangay:{
+                            required: true,
+                            regx2: /(^[a-zA-Z0-9 \'\-\Ñ\ñ\#\.\,]+$)/i,
+                            space: true,
+                        },
+                        city:{
+                            required: true,
+                            regx2: /(^[a-zA-Z0-9 \'\-\Ñ\ñ\#\.\,]+$)/i,
+                            space: true,
+                        },
+                        contact:{
+                            required: true
+                        },
+                        email:{
+                            required: true
+                        },
+                        Ename:{
+                            required: true,
+                            regx1: /(^[a-zA-Z0-9 -\'\Ñ\ñ]+$)/i,
+                            space: true,
+                        },
+                        Erel:{
+                            required: true,
+                            regx1: /(^[a-zA-Z0-9 -\'\Ñ\ñ]+$)/i,
+                            space: true,
+                        },
+                        contact:{
+                            required: true
+                        },
+                        Eaddress:{
+                            required: true,
+                            regx2: /(^[a-zA-Z0-9 \'\-\Ñ\ñ\#\.\,]+$)/i,
+                            space: true,
+                        },
+                        EBattainment:{
+                            required: true,
+                            regx2: /(^[a-zA-Z0-9 \'\-\Ñ\ñ\#\.\,]+$)/i,
+                            space: true,
+                        },
+                        EBschool:{
+                            required: true,
+                            regx2: /(^[a-zA-Z0-9 \'\-\Ñ\ñ\#\.\,]+$)/i,
+                            space: true,
+                        },
+                        EBcourse:{
+                            space: true,
+                        },
+                        noYears:{
+                            number: true,
+                            space: true
+                        },
+                        rank:{
+                            space: true,
+                        }
+                    },
+                    errorPlacement:function(error,element){
+                        error.insertAfter(element.parent("div"));
+                    },
+                });
+            });
+        </script>
+        <script type="text/javascript">
+            function validateTraining(trainingField){
+
+                var isNull= false;
+                $(".training").each(function (index, element) { 
+                    if($(this).val().trim() == ""){
+                        isNull = true;
+                        console.log(isNull);
+                    }
+                    else{
+                        isNull = false;
+                        console.log(isNull);
+                        return false;
+                    }
+                });
+
+                if(isNull){
+                     $(".training").each(function (index, element) { 
+                        $(this).rules('remove', 'required');
+                    });
+                }
+                else{
+                    $(".training").each(function (index, element) { 
+                        $(this).rules('add', 'required');
+
+                //$("#dateTaken").valid();
+                    });
+                }
+
+
+                // var isNull= false;
+                // var index=i;
+                // while(index != 0){
+                //     $('row'+index+'').each(function (){
+                //         $(".training").each(function (index, element) { 
+                //             if($(this).val().trim() == ""){
+                //                 isNull = true;
+                //                 console.log(isNull);
+                //             }
+                //             else{
+                //                 isNull = false;
+                //                 console.log(isNull);
+                //                 return false;
+                //             }
+                //         });
+                //     });
+                //     index--;
+                // }
+
+                // // if(isNull){
+                // //      $(".training").each(function (index, element) { 
+                // //         $(this).rules('remove', 'required');
+                // //     });
+                // // }
+                // // else{
+                // //     $(".training").each(function (index, element) { 
+                // //         $(this).rules('add', 'required');
+
+                // // //$("#dateTaken").valid();
+                // //     });
+                // // }
+
+                // if(isNull){
+                //  index=i;
+                //     while(index != 0){
+                //     $('row'+index+'').each(function (){
+                //         $(".training").each(function (index, element) { 
+                //                 $(this).rules('remove', 'required');
+                //         });
+                //     });
+                //     index--;
+                //     }
+                // }
+                // else{
+                //      index=i;
+                //     while(index != 0){
+                //     $('row'+index+'').each(function (){
+                //         $(".training").each(function (index, element) { 
+                //                 $(this).rules('add', 'required');
+                //         });
+                //     });
+                //     index--;
+                //     }
+                // }
+            }
+        </script>
 @endsection
