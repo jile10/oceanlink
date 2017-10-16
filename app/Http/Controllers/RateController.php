@@ -51,11 +51,6 @@ class RateController extends Controller
             $check = false;
             $messages .= "Invalid price input.";
         }
-        if($request->min_students > $request->max_students)
-        {
-            $check = false;
-            $messages .= "Maximum no. of students must be greater than minimum no. of students";
-        }
         if($check)
         {   
             $rate = new Rate;
@@ -113,11 +108,6 @@ class RateController extends Controller
         {
             $check = false;
             $messages .= "Invalid price input.";
-        }
-        if($request->min_students > $request->max_students)
-        {
-            $check = false;
-            $messages .= "Maximum no. of students must be greater than minimum no. of students";
         }
         if($check)
         {   

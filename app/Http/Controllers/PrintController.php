@@ -355,6 +355,11 @@ class PrintController extends Controller
         	$name = $account->enrollee->firstName . ' ' . $account->enrollee->middleName . ' ' . $account->enrollee->lastName;
         	$address = $account->enrollee->street . ' ' . $account->enrollee->barangay . ' ' . $account->enrollee->city;
         }
+        else
+        {
+        	$name = $account->groupapplication->orgName;
+        	$address = $account->groupapplication->orgAddress;
+        }
 
         foreach($account->accountdetail as $details)
         {

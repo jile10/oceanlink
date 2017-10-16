@@ -71,11 +71,11 @@
 						</div>
 						<div class="col-md-3 pull-right">
 							<fieldset>
-              	<legend>Legend</legend>
-              	<span class="badge unpaid">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;Unpaid enrollee<br>
-              	<span class="badge paid">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;Paid enrollee
-              </fieldset>
-            </div>
+								<legend>Legend</legend>
+								<span class="badge unpaid">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;Unpaid enrollee<br>
+								<span class="badge paid">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;Paid enrollee
+							</fieldset>
+						</div>
 					</div>
 					<table class="table table-striped table-bordered" id="table1">
 						<thead>

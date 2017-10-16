@@ -372,16 +372,6 @@ class EnrolleeController extends Controller
             $message.="Conflict of Schedule.";
         }
         if(count($request->start)!=0){
-            if($request->start>$request->end)
-            {
-                $validdate = false;
-                $message.="Invalid date range.";
-            }
-            if(Carbon::parse($request->morning)->gte(Carbon::parse($request->afternoon)))
-            {
-                $validdate = false;
-                $message.="Invalid time.";
-            }
         }
         else{
             for($i=0; $i<count($request->day)-1; $i++){
@@ -393,14 +383,6 @@ class EnrolleeController extends Controller
                     }
                 }
                 if($validdate == false){
-                    break;
-                }
-            }
-            for($i=0; $i<count($request->day); $i++){
-                if(Carbon::parse($request->morning[$i])->gte(Carbon::parse($request->afternoon[$i])))
-                {
-                    $validdate = false;
-                    $message.="Invalid Time.";
                     break;
                 }
             }
@@ -430,7 +412,7 @@ class EnrolleeController extends Controller
                     $sdetail = new Scheduledetail;
                     $sdetail->day_id = $i;
                     $sdetail->start = $request->morning;
-                    $sdetail->end = $request->afternoon;
+                    $sdetail->end = Carbon::parse($request->morning)->addHours($lastrate->rate->classHour)->format('G:i');
                     $sdetail->breaktime = $request->breaktime;
                     $sdetail->schedule_id = $schedule->id;
                     $sdetail->save();
@@ -439,7 +421,6 @@ class EnrolleeController extends Controller
             else{
                 $day = $request->day;
                 $morning = $request->morning;
-                $afternoon = $request->afternoon;
                 $breaktime = $request->breaktime;
                 for($i = 0; $i<count($request->day)-1;$i++)
                 {
@@ -449,14 +430,11 @@ class EnrolleeController extends Controller
                         {
                             $temp = $day[$i];
                             $tempm = $morning[$i];
-                            $tempa = $afternoon[$i];
                             $tempb = $breaktime[$i];
                             $day[$i] = $day[$a];
                             $day[$a] = $temp;
                             $morning[$i] = $morning[$a];
                             $morning[$a] = $tempm;
-                            $afternoon[$i] = $afternoon[$a];
-                            $afternoon[$a] = $tempa;
                             $breaktime[$i] = $breaktime[$a];
                             $breaktime[$a] = $tempb;
 
@@ -467,7 +445,7 @@ class EnrolleeController extends Controller
                     $sdetail = new Scheduledetail;
                     $sdetail->day_id = $day[$i];
                     $sdetail->start = $morning[$i];
-                    $sdetail->end = $afternoon[$i];
+                    $sdetail->end = Carbon::parse($morning[$i])->addHours($lastrate->rate->classHour)->format('G:i');
                     $sdetail->breaktime = $breaktime[$i];
                     $sdetail->schedule_id = $schedule->id;
                     $sdetail->save();
@@ -606,16 +584,7 @@ class EnrolleeController extends Controller
             $message.="Conflict of Schedule.";
         }
         if(count($request->start)!=0){
-            if($request->start>$request->end)
-            {
-                $validdate = false;
-                $message.="Invalid date range.";
-            }
-            if(Carbon::parse($request->morning)->gte(Carbon::parse($request->afternoon)))
-            {
-                $validdate = false;
-                $message.="Invalid time.";
-            }
+            
         }
         else{
             for($i=0; $i<count($request->day)-1; $i++){
@@ -630,17 +599,9 @@ class EnrolleeController extends Controller
                     break;
                 }
             }
-            for($i=0; $i<count($request->day); $i++){
-                if(Carbon::parse($request->morning[$i])->gte(Carbon::parse($request->afternoon[$i])))
-                {
-                    $validdate = false;
-                    $message.="Invalid Time.";
-                    break;
-                }
-            }
         }
         if($validdate){
-            $message = "New group application is successfully added";
+            $message = "Group application is successfully updated";
             $notification = array(
                     'message' => $message, 
                     'alert-type' => 'success'
@@ -662,7 +623,7 @@ class EnrolleeController extends Controller
                     $sdetail = new Scheduledetail;
                     $sdetail->day_id = $i;
                     $sdetail->start = $request->morning;
-                    $sdetail->end = $request->afternoon;
+                    $sdetail->end = Carbon::parse($request->morning)->addHours($rate->rate->classHour)->format('G:i');
                     $sdetail->breaktime = $request->breaktime;
                     $sdetail->schedule_id = $tclass->schedule_id;
                     $sdetail->save();
@@ -671,7 +632,6 @@ class EnrolleeController extends Controller
             else{
                 $day = $request->day;
                 $morning = $request->morning;
-                $afternoon = $request->afternoon;
                 $breaktime = $request->breaktime;
                 for($i = 0; $i<count($request->day)-1;$i++)
                 {
@@ -687,8 +647,6 @@ class EnrolleeController extends Controller
                             $day[$a] = $temp;
                             $morning[$i] = $morning[$a];
                             $morning[$a] = $tempm;
-                            $afternoon[$i] = $afternoon[$a];
-                            $afternoon[$a] = $tempa;
                             $breaktime[$i] = $breaktime[$a];
                             $breaktime[$a] = $tempb;
 
@@ -699,7 +657,7 @@ class EnrolleeController extends Controller
                     $sdetail = new Scheduledetail;
                     $sdetail->day_id = $day[$i];
                     $sdetail->start = $morning[$i];
-                    $sdetail->end = $afternoon[$i];
+                    $sdetail->end = Carbon::parse($morning[$i])->addHours($rate->rate->classHour)->format('G:i');
                     $sdetail->breaktime = $breaktime[$i];
                     $sdetail->schedule_id = $tclass->schedule_id;
                     $sdetail->save();
