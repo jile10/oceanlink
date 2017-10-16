@@ -96,37 +96,7 @@ class CollectionReportController extends Controller
 	}
 
     public function viewAccount(){
-        $account = Account::all();
-        $accountAll = array();
-        $x=0;
-        foreach($account as $accounts){
-            $total=0;
-            foreach ($accounts->accountdetail as $details) {
-                if($details->scheduledprogram->trainingclass->status != 1 && $details->scheduledprogram->trainingclass->status != 0)
-                {
-                    $total += $details->balance;
-                }
-            }
-            $name = "";
-            if(count($accounts->enrollee)>0)
-            {
-                $name = $accounts->enrollee->firstName . ' '. 
-                                            $accounts->enrollee->middleName .' '. 
-                                            $accounts->enrollee->lastName;
-            }
-            else
-                $name = $accounts->groupapplication->orgName;
-            if($total>0)
-            {
-                $accountAll[$x] = [
-                    "accountNumber" => $accounts->accountNumber,
-                    "accountName" =>$name,
-                    "balance"=>$total,
-                ];
-                $x++;
-            }
-        }
-        return view('admin/reports/accountbalance',compact('accountAll'));
+        return view('admin/reports/accountbalance');
     }
 
     public function getAccountYearly(Request $request){

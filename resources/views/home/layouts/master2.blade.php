@@ -204,16 +204,13 @@
     </a>
     <!--global js starts-->
     <script type="text/javascript" src="/home/js/jquery.min.js"></script>
-    <script type="text/javascript" src="/home/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/home/js/raphael.js"></script>
+    <script type="text/javascript" src="/home/js/bootstrap.min.js"></script>s
     <script type="text/javascript" src="/home/js/livicons-1.4.min.js"></script>
-    <script type="text/javascript" src="/home/js/josh_frontend.js"></script>
     <!--global js end-->
     <!-- page level js starts-->
     <script type="text/javascript" src="/home/js/jquery.circliful.js"></script>
     <script type="text/javascript" src="/home/vendors/owl-carousel/owl.carousel.js"></script>
     <script type="text/javascript" src="/home/js/carousel.js"></script>
-    <script type="text/javascript" src="/home/js/index.js"></script>
     <!--page level js ends-->
     @yield("js")
 </body>
