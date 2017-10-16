@@ -88,7 +88,6 @@ Route::get('/maintenance/employee', 'EmployeeController@viewEmployee' );
 //Printable
 Route::get('/voucher','PrintController@voucher');
 Route::get('/regicard','PrintController@regicard');
-Route::post('/enrollmentreport','PrintController@setEnrollmentReport');
 Route::get('/certificate/{id}','PrintController@certificate');
 
 //Issuance of Certificate
@@ -268,6 +267,9 @@ Route::group(['middleware' => ['TO']],function(){
 	Route::get('/tofficer/class/grade','TrainingOfficerController@viewGrade');
 	Route::post('/tofficer/attendance/insert','TrainingOfficerController@insertAttendance');
 	Route::post('/tofficer/grade/insert','TrainingOfficerController@insertGrade');
+	Route::post('/enrollmentreport','PrintController@setEnrollmentReport');
+	Route::post('/gradingreport','PrintController@setGradeReport');
+	Route::post('/attendancereport','PrintController@setAttendanceReport');
 
 	//account
 	Route::get('/tofficer/accountsetting','TrainingOfficerController@viewAccount');

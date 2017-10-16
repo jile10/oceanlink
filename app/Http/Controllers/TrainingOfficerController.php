@@ -213,7 +213,7 @@ class TrainingOfficerController extends Controller
             $temp = Carbon::parse($dateEnd)->format('l');
             $holidaycheck = false;
             foreach($holiday as $holidays){
-                if(Carbon::parse($dateEnd)->between(Carbon::parse($holidays->dateStart), Carbon::parse($holidays->dateEnd)) || Carbon::parse($dateEnd)->format("F d, Y") == Carbon::parse($holidays->dateStart)->format("F d, Y") || Carbon::parse($dateEnd)->format("F d, Y") == Carbon::parse($holidays->dateEnd)->format("F d, Y")){
+                if(Carbon::parse($dateEnd)->between(Carbon::parse($holidays->dateStart), Carbon::parse($holidays->dateEnd)) ){
                     $holidaycheck = true;
                 }
             }
@@ -222,7 +222,6 @@ class TrainingOfficerController extends Controller
                     $holidaycheck = true;
                 }
             }
-
             if($holidaycheck == false)
             {
                 foreach ($tclass->schedule->scheduledetail as $details) {
@@ -235,9 +234,7 @@ class TrainingOfficerController extends Controller
             {
                 $check = false;
             }
-            else{
                 $dateEnd = Carbon::parse($dateEnd)->addDays(1);
-            }
         }
         return view('training_officer/attendance',compact('tclass','dateEnd'));
     }

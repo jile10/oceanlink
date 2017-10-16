@@ -87,7 +87,6 @@ class EnrollmentController extends Controller
                             $check = false;
                         }
                         else{
-
                             $dateEnd = Carbon::parse($dateEnd)->addDays(1);
                         }
                     }
@@ -117,14 +116,74 @@ class EnrollmentController extends Controller
                         }
                         else
                         {
-                            $sched = Scheduledetail::where('schedule_id','=',$classes->schedule->id);
-                            $startsched = $sched->first();
-                            $startsched = Carbon::parse($startsched->day->dayName)->format("D");
-                            $endsched = $sched->orderBy('id','desc')->first();
-                            $endsched = Carbon::parse($endsched->day->dayName)->format("D");
-                            $schedules = $startsched . '-' . $endsched;
-                            $time = $sched->first();
-                            $schedules .= ' &ensp;' . Carbon::parse($time->start)->format("g:i A") . '-' . Carbon::parse($time->end)->format("g:i A");
+                            $dump = array();
+                            $x=0;
+                            $sched = Scheduledetail::where('schedule_id','=',$classes->schedule->id)->get();
+                            $checkforsched = true;
+                            for($i=0; $i<count($sched)-1;$i++)
+                            {   
+                                for($a=$i+1;$a<count($sched);$a++)
+                                {
+                                    if($sched[$i]->start != $sched[$a]->start)
+                                    {
+                                        $checkforsched = false;
+                                    }
+                                }
+                            }
+                            if($checkforsched == false)
+                            {
+                                $schedules = array();
+                                $counters = 0;
+                                for($i=0; $i<count($sched)-1;$i++)
+                                {   
+                                    $schek = true;
+                                    for($b = 0;$b<count($dump);$b++)
+                                    {
+                                        if($sched[$i]->day_id == $dump[$b])
+                                        {
+                                            $schek = false;
+                                        }
+                                    }
+                                    for($b = 0;$b<count($dump);$b++)
+                                    {
+                                        if($sched[$i]->day_id == $dump[$b])
+                                        {
+                                            $schek = false;
+                                        }
+                                    }
+                                    $schedfirst=Carbon::parse($sched[$i]->day->dayName)->format("D");
+                                    for($a=$i+1;$a<count($sched);$a++)
+                                    {
+                                        if($schek)
+                                        {
+                                            if($sched[$i]->start == $sched[$a]->start)
+                                            {
+                                                $schedfirst .= "/" . Carbon::parse($sched[$a]->day->dayName)->format("D");
+                                                $dump[$x] = $sched[$a]->day_id;
+                                                $x++;
+                                            }
+                                        }
+                                    }
+                                    if($schek)
+                                    {
+                                        $schedfirst .= " ". Carbon::parse($sched[$i]->start)->format("g:i A") .' - ' . Carbon::parse($sched[$i]->end)->format("g:i A");
+                                        $schedules[$counters] = [
+                                            'scheds' => $schedfirst,
+                                        ];
+                                        $counters++;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                $startsched = $sched->first();
+                                $startsched = Carbon::parse($startsched->day->dayName)->format("D");
+                                $endsched = $sched->last();
+                                $endsched = Carbon::parse($endsched->day->dayName)->format("D");
+                                $schedules = $startsched . '-' . $endsched;
+                                $time = $sched->first();
+                                $schedules .= ' &ensp;' . Carbon::parse($time->start)->format("g:i A") . '-' . Carbon::parse($time->end)->format("g:i A");
+                            }
                         }
 
                     }
@@ -141,7 +200,7 @@ class EnrollmentController extends Controller
                     }
                 //end of schedule
                 $tclass[$x] = [
-                    'id' => $classes->scheduledprogram->id,
+                    'id' => $classes->id,
                     'class_name' =>$classes->class_name,
                     'course_name' => $classes->scheduledprogram->rate->program->programName . ' (' . $classes->scheduledprogram->rate->duration . ' Hours) ',
                     'dateStart' =>Carbon::parse($classes->scheduledprogram->dateStart)->format("F d, Y"),
@@ -261,16 +320,16 @@ class EnrollmentController extends Controller
             }
         }
         if(count($request->start)!=0){
-            if($request->start>$request->end)
-            {
-                $validdate = false;
-                $message.=" Invalid date range.";
-            }
-            if(Carbon::parse($request->morning)->gte(Carbon::parse($request->afternoon)))
-            {
-                $validdate = false;
-                $message.=" Invalid time.";
-            }
+            // if($request->start>$request->end)
+            // {
+            //     $validdate = false;
+            //     $message.=" Invalid date range.";
+            // }
+            // if(Carbon::parse($request->morning)->gte(Carbon::parse($request->afternoon)))
+            // {
+            //     $validdate = false;
+            //     $message.=" Invalid time.";
+            // }
         }
         else{
             for($i=0; $i<count($request->day)-1; $i++){
@@ -285,14 +344,14 @@ class EnrollmentController extends Controller
                     break;
                 }
             }
-            for($i=0; $i<count($request->day); $i++){
-                if(Carbon::parse($request->morning[$i])->gte(Carbon::parse($request->afternoon[$i])))
-                {
-                    $validdate = false;
-                    $message.=" Invalid Time.";
-                    break;
-                }
-            }
+            // for($i=0; $i<count($request->day); $i++){
+            //     if(Carbon::parse($request->morning[$i])->gte(Carbon::parse($request->afternoon[$i])))
+            //     {
+            //         $validdate = false;
+            //         $message.=" Invalid Time.";
+            //         break;
+            //     }
+            // }
         }
         $checkdatestart = false;
         if(count($request->day)>0)
@@ -305,6 +364,16 @@ class EnrollmentController extends Controller
                     $checkdatestart = true;
                 }
             }   
+        }
+        else
+        {
+            for($i=$request->start; $i<=$request->end; $i++)
+            {
+                if(Carbon::parse("2018-01-".$i)->format("l") == Carbon::parse($request->dateStart)->format("l"))
+                {
+                    $checkdatestart = true;
+                }
+            }
         }
         if($checkdatestart == false)
         {
@@ -334,7 +403,7 @@ class EnrollmentController extends Controller
                     $sdetail = new Scheduledetail;
                     $sdetail->day_id = $i;
                     $sdetail->start = $request->morning;
-                    $sdetail->end = $request->afternoon;
+                    $sdetail->end = Carbon::parse($request->morning)->addHours($lastrate->rate->classHour)->format('G:i');
                     $sdetail->breaktime = $request->breaktime;
                     $sdetail->schedule_id = $schedule->id;
                     $sdetail->save();
@@ -353,14 +422,11 @@ class EnrollmentController extends Controller
                         {
                             $temp = $day[$i];
                             $tempm = $morning[$i];
-                            $tempa = $afternoon[$i];
                             $tempb = $breaktime[$i];
                             $day[$i] = $day[$a];
                             $day[$a] = $temp;
                             $morning[$i] = $morning[$a];
                             $morning[$a] = $tempm;
-                            $afternoon[$i] = $afternoon[$a];
-                            $afternoon[$a] = $tempa;
                             $breaktime[$i] = $breaktime[$a];
                             $breaktime[$a] = $tempb;
 
@@ -371,7 +437,7 @@ class EnrollmentController extends Controller
                     $sdetail = new Scheduledetail;
                     $sdetail->day_id = $day[$i];
                     $sdetail->start = $morning[$i];
-                    $sdetail->end = $afternoon[$i];
+                    $sdetail->end = Carbon::parse($morning[$i])->addHours($lastrate->rate->classHour)->format('G:i');
                     $sdetail->breaktime = $breaktime[$i];
                     $sdetail->schedule_id = $schedule->id;
                     $sdetail->save();
@@ -658,16 +724,16 @@ class EnrollmentController extends Controller
             }
         }
         if(count($request->start)!=0){
-            if($request->start>$request->end)
-            {
-                $validdate = false;
-                $message.="Invalid date range.";
-            }
-            if(Carbon::parse($request->morning)->gte(Carbon::parse($request->afternoon)))
-            {
-                $validdate = false;
-                $message.="Invalid time.";
-            }
+            // if($request->start>$request->end)
+            // {
+            //     $validdate = false;
+            //     $message.="Invalid date range.";
+            // }
+            // if(Carbon::parse($request->morning)->gte(Carbon::parse($request->afternoon)))
+            // {
+            //     $validdate = false;
+            //     $message.="Invalid time.";
+            // }
         }
         else{
             for($i=0; $i<count($request->day)-1; $i++){
@@ -682,14 +748,14 @@ class EnrollmentController extends Controller
                     break;
                 }
             }
-            for($i=0; $i<count($request->day); $i++){
-                if(Carbon::parse($request->morning[$i])->gte(Carbon::parse($request->afternoon[$i])))
-                {
-                    $validdate = false;
-                    $message.="Invalid Time.";
-                    break;
-                }
-            }
+            // for($i=0; $i<count($request->day); $i++){
+            //     if(Carbon::parse($request->morning[$i])->gte(Carbon::parse($request->afternoon[$i])))
+            //     {
+            //         $validdate = false;
+            //         $message.="Invalid Time.";
+            //         break;
+            //     }
+            // }
         }
         $checkdatestart = false;
         if(count($request->start)==0){
@@ -699,6 +765,16 @@ class EnrollmentController extends Controller
                     {
                         $checkdatestart = true;
                     }
+            }
+        }
+        else
+        {
+            for($i=$request->start; $i<=$request->end; $i++)
+            {
+                if(Carbon::parse("2018-01-".$i)->format("l") == Carbon::parse($request->dateStart)->format("l"))
+                {
+                    $checkdatestart = true;
+                }
             }
         }
         if($checkdatestart  == false)
@@ -729,7 +805,7 @@ class EnrollmentController extends Controller
                     $sdetail = new Scheduledetail;
                     $sdetail->day_id = $i;
                     $sdetail->start = $request->morning;
-                    $sdetail->end = $request->afternoon;
+                    $sdetail->end = Carbon::parse($request->morning)->addHours($sprog->rate->classHour)->format('G:i');
                     $sdetail->breaktime = $request->breaktime;
                     $sdetail->schedule_id = $schedule->id;
                     $sdetail->save();
@@ -748,14 +824,11 @@ class EnrollmentController extends Controller
                         {
                             $temp = $day[$i];
                             $tempm = $morning[$i];
-                            $tempa = $afternoon[$i];
                             $tempb = $breaktime[$i];
                             $day[$i] = $day[$a];
                             $day[$a] = $temp;
                             $morning[$i] = $morning[$a];
                             $morning[$a] = $tempm;
-                            $afternoon[$i] = $afternoon[$a];
-                            $afternoon[$a] = $tempa;
                             $breaktime[$i] = $breaktime[$a];
                             $breaktime[$a] = $tempb;
 
@@ -766,7 +839,7 @@ class EnrollmentController extends Controller
                     $sdetail = new Scheduledetail;
                     $sdetail->day_id = $request->day[$i];
                     $sdetail->start = $request->morning[$i];
-                    $sdetail->end = $request->afternoon[$i];
+                    $sdetail->end = Carbon::parse($morning[$i])->addHours($sprog->rate->classHour)->format('G:i');
                     $sdetail->breaktime = $request->breaktime[$i];
                     $sdetail->schedule_id = $schedule->id;
                     $sdetail->save();
@@ -786,6 +859,7 @@ class EnrollmentController extends Controller
             }
         }
         else{
+
             $notification = array(
                     'message' => $message, 
                     'alert-type' => 'warning'
@@ -798,6 +872,7 @@ class EnrollmentController extends Controller
             {
                 return redirect('/manage_enrollment')->with($notification);
             }
+            return redirect('/manage_enrollment')->with($notification);
         }
     }
 

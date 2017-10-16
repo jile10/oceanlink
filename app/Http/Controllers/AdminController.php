@@ -11,7 +11,11 @@ use App\Groupclassdetail;
 use App\Holiday;
 use App\Classdetail;
 use App\Nosessionday;
+<<<<<<< HEAD
 use App\Trainingofficer;
+=======
+use App\Accountdetail;
+>>>>>>> 9f9cc42619c94710aa7767798e774c2db1242d3b
 use Image;
 use Auth;
 class AdminController extends Controller
@@ -25,6 +29,9 @@ class AdminController extends Controller
 				$tclass->save();
                 if(count($tclasses->groupclassdetail)==0){
                     foreach($tclasses->classdetail->where('status',1) as $details){
+                        $account = $details->enrollee->account;
+                        $accountdetail = $account->accountdetail->where('scheduledprogram','=',$details->trainingclass->scheduledprogram->id);
+                        $accountdetail->delete();
                         $cdetail = $details;
                         $cdetail->delete();
                     }
@@ -48,7 +55,7 @@ class AdminController extends Controller
                 }
                 else
                 {                    
-                        foreach($tclasses->classdetail as $details){
+                        foreach($tclasses->classdetail->where('status','=!',1) as $details){
                         $certificate = Certificate::all();
                         $a = count($certificate)+1;
                         $certificate = new Certificate;
@@ -82,7 +89,7 @@ class AdminController extends Controller
                 $temp = Carbon::parse($dateEnd)->format('l');
                 $holidaycheck = false;
                 foreach($holiday as $holidays){
-                    if(Carbon::parse($dateEnd)->between(Carbon::parse($holidays->dateStart), Carbon::parse($holidays->dateEnd)) || Carbon::parse($dateEnd)->format("F d, Y") == Carbon::parse($holidays->dateStart)->format("F d, Y") || Carbon::parse($dateEnd)->format("F d, Y") == Carbon::parse($holidays->dateEnd)->format("F d, Y")){
+                    if(Carbon::parse($dateEnd)->between(Carbon::parse($holidays->dateStart), Carbon::parse($holidays->dateEnd))){
                         $holidaycheck = true;
                     }
                 }
@@ -105,7 +112,6 @@ class AdminController extends Controller
                     $check = false;
                 }
                 else{
-
                     $dateEnd = Carbon::parse($dateEnd)->addDays(1);
                 }
             }

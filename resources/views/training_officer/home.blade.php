@@ -54,7 +54,25 @@
 												Ended
 											@endif
 										</td>
-										<td><form  action="/tofficer/setclass" method="get"><input type="hidden" name="officer_id" value="{{$officer->id}}"><button style="margin-bottom: 5px;" type="submit" name="tclass_id" value="{{$sprog->trainingclass->id}}" class="btn btn-primary col-sm-8">View Class</button></form>@if($sprog->trainingclass->status == 2) <form action="/enrollmentreport" method="post" target="_blank">{{csrf_field()}}<button type="submit" name="tclass_id" value="{{$sprog->trainingclass->id}}" class="btn btn-info col-sm-12"><i class="glyphicon glyphicon-print"></i>&ensp;Print Enrollment Report</button></form>@endif
+										<td><form  action="/tofficer/setclass" method="get"><input type="hidden" name="officer_id" value="{{$officer->id}}"><button style="margin-bottom: 5px;" type="submit" name="tclass_id" value="{{$sprog->trainingclass->id}}" class="btn btn-primary col-sm-8">View Class</button></form>@if($sprog->trainingclass->status == 2) <form action="/enrollmentreport" method="post" target="_blank">{{csrf_field()}}<button style="margin-bottom: 5px;" type="submit" name="tclass_id" value="{{$sprog->trainingclass->id}}" class="btn btn-info col-sm-12"><i class="glyphicon glyphicon-print"></i>&ensp;Print Enrollment Report</button></form>@endif
+										@if(count($sprog->trainingclass->classdetail)>0)
+										@if(count($sprog->trainingclass->classdetail->first()->grade)>0)
+										<form action="/gradingreport" method="post" target="_blank">{{csrf_field()}}<button  type="submit" style="margin-bottom: 5px;" name="tclass_id" value="{{$sprog->trainingclass->id}}" class="btn btn-info col-sm-12"><i class="glyphicon glyphicon-print"></i>&ensp;Print Grade Report</button></form>
+										@endif
+										@else
+										@if(count($sprog->trainingclass->groupclassdetail->first()->groupgrade)>0)
+										<form action="/gradingreport" method="post" target="_blank">{{csrf_field()}}<button  type="submit" style="margin-bottom: 5px;" name="tclass_id" value="{{$sprog->trainingclass->id}}" class="btn btn-info col-sm-12"><i class="glyphicon glyphicon-print"></i>&ensp;Print Grade Report</button></form>
+										@endif
+										@endif
+										@if(count($sprog->trainingclass->classdetail)>0)
+										@if(count($sprog->trainingclass->attendance->attend)/count($sprog->trainingclass->classdetail) == $sprog->rate->duration / $sprog->rate->classHour)
+										<form action="/attendancereport" method="post" target="_blank">{{csrf_field()}}<button style="margin-bottom: 5px;"  type="submit" name="tclass_id" value="{{$sprog->trainingclass->id}}" class="btn btn-info col-sm-12"><i class="glyphicon glyphicon-print"></i>&ensp;Print Attendance Report</button></form>
+										@endif
+										@else
+										@if(count($sprog->trainingclass->attendance->groupattend)/count($sprog->trainingclass->groupclassdetail) == $sprog->rate->duration / $sprog->rate->classHour)
+										<form action="/attendancereport" method="post" target="_blank">{{csrf_field()}}<button style="margin-bottom: 5px;" type="submit" name="tclass_id" value="{{$sprog->trainingclass->id}}" class="btn btn-info col-sm-12"><i class="glyphicon glyphicon-print"></i>&ensp;Print Attendance Report</button></form>
+										@endif
+										@endif
 										</td>
 									</tr>
 								@endif

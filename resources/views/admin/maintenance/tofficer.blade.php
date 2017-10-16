@@ -190,26 +190,22 @@
 		</div>
 	</div>
 </div>
-
-@foreach($tofficer as $tofficers)
 <!--Update Modal-->
+@foreach($tofficer as $tofficers)
 <div class="modal fade in" id="update{{$tofficers->id}}" tabindex="-1" role="dialog" aria-hidden="false" style="display:none;">
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
-			<form id="update-form{{$tofficers->id}}" action="/tofficer/update" method="post" class="form-horizontal">
+			<form  id="update-form{{$tofficers->id}}" action="/tofficer/update" method="post" class="form-horizontal">
 				{{ csrf_field() }}
-				<input type="hidden" name="id" value="{{$tofficers->id}}">
-				<div class="modal-header btn-primary" >
+				<div class="modal-header btn-primary">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-					<h4 class="modal-title">Update Training officer</h4>
+					<h4 class="modal-title">New Training Officer</h4>
 				</div>
 				<div class="modal-body">
 					<div class="row">
-						<div class="row">
-							<div class="col-md-12">
-								<div class="alert alert-success">
-										<p><em>Note: <font color="red">*</font> fields are required</em></p>
-								</div>
+						<div class="col-md-12">
+							<div class="alert alert-success">
+									<p><em>Note: <font color="red">*</font> fields are required</em></p>
 							</div>
 						</div>
 						<div class="col-md-6">
@@ -287,30 +283,25 @@
 								<div class="col-md-8" style="padding-right: 0px; padding-left: 0px; ">
 									<div class="col-md-6" style="padding-right: 0px;">
 										<select name="contactType" id="contactType{{$tofficers->id}}" class="selector form-control" style="padding: 0px; width: 80%;" onchange="contactTypeChanged1({{$tofficers->id}})">
-				                @if(strlen($tofficers->contact) >= 11)
-					                <option selected value="mobile">Mobile No.</option>
-					                <option value="tel">Landline No.</option>
-					              @else
-					              	<option  value="mobile">Mobile No.</option>
-					                <option selected value="tel">Landline No.</option>
-					              @endif
-				            </select>
-			            </div>
-			            <div class="col-md-6" id="contactC{{$tofficers->id}}" style="padding-left: 0px;">
-			            	@if(strlen($tofficers->contact) >= 11)
-			                <input type="text" id="contact" class="selector cp form-control placeholder" name="contact" placeholder="0999 9999 999" value="{{$tofficers->contact}}" maxlength="11">
-			              @else
-			              	<input type="text" id="contact" class="tel form-control placeholder" placeholder="999 9999" value="{{$tofficers->contact}}"  maxlength="11">
-					          @endif 	
+											@if(strlen($tofficers->contact) >= 11)
+											<option selected value="mobile">Mobile No.</option>
+											<option value="tel">Landline No.</option>
+											@else
+											<option  value="mobile">Mobile No.</option>
+											<option selected value="tel">Landline No.</option>
+											@endif
+										</select>
+									</div>
+									<div class="col-md-6" id="contactC{{$tofficers->id}}" style="padding-left: 0px;">
+										@if(strlen($tofficers->contact) >= 11)
+										<input type="text" id="contact" class="selector cp form-control placeholder" name="contact" placeholder="0999 9999 999" value="{{$tofficers->contact}}" maxlength="11">
+										@else
+										<input type="text" id="contact" class="tel form-control placeholder" placeholder="999 9999" value="{{$tofficers->contact}}"  maxlength="11">
+										@endif 	
 
 									</div>
 								</div>
 							</div>
-								<div class="form-group">
-								<label for="inputEmail3" class="col-sm-4 control-label">Email<font color="red">*</font></label>
-								<div class="col-sm-8">
-									<input required type="email" required class="form-control" value="{{$tofficers->user->email}}" name="email" maxlength="100">
-								</div>
 						</div>
 					</div>
 				</div>
@@ -368,6 +359,8 @@
 		maxView: 4,
 		forceParse: 0,
 	});
+	$('#maintenance').addClass(' active');
+	$('#tofficer').addClass(' active');
 </script> 
 
 <script type="text/javascript">

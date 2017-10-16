@@ -111,7 +111,7 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label for="inputEmail3" class="col-sm-3 control-label">Room Number<font color="red">*</font></label>
+								<label for="inputEmail3" class="col-sm-3 control-label">Room Name<font color="red">*</font></label>
 								<div class="col-sm-4">
 									<input required type="text" class="form-control" name="room_no" maxlength="10">
 								</div>
@@ -175,7 +175,7 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label for="inputEmail3" class="col-sm-3 control-label">Room Number<font color="red">*</font></label>
+								<label for="inputEmail3" class="col-sm-3 control-label">Room Name<font color="red">*</font></label>
 								<div class="col-sm-4">
 									<input required type="text" value="{{$rooms->room_no}}" class="form-control" name="room_no" maxlength="10">
 								</div>
