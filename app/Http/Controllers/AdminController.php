@@ -11,6 +11,7 @@ use App\Groupclassdetail;
 use App\Holiday;
 use App\Classdetail;
 use App\Nosessionday;
+use App\Trainingofficer;
 use Image;
 use Auth;
 class AdminController extends Controller
@@ -120,7 +121,31 @@ class AdminController extends Controller
             }
         }
 		
-       return view('admin.home');
+        //Dashboard the real deal
+        //EnrolledSTudents
+        $enrolledStudents = 0;
+        $trainingclass = Trainingclass::where('status','=',1)->orWhere('status','=',2)->get();
+        foreach($trainingclass as $trainingclasses){
+            if(count($trainingclasses->classdetail)>0)
+            {
+                $enrolledStudents += count($trainingclasses->classdetail->where('status','!=',1));
+            }
+            else{
+                if($count($trainingclasses->groupapplicationdetail->where('status','!=',1)))
+                {
+                    $enrolledStudents += count($trainingclasses->groupclassdetail);
+                }
+            }
+        }
+
+        //ongoing courses
+        $ongoingCourses = 0;
+        $trainingClass = count(Trainingclass::where('status','=',2)->get());
+
+        //training officers
+        $trainingOfficers = count(Trainingofficer::where('active','=',1)->get());
+
+       return view('admin.home',compact('enrolledStudents','ongoingCourses','trainingOfficers'));
 	}
 
 	public function gapplication(){

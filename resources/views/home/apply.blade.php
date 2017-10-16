@@ -67,10 +67,13 @@
                       <!-- BEGIN FORM WIZARD WITH VALIDATION -->
                       <form id="apply-form" action="/iApply/insert" method="post">
                           {{csrf_field()}}
-                        <div class="col-md-4">
-                            <div class="panel panel-lightgreen">
-                                <div class="panel-heading">
-                                    <h4 class="panel-title"><em>Note: <font color="red">*</font> fields are required</em></h4>
+                        
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="col-md-12">
+                                    <div class="alert alert-success">
+                                            <p><em>Note: <font color="red">*</font> fields are required</em></p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -78,51 +81,53 @@
                         <input type="hidden" name="sprogram_id[]" value="{{$ids}}">
                         @endforeach
                         <div class="col-md-12">
-                            <div class="panel panel-primary" style="margin-top: 0px;">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title">
-                                        <i class="livicon" data-name="user" data-size="18" data-loop="true" data-c="#fff" data-hc="white"></i>
-                                        Select Payment Mode
-                                    </h3>
-                                    <span class="pull-right clickable">
-                                        <i class="glyphicon glyphicon-chevron-up"></i>
-                                    </span>
-                                </div>
-                                <div class="panel-body">
-                                    <div class="col-md-12 table-responded">
-                                        <table class="striped bordered" id="table1">
-                                            <thead>
-                                                <tr>
-                                                    <th width="30%">Course</th>
-                                                    <th width="15%">Date Start</th>
-                                                    <th width="15%">Date End</th>
-                                                    <th width="15%" style="text-align:right;">Fee &ensp;(Php)</th>
-                                                    <th width="25%" style="text-align: center;">Payment Mode</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach($tclass as $tclasses)
-                                                @foreach(session('sprogram_id') as $ids)
-                                                @if($tclasses['id'] == $ids)
-                                                <tr id="row{{$tclasses['id']}}">
-                                                    <td>{{$tclasses['course_name']}}</td>
-                                                    <td>{{$tclasses['dateStart']}}</td>
-                                                    <td>{{$tclasses['dateEnd']}}</td>
-                                                    <td style="text-align:right;">{{number_format($tclasses['fee'],2)}}</td>
-                                                    <td id="col{{$tclasses['id']}}">
-                                                        <label class="radio-inline">
-                                                            <input id="PP{{$tclasses['id']}}" type="radio" name="paymentMode{{$tclasses['id']}}[]" value="1" checked>&ensp;Partial
-                                                        </label>
-                                                        <label class="radio-inline">
-                                                            <input id="FP{{$tclasses['id']}}" type="radio" name="paymentMode{{$tclasses['id']}}[]" value="2">&ensp;Full
-                                                        </label>
-                                                    </td>
-                                                </tr>
-                                                @endif
-                                                @endforeach
-                                                @endforeach
-                                            </tbody>
-                                        </table>
+                            <div class="col-md-12">
+                                <div class="panel panel-primary" style="margin-top: 0px;">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">
+                                            <i class="livicon" data-name="user" data-size="18" data-loop="true" data-c="#fff" data-hc="white"></i>
+                                            Select Payment Mode
+                                        </h3>
+                                        <span class="pull-right clickable">
+                                            <i class="glyphicon glyphicon-chevron-up"></i>
+                                        </span>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="col-md-12 table-responded">
+                                            <table class="striped bordered" id="table1">
+                                                <thead>
+                                                    <tr>
+                                                        <th width="30%">Course</th>
+                                                        <th width="15%">Date Start</th>
+                                                        <th width="15%">Date End</th>
+                                                        <th width="15%" style="text-align:right;">Fee &ensp;(Php)</th>
+                                                        <th width="25%" style="text-align: center;">Payment Mode</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach($tclass as $tclasses)
+                                                    @foreach(session('sprogram_id') as $ids)
+                                                    @if($tclasses['id'] == $ids)
+                                                    <tr id="row{{$tclasses['id']}}">
+                                                        <td>{{$tclasses['course_name']}}</td>
+                                                        <td>{{$tclasses['dateStart']}}</td>
+                                                        <td>{{$tclasses['dateEnd']}}</td>
+                                                        <td style="text-align:right;">{{number_format($tclasses['fee'],2)}}</td>
+                                                        <td id="col{{$tclasses['id']}}">
+                                                            <label class="radio-inline">
+                                                                <input id="PP{{$tclasses['id']}}" type="radio" name="paymentMode{{$tclasses['id']}}[]" value="1" checked>&ensp;Partial
+                                                            </label>
+                                                            <label class="radio-inline">
+                                                                <input id="FP{{$tclasses['id']}}" type="radio" name="paymentMode{{$tclasses['id']}}[]" value="2">&ensp;Full
+                                                            </label>
+                                                        </td>
+                                                    </tr>
+                                                    @endif
+                                                    @endforeach
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -133,104 +138,105 @@
                                     <input type="hidden" name="enrollee_id" id="enrollee_id" value="">
                                 </div>
                             </div>
-                            <div class="panel panel-primary" style="margin-top: 0px;">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title">
-                                        <i class="livicon" data-name="user" data-size="18" data-loop="true" data-c="#fff" data-hc="white"></i>
-                                        Personal Information
-                                    </h3>
-                                    <span class="pull-right clickable">
-                                        <i class="glyphicon glyphicon-chevron-up"></i>
-                                    </span>
-                                </div>
-                                <div class="panel-body">
-                                    <h2 class="hidden">&nbsp;</h2>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div  class="form-group">
-                                                <div class="input-group">
-                                                    <span class="input-group-addon">First Name<font color="red">*</font></span>
-                                                    <input id="1firstName" type="text" class="selector form-control capital" name="firstName">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <div class="input-group">
-                                                    <span class="input-group-addon">Middle Name</span>
-                                                    <input id="1middleName" type="text" class="selector form-control capital" name="middleName">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <div class="input-group">
-                                                    <span class="input-group-addon">Last Name<font color="red">*</font></span>
-                                                    <input id="1lastName" type="text" class="selector form-control capital" name="lastName">
-                                                </div>
-                                            </div>
-                                        </div>
+                            <div class="col-md-12">
+                                <div class="panel panel-primary" style="margin-top: 0px;">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">
+                                            <i class="livicon" data-name="user" data-size="18" data-loop="true" data-c="#fff" data-hc="white"></i>
+                                            Personal Information
+                                        </h3>
+                                        <span class="pull-right clickable">
+                                            <i class="glyphicon glyphicon-chevron-up"></i>
+                                        </span>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <div class="input-group">
-                                                    <span>Gender<font color="red">*</font></span>
-                                                    <label class="radio-inline">
-                                                        <input class="selector" type="radio" name="gender" required id="male" value="M" checked>Male
-                                                    </label>
-                                                    <label class="radio-inline">
-                                                        <input class="selector" type="radio" name="gender" required id="female" value="F">Female
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <div class="input-group">
-                                                    <span class="input-group-addon">Civil Status<font color="red">*</font></span>
-                                                    <select name="civilStatus" id="civilStatus" class="selector form-control">
-                                                        <option  id="option1" selected disabled>--Select Civil Status--</option>
-                                                        @foreach($cstatus as $cstatuses)
-                                                        <option value="{{$cstatuses->id}}">{{$cstatuses->statusName}}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="input-group date form_datetime"  data-date-format="MM dd, yyyy" data-link-field="dtp_input1">
-                                                <span class="input-group-addon">Birthdate<font color="red">*</font></span>
-                                                <input class="form-control" size="16" type="text" value="" readonly name="dob" id="1dob" onchange="dobChanged(this)">
-                                                <span class="input-group-addon">
-                                                    <span class="glyphicon glyphicon-th"></span>
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <div>
+                                    <div class="panel-body">
+                                        <h2 class="hidden">&nbsp;</h2>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div  class="form-group">
                                                     <div class="input-group">
-                                                        <span class="input-group-addon">Age</span>
-                                                        <input type="text" id="age" class="form-control" name="age" readonly="readonly" maxlength="3">
+                                                        <span class="input-group-addon">First Name<font color="red">*</font></span>
+                                                        <input id="1firstName" type="text" class="selector form-control capital" name="firstName">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">Middle Name</span>
+                                                        <input id="1middleName" type="text" class="selector form-control capital" name="middleName">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">Last Name<font color="red">*</font></span>
+                                                        <input id="1lastName" type="text" class="selector form-control capital" name="lastName">
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <div class="input-group">
-                                                    <span class="input-group-addon">Birthplace<font color="red">*</font></span>
-                                                    <input type="text" id="1dop" class="selector form-control" name="dop">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span>Gender<font color="red">*</font></span>
+                                                        <label class="radio-inline">
+                                                            <input class="selector" type="radio" name="gender" required id="male" value="M" checked>Male
+                                                        </label>
+                                                        <label class="radio-inline">
+                                                            <input class="selector" type="radio" name="gender" required id="female" value="F">Female
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">Civil Status<font color="red">*</font></span>
+                                                        <select name="civilStatus" id="civilStatus" class="selector form-control">
+                                                            <option  id="option1" selected disabled>--Select Civil Status--</option>
+                                                            @foreach($cstatus as $cstatuses)
+                                                            <option value="{{$cstatuses->id}}">{{$cstatuses->statusName}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="input-group date form_datetime"  data-date-format="MM dd, yyyy" data-link-field="dtp_input1">
+                                                    <span class="input-group-addon">Birthdate<font color="red">*</font></span>
+                                                    <input class="form-control" size="16" type="text" value="" readonly name="dob" id="1dob" onchange="dobChanged(this)">
+                                                    <span class="input-group-addon">
+                                                        <span class="glyphicon glyphicon-th"></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <div>
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon">Age</span>
+                                                            <input type="text" id="age" class="form-control" name="age" readonly="readonly" maxlength="3">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">Birthplace<font color="red">*</font></span>
+                                                        <input type="text" id="1dop" class="selector form-control" name="dop">
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
                             <div class="col-md-12">
                                 <div class="panel panel-primary">
                                     <div class="panel-heading">
@@ -289,20 +295,24 @@
                                     <div class="panel-body">
                                         <h2 class="hidden">&nbsp;</h2>
                                         <div class="row">
-                                            <div class="form-group">
-                                                <div class="col-md-2">
-                                                    <label>Contact<font color="red">*</font></label>
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <span>Contact<font color="red">*</font></span>
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
-                                                <select name="contactType" id="contactType" class="selector form-control" onchange="changeContactType(this)">
-                                                    <option selected value="mobile">Mobile No.</option>
-                                                    <option value="tel">Landline No.</option>
-                                                </select>
+                                                <div class="form-group">
+                                                    <select name="contactType" id="contactType" class="selector form-control" onchange="changeContactType(this)">
+                                                        <option selected value="mobile">Mobile No.</option>
+                                                        <option value="tel">Landline No.</option>
+                                                    </select>
+                                                </div>
                                             </div>
                                             <div class="col-md-6">
-                                                <div id="contactC">
-                                                    <input type="text" id="1contactI" name="contact" class="cp form-control placeholder selector" placeholder="e.g: 0999 9999 999">
+                                                <div class="form-group">
+                                                    <div id="contactC">
+                                                        <input type="text" id="1contactI" name="contact" class="cp form-control placeholder selector" placeholder="e.g: 0999 9999 999">
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -353,20 +363,24 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="form-group">
-                                                <div class="col-md-2">
-                                                    <label>Contact<font color="red">*</font></label>
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <span>Contact<font color="red">*</font></span>
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
-                                                <select name="EContactType" id="1EContactType" class="selector form-control" onchange="EchangeContactType(this)">
-                                                    <option selected value="mobile">Mobile No.</option>
-                                                    <option value="tel">Landline No.</option>
-                                                </select>
+                                                <div class="form-group">
+                                                    <select name="EContactType" id="1EContactType" class="selector form-control" onchange="EchangeContactType(this)">
+                                                        <option selected value="mobile">Mobile No.</option>
+                                                        <option value="tel">Landline No.</option>
+                                                    </select>
+                                                </div>
                                             </div>
                                             <div class="col-md-6">
-                                                <div id="contactE">
-                                                    <input type="text" id="1EContact" name="Econtact" class="cp form-control placeholder selector" placeholder="e.g: 0999 9999 999">
+                                                <div class="form-group">
+                                                    <div id="contactE">
+                                                        <input type="text" id="1EContact" name="Econtact" class="cp form-control placeholder selector" placeholder="e.g: 0999 9999 999">
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -1020,7 +1034,7 @@
                             regx1: /(^[a-zA-Z0-9 -\'\Ñ\ñ]+$)/i,
                             space: true,
                         },
-                        contact:{
+                        Econtact:{
                             required: true
                         },
                         Eaddress:{
