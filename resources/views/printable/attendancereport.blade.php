@@ -25,16 +25,16 @@
 		<h3 style="padding: none;">Course : {{$tclass->scheduledprogram->rate->program->programName . ' ('. $tclass->scheduledprogram->rate->duration .' Hours)'}}</h3>
 		<h3 style="padding: -10px;">Class Name : {{$tclass->class_name}}</h3>
 	</div>
-	<h2 style="text-align: center;">Enrollment Report</h2>
+	<h2 style="text-align: center;">Attendance Report</h2>
 	<div style="width: 100%; border-bottom: 2px solid black;"></div>
 	<table width="100%"  style="border: 1px solid black; border-collapse: collapse;">
 		<thead >
 			<tr>
 				<th width="5%" style="border: 1px solid black; height: 30px; padding-left: 5px;"> No.</th>
-				<th width="35%" style="border: 1px solid black; height: 30px; padding-left: 5px;"> Name</th>
-				<th width="20%" style="border: 1px solid black; height: 30px; padding-left: 5px;"> Date of Birth</th>
-				<th width="20%" style="border: 1px solid black; height: 30px; padding-left: 5px;"> Date of Enrolled</th>
-				<th width="20%" style="border: 1px solid black; height: 30px; padding-left: 5px;"> Signature</th>
+				<th width="50%" style="border: 1px solid black; height: 30px; padding-left: 5px;"> Name</th>
+				<th width="15%" style="border: 1px solid black; height: 30px; padding-left: 5px;"> Present <br> (Total)</th>
+				<th width="15%" style="border: 1px solid black; height: 30px; padding-left: 5px;"> Absent <br> (Total)</th>
+				<th width="15%" style="border: 1px solid black; height: 30px; padding-left: 5px;"> Late <br> (Total)</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -43,19 +43,19 @@
 					<tr style="border: 1px solid black;">
 						<td style="border: 1px solid black; height: 25px;  padding-left: 5px;">{{++$x}}</td>
 						<td style="border: 1px solid black; height: 25px;  padding-left: 5px;">{{$details->enrollee->firstName . ' ' . $details->enrollee->middleName . ' ' .$details->enrollee->lastName }}</td>
-						<td style="border: 1px solid black; height: 25px; padding-left: 5px;">{{Carbon\Carbon::parse($details->enrollee->dob)->format('F d,Y')}}</td>
-						<td style="border: 1px solid black; height: 25px;  padding-left: 5px;">{{Carbon\Carbon::parse($details->created_at)->format('F d,Y')}}</td>
-						<td style="border: 1px solid black; height: 25px;  padding-left: 5px;"></td>
+						<td style="border: 1px solid black; height: 25px; padding-left: 5px;">{{count($details->attend->where('status','=',1))}}</td>
+						<td style="border: 1px solid black; height: 25px; padding-left: 5px;">{{count($details->attend->where('status','=',2))}}</td>
+						<td style="border: 1px solid black; height: 25px; padding-left: 5px;">{{count($details->attend->where('status','=',3))}}</td>
 					</tr>
 				@endforeach
 			@else
 			@foreach($tclass->groupclassdetail as $details)
 					<tr style="border: 1px solid black;">
 						<td style="border: 1px solid black; height: 25px;  padding-left: 5px;">{{++$x}}</td>
+						<td style="border: 1px solid black; height: 25px;  padding-left: 5px;">{{$details->groupenrollee->studentNumber}}</td>
 						<td style="border: 1px solid black; height: 25px;  padding-left: 5px;">{{$details->groupenrollee->firstName . ' ' . $details->groupenrollee->middleName . ' ' .$details->groupenrollee->lastName }}</td>
-						<td style="border: 1px solid black; height: 25px; padding-left: 5px;">{{Carbon\Carbon::parse($details->groupenrollee->dob)->format('F d,Y')}}</td>
-						<td style="border: 1px solid black; height: 25px;  padding-left: 5px;">{{Carbon\Carbon::parse($details->created_at)->format('F d,Y')}}</td>
-						<td style="border: 1px solid black; height: 25px;  padding-left: 5px;"></td>
+						<td style="border: 1px solid black; height: 25px; padding-left: 5px;">{{$details->groupgrade->grade}}</td>
+						<td style="border: 1px solid black; height: 25px;  padding-left: 5px;">{{$details->groupgrade->remark}}</td>
 					</tr>
 				@endforeach
 			@endif
@@ -70,18 +70,9 @@
 			@endif
 		</div>
 	</div>
-	<div style="width: 60%; float: right;">
-		<h4 style="text-align: center;">Certified True and Correct:</h4>
-		<div style="width: 50%; float: left">
-				<h4 style="text-align: center;"><u>Capt. Esmeraldo B. Arriesgado</u></h4>
-				<p style="text-align: center; padding-top: -20px;">Training Director</p>
-		</div>
-		<div style="width: 50%; float: right;">
-				<h4 style="text-align: center;"><u>Frederick Francisco</u></h4>
-				<p style="text-align: center; padding-top: -20px;">Registrar</p>
-		</div>
-		<div style="clear: both;"></div>
-	</div>
 	<div style="clear: both;"></div>
+	<div style="position: absolute; bottom: -50px;">
+		<h5>Date Printed : {{Carbon\Carbon::today()->format('F d, Y')}}</h5>
+	</div>
 </body>
 </html>

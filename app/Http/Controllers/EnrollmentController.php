@@ -87,7 +87,6 @@ class EnrollmentController extends Controller
                             $check = false;
                         }
                         else{
-
                             $dateEnd = Carbon::parse($dateEnd)->addDays(1);
                         }
                     }

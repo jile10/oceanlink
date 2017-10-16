@@ -21,4 +21,8 @@ class Classdetail extends Model
     public function certificate(){
     	return $this->belongsTo('App\Certificate');
     }
+
+    public function attend(){
+        return $this->hasMany('App\Attend');
+    }
 }

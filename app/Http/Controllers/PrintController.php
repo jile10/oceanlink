@@ -174,6 +174,18 @@ class PrintController extends Controller
     	return $pdf->stream();
     }
 
+    public function setGradeReport(Request $request){
+    	$tclass = Trainingclass::find($request->tclass_id);
+    	$pdf = PDF::loadView('printable/gradereport',['tclass'=>$tclass,'x'=>0])->setPaper([0,0,612,792],'portrait');
+    	return $pdf->stream();
+    }
+
+    public function setAttendanceReport(Request $request){
+    	$tclass = Trainingclass::find($request->tclass_id);
+    	$pdf = PDF::loadView('printable/attendancereport',['tclass'=>$tclass,'x'=>0])->setPaper([0,0,612,792],'portrait');
+    	return $pdf->stream();
+    }
+
     public function printCollectionReport(Request $request)
     {
     	$timePeriod ="";
