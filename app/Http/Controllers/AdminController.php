@@ -11,11 +11,8 @@ use App\Groupclassdetail;
 use App\Holiday;
 use App\Classdetail;
 use App\Nosessionday;
-<<<<<<< HEAD
 use App\Trainingofficer;
-=======
 use App\Accountdetail;
->>>>>>> 9f9cc42619c94710aa7767798e774c2db1242d3b
 use Image;
 use Auth;
 class AdminController extends Controller

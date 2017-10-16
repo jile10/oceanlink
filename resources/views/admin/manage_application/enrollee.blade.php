@@ -142,11 +142,8 @@
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label">Choose desired program<font color="red">*</font></label>
                                         <div class="col-sm-8">
-<<<<<<< HEAD
                                             <select class="form-control select2" name="rate_id" >
-=======
                                             <select class="form-control" onchange="rateChange(this)" name="rate_id" >
->>>>>>> 9f9cc42619c94710aa7767798e774c2db1242d3b
                                                 @foreach($rate as $rates)
                                                 <option value="{{$rates->id}}">{{$rates->program->programName . ' ('.$rates->duration.' Hours'}}</option>
                                                 @endforeach
@@ -617,11 +614,8 @@
 <script>
     $(document).ready( function(){
         var table = $('#table1').DataTable();
-<<<<<<< HEAD
         $('#table2').DataTable();
-=======
         var table = $('#table2').DataTable();
->>>>>>> 9f9cc42619c94710aa7767798e774c2db1242d3b
         var i = 1;
         $('#add').click(function(){
             i++;
