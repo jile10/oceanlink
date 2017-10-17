@@ -679,10 +679,18 @@ class EnrolleeController extends Controller
     public function markGroupEnrollee(Request $request)
     {
         $gapp = Groupapplicationdetail::find($request->id);
+        $account = Account::find($gapp->groupapplication->account_id);
+        $detailaccount = Accountdetail::where('account_id','=', $account->id )
+                        ->where('scheduledprogram_id','=',$gapp->trainingclass->scheduledprogram->id)->first();
+        $accountdetail = Accountdetail::find($detailaccount->id);
+        $balance = $accountdetail->balance;
+        $balance += count($gapp->trainingclass->groupclassdetail)*$gapp->trainingclass->scheduledprogram->rate->price;
+        $accountdetail->balance = $balance;
+        $accountdetail->save();
         $tclass = $gapp->trainingclass;
         if(count($tclass->groupclassdetail)>=$tclass->scheduledprogram->rate->min_students)
         {
-            $gapp->status = 2;
+            $gapp->application_status = 2;
             $gapp->save();
             $notification = array(
                     'message' => "Successfully finalized this class", 
@@ -730,14 +738,6 @@ class EnrolleeController extends Controller
 
     public function insertGApplication(Request $request){
         $groupappdetail = Groupapplicationdetail::find($request->groupapplication_id);
-        $account = Account::find($groupappdetail->groupapplication->account_id);
-        $detailaccount = Accountdetail::where('account_id','=', $account->id )
-                        ->where('scheduledprogram_id','=',$groupappdetail->trainingclass->scheduledprogram->id)->first();
-        $accountdetail = Accountdetail::find($detailaccount->id);
-        $balance = $accountdetail->balance;
-        $balance += $groupappdetail->trainingclass->scheduledprogram->rate->price;
-        $accountdetail->balance = $balance;
-        $accountdetail->save();
         if(count($request->groupenrollee_id)==0)
         {
             //check if the student data already exist

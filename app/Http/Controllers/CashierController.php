@@ -27,7 +27,7 @@ class CashierController extends Controller
             if(count($accounts->groupapplication)>0){
                 $check = false;
                 foreach($accounts->groupapplication->groupapplicationdetail as $details ){ 
-                     if($details->status == 2){
+                     if($details->application_status == 2){
                         $check = true;
                      }
                 }
@@ -193,7 +193,7 @@ class CashierController extends Controller
         return redirect('/cashier');
     }
 
-    public function viewAccount(){
+    public function viewAccountSettings(){
         return view('cashier.accountsetting');
     }
 

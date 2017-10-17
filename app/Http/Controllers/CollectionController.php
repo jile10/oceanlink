@@ -27,7 +27,7 @@ class CollectionController extends Controller
             if(count($accounts->groupapplication)>0){
                 $check = false;
                 foreach($accounts->groupapplication->groupapplicationdetail as $details ){ 
-                     if($details->status == 2){
+                     if($details->application_status == 2){
                         $check = true;
                      }
                 }

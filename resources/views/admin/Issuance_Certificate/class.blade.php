@@ -93,13 +93,13 @@
 												<td>{{$tclasses->scheduledprogram->rate->program->programName. ' (' . $tclasses->scheduledprogram->rate->duration . ' Hours)'}}</td>
 												<td>{{count($tclasses->groupclassdetail)}}</td>
 												<td>
-													@if($tclasses->groupapplicationdetail->application_status != 3)
+													@if($tclasses->groupapplicationdetail->status != 3)
 													On Hold
 													@else
 													Ready
 													@endif
 												</td>
-												<td>@if($tclasses->groupapplicationdetail->application_status != 3)<a disabled href="/certificate/{{$tclasses->id}}" class="btn btn-primary">Print</a>@else <a href="/certificate/{{$tclasses->id}}" class="btn btn-primary">Print</a>@endif</td>
+												<td>@if($tclasses->groupapplicationdetail->status != 3)<a disabled href="/certificate/{{$tclasses->id}}" target="_blank" class="btn btn-primary">Print</a>@else <a href="/certificate/{{$tclasses->id}}" target="_blank" class="btn btn-primary">Print</a>@endif</td>
 											</tr>
 											@endif
 										@endforeach

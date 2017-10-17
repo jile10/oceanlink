@@ -38,13 +38,19 @@
                 <div class="responsive_nav"></div>
             </a>
         </div>
-        <div class="navbar-right">
+        <div class="navbar-left"`>
+            <div class="col-md-12 text-center" style="margin-top: 7px;">
+                <h4 id="time" style="color: white !important;"></h4>
+            </div>
+        </div>
+        <div class="navbar-right" style="margin-right: 0.3%;">
             <ul class="nav navbar-nav">
-                <li class="dropdown user user-menu">
+                <li class="dropdown user user-menu" >
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <img src="/display_image/{{Auth::user()->employee->image}}" width="35" class="img-circle img-responsive pull-left" height="35" alt="riot">
                         <div class="riot">
                             <div>
-                                as
+                                {{Auth::user()->employee->firstName. ' ' . Auth::user()->employee->middleName . ' ' . Auth::user()->employee->lastName}}
                                 <span>
                                     <i class="caret"></i>
                                 </span>
@@ -52,10 +58,20 @@
                         </div>
                     </a>
                     <ul class="dropdown-menu">
+                        <li class="user-header bg-light-blue">
+                            <img src="/display_image/{{Auth::user()->employee->image}}" class="img-responsive img-circle" alt="User Image">
+                            <p class="topprofiletext">{{Auth::user()->employee->firstName. ' ' . Auth::user()->employee->lastName}}</p>
+                        </li>
                         <!-- Menu Body -->
                         <li>
-                            <a href="/">
-                                <i class="livicon" data-name="user" data-s="18"></i>
+                            <a href="/cashier/accountsetting">
+                                <i class="glyphicon glyphicon-cog"></i>
+                                Account Setting
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/logout">
+                                <i class="glyphicon glyphicon-log-out"></i>
                                 Log-out
                             </a>
                         </li>

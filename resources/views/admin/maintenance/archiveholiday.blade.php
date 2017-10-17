@@ -13,7 +13,8 @@
 		<li>
 			<a >Maintenance</a>
 		</li>
-		<li class="active">Holiday</li>
+		<li > <a href="/maintenance/holiday">Holiday</a></li>
+		<li class="active">Archive</li>
 	</ol>
 </section>
 <section class="content">

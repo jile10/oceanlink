@@ -68,7 +68,7 @@
 											<td style="text-align: right">{{number_format($accounts->balance,2)}}</td>
 										</tr>
 									@else
-										@if($accounts->scheduledprogram->trainingclass->groupapplicationdetail->status == 2)
+										@if($accounts->scheduledprogram->trainingclass->groupapplicationdetail->application_status == 2)
 										<tr>
 											<td style="text-align: center;"><input id="{{$accounts->id}}" type="checkbox" name="check"></td>								<td>{{$accounts->scheduledprogram->rate->program->programName . ' (' . $accounts->scheduledprogram->rate->duration .' Hours)'}}</td>
 											<td>@if($accounts->paymentMode == 1)Partial Payment @else Full Payment @endif</td>

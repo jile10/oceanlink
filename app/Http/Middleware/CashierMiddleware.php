@@ -1,4 +1,4 @@
-Auth::guard($guard)->check() && <?php
+<?php
 
 namespace App\Http\Middleware;
 

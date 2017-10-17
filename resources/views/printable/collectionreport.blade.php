@@ -37,7 +37,7 @@
 			@foreach($report as $reports)
 			<tr style="border: 1px solid black;">
 				<td style="border: 1px solid black; height: 25px;  padding-left: 5px;">{{$reports->account->accountNumber}}</td>
-				@if($reports->account->has('enrollee'))
+        		@if(count($reports->account->enrollee)>0)
 				<td style="border: 1px solid black; height: 25px;  padding-left: 5px;">{{$reports->account->enrollee->firstName .' '. $reports->account->enrollee->middleName . ' ' . $reports->account->enrollee->lastName}}</td>
 				@else
 				<td style="border: 1px solid black; height: 25px;  padding-left: 5px;">{{$reports->account->groupapplication->orgName}}</td>

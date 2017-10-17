@@ -59,7 +59,8 @@
 						<tbody>
 							@foreach($account->accountdetail as $accounts)
 								@if($accounts->status != 3)
-									@if($accounts->balance >0 && count($accounts->account->groupapplication)==0)
+									@if($accounts->balance >0 )
+										@if(count($accounts->account->groupapplication)==0)
 										<tr>
 											<td style="text-align: center;"><input id="{{$accounts->id}}" type="checkbox" name="check"></td>								<td>{{$accounts->scheduledprogram->rate->program->programName . ' (' . $accounts->scheduledprogram->rate->duration .' Hours)'}}</td>
 											<td>@if($accounts->paymentMode == 1)Partial Payment @else Full Payment @endif</td>
@@ -67,8 +68,8 @@
 											<td style="text-align: center;" id="cell{{$accounts->id}}">@if($accounts->paymentMode == 1) <input type="checkbox" name="" id="overridePaymentMode{{$accounts->id}}">&ensp;Full Payment @endif</td>
 											<td style="text-align: right">{{number_format($accounts->balance,2)}}</td>
 										</tr>
-									@else
-										@if($accounts->scheduledprogram->trainingclass->groupapplicationdetail->status == 2)
+										@else
+										@if($accounts->scheduledprogram->trainingclass->groupapplicationdetail->application_status == 2)
 										<tr>
 											<td style="text-align: center;"><input id="{{$accounts->id}}" type="checkbox" name="check"></td>			
 											<td>{{$accounts->scheduledprogram->rate->program->programName . ' (' . $accounts->scheduledprogram->rate->duration .' Hours)'}}</td>
@@ -77,6 +78,7 @@
 											<td style="text-align: center;" id="cell{{$accounts->id}}">@if($accounts->paymentMode == 1) <input type="checkbox" name="" id="overridePaymentMode{{$accounts->id}}">&ensp;Full Payment @endif</td>
 											<td style="text-align: right">{{number_format($accounts->balance,2)}}</td>
 										</tr>
+										@endif
 										@endif
 									@endif
 								@endif

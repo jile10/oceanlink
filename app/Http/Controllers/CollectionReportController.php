@@ -26,7 +26,7 @@ class CollectionReportController extends Controller
 
         foreach($result as $results){
             $accountName = "";
-            if ($results->account->has('enrollee')) {
+            if (count($results->account->enrollee)>0) {
                 $accountName = $results->account->enrollee->firstName . ' '. 
                                                 $results->account->enrollee->middleName .' '. 
                                                 $results->account->enrollee->lastName;
@@ -57,7 +57,7 @@ class CollectionReportController extends Controller
 
         foreach($result as $results){
             $accountName = "";
-            if ($results->account->has('enrollee')) {
+            if (count($results->account->enrollee)>0) {
                 $accountName = $results->account->enrollee->firstName . ' '. 
                                                 $results->account->enrollee->middleName .' '. 
                                                 $results->account->enrollee->lastName;
@@ -90,7 +90,7 @@ class CollectionReportController extends Controller
 
         foreach($result as $results){
             $accountName = "";
-            if ($results->account->has('enrollee')) {
+            if (count($results->account->enrollee)>0) {
                 $accountName = $results->account->enrollee->firstName . ' '. 
                                                 $results->account->enrollee->middleName .' '. 
                                                 $results->account->enrollee->lastName;

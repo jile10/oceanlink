@@ -21,7 +21,8 @@
 		<li>
 			<a >Maintenance</a>
 		</li>
-		<li class="active">Training Officer</li>
+		<li ><a href="/maintenance/tofficer"> Training Officer</a></li>
+		<li class="active">Archive</li>
 	</ol>
 </section>
 <section class="content">

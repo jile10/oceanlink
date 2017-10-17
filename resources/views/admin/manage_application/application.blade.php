@@ -611,6 +611,7 @@
             $("#civilStatus option[value='0']").attr("selected", "selected");
             $('#option1').attr('disabled',true);
             $('#1dob').val('');
+            $('#age').val('');
             $('#1dop').attr('value','');
             $('#1street').attr('value','');
             $('#1barangay').attr('value','');
@@ -665,6 +666,7 @@
                         }
                         $("#civilStatus option[value="+data[0]['cstatus_id']+"]").attr("selected", true);
                         $('#1dob').val(''+data[0]['dob']+'');
+                        $('#age').val(''+data[0]['age']+'');
                         $('#1dop').attr('value',''+data[0]['dop']+'');
                         $('#1street').attr('value',''+data[0]['street']+'');
                         $('#1barangay').attr('value',''+data[0]['barangay']+'');
@@ -709,6 +711,7 @@
                         $('#civilStatus').attr('disabled',true);
                         $('#option1').attr('disabled',true);
                         $('#1dob').val('');
+                        $('#age').val('');
                         $('#1dop').attr('value','');
                         $('#1street').attr('value','');
                         $('#1barangay').attr('value','');

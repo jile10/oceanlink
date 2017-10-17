@@ -46,7 +46,7 @@
 				</div>
 				<div class="panel-body table-responsive">
 					<div class="col-md-12">
-					@if($tclass->groupapplicationdetail->status == 1)
+					@if($tclass->groupapplicationdetail->application_status == 1)
 						<div class="col-md-2">
 							<form action="/manage_app/genrollee/application" method="post">
 								{{csrf_field()}}

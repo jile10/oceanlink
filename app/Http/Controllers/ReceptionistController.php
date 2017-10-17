@@ -321,7 +321,7 @@ class ReceptionistController extends Controller
 
     public function insertGroup(Request $request)
     {
-        $validdate = true;
+       $validdate = true;
         $message = "";
         $tofficer = Trainingofficer::find($request->tofficer_id);
         $checkconflict = false;
@@ -348,7 +348,6 @@ class ReceptionistController extends Controller
                             $holidaycheck = true;
                         }
                     }
-
                     if($holidaycheck == false)
                     {
                         foreach ($classes->trainingclass->schedule->scheduledetail as $details) {
@@ -362,7 +361,6 @@ class ReceptionistController extends Controller
                         $check = false;
                     }
                     else{
-
                         $dateEnd = Carbon::parse($dateEnd)->addDays(1);
                     }
                     if(Carbon::parse($request->dateStart)->eq($dateEnd)){
@@ -377,16 +375,6 @@ class ReceptionistController extends Controller
             $message.="Conflict of Schedule.";
         }
         if(count($request->start)!=0){
-            if($request->start>$request->end)
-            {
-                $validdate = false;
-                $message.="Invalid date range.";
-            }
-            if(Carbon::parse($request->morning)->gte(Carbon::parse($request->afternoon)))
-            {
-                $validdate = false;
-                $message.="Invalid time.";
-            }
         }
         else{
             for($i=0; $i<count($request->day)-1; $i++){
@@ -401,138 +389,131 @@ class ReceptionistController extends Controller
                     break;
                 }
             }
-            for($i=0; $i<count($request->day); $i++){
-                if(Carbon::parse($request->morning[$i])->gte(Carbon::parse($request->afternoon[$i])))
-                {
-                    $validdate = false;
-                    $message.="Invalid Time.";
-                    break;
-                }
-            }
         }
         if($validdate){
-            $check_exist = true;
-            if(count($request->org_id)==0)
-            {
-                $exist_group = Groupapplication::where('orgName','=',$request->orgName)->first();
-                if(count($exist_group)>0)
-                {
-                    $check_exist = false;
-                }
-            }
-            if($check_exist)
-            {
-                $message = "New group application is successfully added";
-                $notification = array(
-                        'message' => $message, 
-                        'alert-type' => 'success'
-                    );
-                $rate = new Scheduledprogram;
-                $rate->dateStart = Carbon::parse($request->dateStart)->format('Y-m-d');
-                $rate->rate_id = $request->rate_id;
-                $rate->trainingofficer_id = $request->tofficer_id;
-                $rate->active=0;
-                $rate->save();
-                $rate= Scheduledprogram::all();
-                $lastrate = $rate->last();
-
-                $schedule = new Schedule;
-                $schedule->save();
-                $schedule = Schedule::all();
-                $schedule = $schedule->last();
-
-                if(count($request->start)!=0){
-                    for($i=$request->start; $i<=$request->end; $i++){
-                        $sdetail = new Scheduledetail;
-                        $sdetail->day_id = $i;
-                        $sdetail->start = $request->morning;
-                        $sdetail->end = $request->afternoon;
-                        $sdetail->breaktime = $request->breaktime;
-                        $sdetail->schedule_id = $schedule->id;
-                        $sdetail->save();
-                    }
-                }
-                else{
-                    for($i=0; $i<count($request->day); $i++){
-                        $sdetail = new Scheduledetail;
-                        $sdetail->day_id = $request->day[$i];
-                        $sdetail->start = $request->morning[$i];
-                        $sdetail->end = $request->afternoon[$i];
-                        $sdetail->breaktime = $request->breaktime[$i];
-                        $sdetail->schedule_id = $schedule->id;
-                        $sdetail->save();
-                    }
-                }
-                $class = new Trainingclass;
-                $class->class_name = 'Class ' . $lastrate->id;
-                $class->scheduledprogram_id = $lastrate->id;
-                $class->trainingroom_id = $request->trainingroom_id;
-                $class->schedule_id = $schedule->id;
-                $class->save();
-                $class = Trainingclass::all();
-                $class_last = $class->last();
-
-                $attendance = new Attendance;
-                $attendance->trainingclass_id = $class_last->id;
-                $attendance->save();
-                if(count($request->org_id)>0)
-                {
-                    $gapp = Groupapplication::find($request->org_id);
-
-                    $accountdetail = new Accountdetail;
-                    $accountdetail->account_id = $gapp->account_id;
-                    $accountdetail->balance = 0;
-                    $accountdetail->scheduledprogram_id = $lastrate->id;
-                    $accountdetail->paymentMode = $request->paymentMode;;
-                    $accountdetail->save();
-
-                    $groupappdetail =  new Groupapplicationdetail;
-                    $groupappdetail->groupapplication_id = $gapp->id;
-                    $groupappdetail->trainingclass_id = $class_last->id;
-                    $groupappdetail->save();
-
-                    return redirect('/receptionist')->with($notification);
-                }
-                else{
-                    $accounts = Account::all();
-                    $accountx = count($accounts);
-                    $accountx += 1;
-                    $account = new Account;
-                    $account->accountNumber = 'OC-'.Carbon::today()->format('Y').'-000'. $accountx;
-                    $account->save();
-                    $account = Account::all();
-                    $account = $account->last();
-
-                    $accountdetail = new Accountdetail;
-                    $accountdetail->account_id = $account->id;
-                    $accountdetail->balance = 0;
-                    $accountdetail->scheduledprogram_id = $lastrate->id;
-                    $accountdetail->paymentMode = $request->paymentMode;;
-                    $accountdetail->save();
-
-                    $gapp = new Groupapplication;
-                    $gapp->orgName = $request->orgName;
-                    $gapp->orgAddress = $request->orgAddress;
-                    $gapp->orgRepresentative = $request->orgRepresentative;
-                    $gapp->account_id = $account->id;
-                    $gapp->save();
-                    $gapp = Groupapplication::all();
-                    $gapp = $gapp->last();
-
-                    $groupappdetail =  new Groupapplicationdetail;
-                    $groupappdetail->groupapplication_id = $gapp->id;
-                    $groupappdetail->trainingclass_id = $class_last->id;
-                    $groupappdetail->save();
-
-                    return redirect('/receptionist')->with($notification);
-                }
-            }
-            else
-            {
-                $notification = array(
-                    'message' => "Organization already exist", 
-                    'alert-type' => 'warning'
+            $message = "New group application is successfully added";
+            $notification = array(
+                    'message' => $message, 
+                    'alert-type' => 'success'
                 );
+            $rate = new Scheduledprogram;
+            $rate->dateStart = Carbon::parse($request->dateStart)->format('Y-m-d');
+            $rate->rate_id = $request->rate_id;
+            $rate->trainingofficer_id = $request->tofficer_id;
+            $rate->active=0;
+            $rate->save();
+            $rate= Scheduledprogram::all();
+            $lastrate = $rate->last();
+
+            $schedule = new Schedule;
+            $schedule->save();
+            $schedule = Schedule::all();
+            $schedule = $schedule->last();
+
+            if(count($request->start)!=0){
+                for($i=$request->start; $i<=$request->end; $i++){
+                    $sdetail = new Scheduledetail;
+                    $sdetail->day_id = $i;
+                    $sdetail->start = $request->morning;
+                    $sdetail->end = Carbon::parse($request->morning)->addHours($lastrate->rate->classHour)->format('G:i');
+                    $sdetail->breaktime = $request->breaktime;
+                    $sdetail->schedule_id = $schedule->id;
+                    $sdetail->save();
+                }
+            }
+            else{
+                $day = $request->day;
+                $morning = $request->morning;
+                $breaktime = $request->breaktime;
+                for($i = 0; $i<count($request->day)-1;$i++)
+                {
+                    for($a = $i+1; $a<count($request->day);$a++)
+                    {
+                        if($day[$i] > $day[$a])
+                        {
+                            $temp = $day[$i];
+                            $tempm = $morning[$i];
+                            $tempb = $breaktime[$i];
+                            $day[$i] = $day[$a];
+                            $day[$a] = $temp;
+                            $morning[$i] = $morning[$a];
+                            $morning[$a] = $tempm;
+                            $breaktime[$i] = $breaktime[$a];
+                            $breaktime[$a] = $tempb;
+
+                        }
+                    }
+                }
+                for($i=0; $i<count($request->day); $i++){
+                    $sdetail = new Scheduledetail;
+                    $sdetail->day_id = $day[$i];
+                    $sdetail->start = $morning[$i];
+                    $sdetail->end = Carbon::parse($morning[$i])->addHours($lastrate->rate->classHour)->format('G:i');
+                    $sdetail->breaktime = $breaktime[$i];
+                    $sdetail->schedule_id = $schedule->id;
+                    $sdetail->save();
+                }
+            }
+            $class = new Trainingclass;
+            $class->class_name = 'Class ' . $lastrate->id;
+            $class->scheduledprogram_id = $lastrate->id;
+            $class->trainingroom_id = $request->trainingroom_id;
+            $class->schedule_id = $schedule->id;
+            $class->save();
+            $class = Trainingclass::all();
+            $class_last = $class->last();
+
+            $attendance = new Attendance;
+            $attendance->trainingclass_id = $class_last->id;
+            $attendance->save();
+            if(count($request->org_id)>0)
+            {
+                $gapp = Groupapplication::find($request->org_id);
+
+                $accountdetail = new Accountdetail;
+                $accountdetail->account_id = $gapp->account_id;
+                $accountdetail->balance = 0;
+                $accountdetail->scheduledprogram_id = $lastrate->id;
+                $accountdetail->paymentMode = $request->paymentMode;;
+                $accountdetail->save();
+
+                $groupappdetail =  new Groupapplicationdetail;
+                $groupappdetail->groupapplication_id = $gapp->id;
+                $groupappdetail->trainingclass_id = $class_last->id;
+                $groupappdetail->save();
+
+                return redirect('/receptionist')->with($notification);
+            }
+            else{
+                $accounts = Account::all();
+                $accountx = count($accounts);
+                $accountx += 1;
+                $account = new Account;
+                $account->accountNumber = 'OC-'.Carbon::today()->format('Y').'-000'. $accountx;
+                $account->save();
+                $account = Account::all();
+                $account = $account->last();
+
+                $accountdetail = new Accountdetail;
+                $accountdetail->account_id = $account->id;
+                $accountdetail->balance = 0;
+                $accountdetail->scheduledprogram_id = $lastrate->id;
+                $accountdetail->paymentMode = $request->paymentMode;;
+                $accountdetail->save();
+
+                $gapp = new Groupapplication;
+                $gapp->orgName = $request->orgName;
+                $gapp->orgAddress = $request->orgAddress;
+                $gapp->orgRepresentative = $request->orgRepresentative;
+                $gapp->account_id = $account->id;
+                $gapp->save();
+                $gapp = Groupapplication::all();
+                $gapp = $gapp->last();
+
+                $groupappdetail =  new Groupapplicationdetail;
+                $groupappdetail->groupapplication_id = $gapp->id;
+                $groupappdetail->trainingclass_id = $class_last->id;
+                $groupappdetail->save();
                 return redirect('/receptionist')->with($notification);
             }
         }
@@ -546,14 +527,34 @@ class ReceptionistController extends Controller
     }
 
     public function finalizeGroup(Request $request){
-        $detail = Groupapplicationdetail::find($request->id);
-        $detail->application_status = 2;
-        $detail->save();
-        $notification = array(
-                    'message' => "Successfully finalize group application", 
+        $gapp = Groupapplicationdetail::find($request->id);
+        $account = Account::find($gapp->groupapplication->account_id);
+        $detailaccount = Accountdetail::where('account_id','=', $account->id )
+                        ->where('scheduledprogram_id','=',$gapp->trainingclass->scheduledprogram->id)->first();
+        $accountdetail = Accountdetail::find($detailaccount->id);
+        $balance = $accountdetail->balance;
+        $balance += count($gapp->trainingclass->groupclassdetail)*$gapp->trainingclass->scheduledprogram->rate->price;
+        $accountdetail->balance = $balance;
+        $accountdetail->save();
+        $tclass = $gapp->trainingclass;
+        if(count($tclass->groupclassdetail)>=$tclass->scheduledprogram->rate->min_students)
+        {
+            $gapp->application_status = 2;
+            $gapp->save();
+            $notification = array(
+                    'message' => "Successfully finalized this class", 
                     'alert-type' => 'success'
                 );
-        return redirect('/receptionist')->with($notification);
+            return redirect('/receptionist')->with($notification);
+        }
+        else
+        {
+            $notification = array(
+                    'message' => "Number of students must be greater than minimun students", 
+                    'alert-type' => 'warning'
+                );
+            return redirect('/receptionist')->with($notification);
+        }
 
     }
 
@@ -563,82 +564,160 @@ class ReceptionistController extends Controller
         $groupappdetail = Groupapplicationdetail::find($tclass->groupapplicationdetail->id);
         $student = $groupappdetail->groupapplication->groupdetail;
         $cstatus = Civilstatus::all();
-        return view('admin/manage_application/gapplication',compact('groupapplication_id','cstatus','student'));
+        return view('receptionist/groupapplication',compact('groupapplication_id','cstatus','student'));
     }
 
     public function insertGApplication(Request $request){
-    	$groupappdetail = Groupapplicationdetail::find($request->groupapplication_id);
-        $account = Account::find($groupappdetail->groupapplication->account_id);
-        $detailaccount = Accountdetail::where('account_id','=', $account->id )
-                        ->where('scheduledprogram_id','=',$groupappdetail->trainingclass->scheduledprogram->id)->first();
-        $accountdetail = Accountdetail::find($detailaccount->id);
-        $balance = $accountdetail->balance;
-        $balance += $groupappdetail->trainingclass->scheduledprogram->rate->price;
-        $accountdetail->balance = $balance;
-        $accountdetail->save();
+        $groupappdetail = Groupapplicationdetail::find($request->groupapplication_id);
         if(count($request->groupenrollee_id)==0)
         {
-            $edub = new Educationalbackground;
-            $edub->attainment = $request->EBattainment;
-            $edub->school = $request->EBschool;
-            $edub->course = $request->EBcourse;
-            $edub->save();
-            $edub = Educationalbackground::All();
-            $edub_last = $edub->last();
+            //check if the student data already exist
+            $exist_enrollee = Groupenrollee::where('firstName','=',$request->firstName)->where('middleName','=',$request->middleName)->where('lastName','=',$request->lastName)->get();
 
-            //contact person
-            $contactp = new Contactperson;
-            $contactp->name = $request->Ename;
-            $contactp->relationship = $request->Erel;
-            $contactp->address = $request->Eaddress;
-            $contactp->contact = $request->contact;
-            $contactp->save();
-            $contactp =Contactperson::all();
-            $contactp_last = $contactp->last();
-            //enrollee
+            if(count($exist_enrollee)>0)
+            {
+                $request->session()->flash('error_message','Already a trainee');
+                return redirect('/receptionist/manage_enrollment/group/view');
+            }
+            else
+            {
+                $edub = new Educationalbackground;
+                $edub->attainment = $request->EBattainment;
+                $edub->school = $request->EBschool;
+                $edub->course = $request->EBcourse;
+                $edub->save();
+                $edub = Educationalbackground::All();
+                $edub_last = $edub->last();
 
-            $enrolleex = Groupenrollee::all();
-            $enrolleex = count($enrolleex)+1;
-            $enrollee = new Groupenrollee;
-            $enrollee->firstName = $request->firstName;
-            $enrollee->middleName = $request->middleName;
-            $enrollee->lastName = $request->lastName;
-            $enrollee->gender = $request->gender;
-            $enrollee->civilstatus_id = $request->civilStatus;
-            $enrollee->dob = Carbon::parse($request->dob)->format('Y-m-d');
-            $enrollee->birthPlace = $request->dop;
-            $enrollee->street = $request->street;
-            $enrollee->barangay = $request->barangay;
-            $enrollee->city = $request->city;
-            $enrollee->contact = $request->contact;
-            $enrollee->email = $request->email;
-            $enrollee->educationalbackground_id = $edub_last->id;
-            $enrollee->contactperson_id = $contactp_last->id;
-            $enrollee->studentNumber = 'GA-'.Carbon::today()->format('Y').'-000'.$enrolleex;
-            $enrollee->save();
-            $enrollee = Groupenrollee::all();
-            $enrollee_last = $enrollee->last();
+                //contact person
+                $contactp = new Contactperson;
+                $contactp->name = $request->Ename;
+                $contactp->relationship = $request->Erel;
+                $contactp->address = $request->Eaddress;
+                $contactp->contact = $request->contact;
+                $contactp->save();
+                $contactp =Contactperson::all();
+                $contactp_last = $contactp->last();
+                //enrollee
 
-            $groupapp = new Groupdetail;
-            $groupapp->groupapplication_id = $groupappdetail->groupapplication_id;
-            $groupapp->groupenrollee_id = $enrollee_last->id;
-            $groupapp->save();
+                $enrolleex = Groupenrollee::all();
+                $enrolleex = count($enrolleex)+1;
+                $enrollee = new Groupenrollee;
+                $enrollee->firstName = $request->firstName;
+                $enrollee->middleName = $request->middleName;
+                $enrollee->lastName = $request->lastName;
+                $enrollee->gender = $request->gender;
+                $enrollee->civilstatus_id = $request->civilStatus;
+                $enrollee->dob = Carbon::parse($request->dob)->format('Y-m-d');
+                $enrollee->birthPlace = $request->dop;
+                $enrollee->street = $request->street;
+                $enrollee->barangay = $request->barangay;
+                $enrollee->city = $request->city;
+                $enrollee->contact = $request->contact;
+                $enrollee->email = $request->email;
+                $enrollee->educationalbackground_id = $edub_last->id;
+                $enrollee->contactperson_id = $contactp_last->id;
+                $enrollee->studentNumber = 'GA-'.Carbon::today()->format('Y').'-000'.$enrolleex;
+                $enrollee->save();
+                $enrollee = Groupenrollee::all();
+                $enrollee_last = $enrollee->last();
+
+                $groupapp = new Groupdetail;
+                $groupapp->groupapplication_id = $groupappdetail->groupapplication_id;
+                $groupapp->groupenrollee_id = $enrollee_last->id;
+                $groupapp->save();
 
 
-            $groupclassdetail = new Groupclassdetail;
-            $groupclassdetail->groupenrollee_id = $enrollee_last->id;
-            $groupclassdetail->trainingclass_id = $groupappdetail->trainingclass_id;
-            $groupclassdetail->save();
+                $groupclassdetail = new Groupclassdetail;
+                $groupclassdetail->groupenrollee_id = $enrollee_last->id;
+                $groupclassdetail->trainingclass_id = $groupappdetail->trainingclass_id;
+                $groupclassdetail->save();
+
+                $request->session()->flash('success_message','Successfully added new trainee');
+                return redirect('/receptionist/manage_enrollment/group/view');
+            }
         }
         else{
+            $enrollee = Groupenrollee::find($request->groupenrollee_id);
+            $holiday = Holiday::all()->where('status','=',1);
+            $sprog = Scheduledprogram::find($groupappdetail->trainingclass_id);
+            $checkconflict = false;
+            //check if conflict in student schedule
+            foreach($enrollee->groupclassdetail as $cdetails)
+            {
+                if($cdetails->trainingclass->status == 1 || $cdetails->trainingclass->status == 2 || $cdetails->trainingclass->status == 3)
+                {
+                    // start of date end
+                    $check = true;
+                    $checkdays = 0;
+                    $dateEnd = Carbon::create();
+                    $dateEnd = Carbon::parse($cdetails->trainingclass->scheduledprogram->dateStart);
+                    $days = $cdetails->trainingclass->scheduledprogram->rate->duration/$cdetails->trainingclass->scheduledprogram->rate->classHour;
+                    while ($check) {
+                        $temp = Carbon::parse($dateEnd)->format('l');
+                        $holidaycheck = false;
+                        foreach($holiday as $holidays){
+                            if(Carbon::parse($dateEnd)->between(Carbon::parse($holidays->dateStart)->subDays(1), Carbon::parse($holidays->dateEnd)->addDays(1)) || Carbon::parse($dateEnd)->format("F d, Y") == Carbon::parse($holidays->dateStart)->format("F d, Y") || Carbon::parse($dateEnd)->format("F d, Y") == Carbon::parse($holidays->dateEnd)->format("F d, Y")){
+                                $holidaycheck = true;
+                            }
+                        }
+                        $check = Nosessionday::where('date',Carbon::parse($dateEnd)->format('Y-m-d'))->get();
+                        if(count($check)>0)
+                        {
+                            $holidaycheck = true;
+                        }
+                        if($holidaycheck == false)
+                        {
+                            foreach ($cdetails->trainingclass->schedule->scheduledetail as $details) {
+                                if($temp == $details->day->dayName){
+                                    $checkdays++;
+                                }
+                            }
+                        }
+                        if($days == 1)
+                        {
+                            $checkdays = 1;
+                        }
+                        if(Carbon::parse($sprog->dateStart)->eq($dateEnd)){
+                            $checkconflict = true;
+                        }
+                        if($checkdays == $days)
+                        {
+                            $check = false;
+                        }
+                        else{
+                            $dateEnd = Carbon::parse($dateEnd)->addDays(1);
+                        }
+                    }
+                    //end of date end
+                }
+            }
+            //check if the student already exist in the class
+            $exist_classdetail = Groupclassdetail::where('groupenrollee_id','=',$request->groupenrollee_id)->where('trainingclass_id','=',$groupappdetail->trainingclass_id)->get();
 
-            $groupclassdetail = new Groupclassdetail;
-            $groupclassdetail->groupenrollee_id = $request->groupenrollee_id;
-            $groupclassdetail->trainingclass_id = $groupappdetail->trainingclass_id;
-            $groupclassdetail->save();
+            if(count($exist_classdetail)>0)
+            {
+                $request->session()->flash('error_message','Already a trainee in this class');
+                    return redirect('/receptionist/manage_enrollment/group/view');
+            }
+            else
+            {
+                if($checkconflict)
+                {
+                    $request->session()->flash('error_message',"Conflict in this trainee's schedule.");
+                    return redirect('/receptionist/manage_enrollment/group/view');
+                }
+                else
+                {
+                    $groupclassdetail = new Groupclassdetail;
+                    $groupclassdetail->groupenrollee_id = $request->groupenrollee_id;
+                    $groupclassdetail->trainingclass_id = $groupappdetail->trainingclass_id;
+                    $groupclassdetail->save();
+                    $request->session()->flash('success_message',"Successfully added new trainee");
+                    return redirect('/receptionist/manage_enrollment/group/view');
+                }
+            }
         }
-
-
         return redirect('/receptionist/manage_enrollment/group/view');
     }
 

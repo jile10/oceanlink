@@ -73,16 +73,20 @@ class TOfficerController extends Controller
         $check = true;
         $messages = "";
         foreach ($officer as $officers) {
-            if(strtolower(trim($request->firstName) . ' '.trim($request->middleName) . ' ' . trim($request->lastName)).$request->id != strtolower(trim($officers->firstName). ' ' .trim($officers->middleName) .' '.trim($officers->lastName)).$officers->id)
+            echo $officers->id .' ' . $request->id . '<br>';
+            if($officers->id != $request->id)
             {
-                if(strtolower(trim($request->firstName) . ' '.trim($request->middleName) . ' ' . trim($request->lastName)) == strtolower(trim($officers->firstName). ' ' .trim($officers->middleName) .' '.trim($officers->lastName))){
-                    $check = false;
-                    $messages .= "Duplication of name is not allowed. ";
-                }
-                if(strtolower(trim($request->email)) == strtolower(trim($officers->user->email)))
+                if(strtolower(trim($request->firstName) . ' '.trim($request->middleName) . ' ' . trim($request->lastName)).$request->id != strtolower(trim($officers->firstName). ' ' .trim($officers->middleName) .' '.trim($officers->lastName)).$officers->id)
                 {
-                    $check = false;
-                    $messages .= "Duplication of email is not allowed. ";
+                    if(strtolower(trim($request->firstName) . ' '.trim($request->middleName) . ' ' . trim($request->lastName)) == strtolower(trim($officers->firstName). ' ' .trim($officers->middleName) .' '.trim($officers->lastName))){
+                        $check = false;
+                        $messages .= "Duplication of name is not allowed. ";
+                    }
+                    if(strtolower(trim($request->email)) == strtolower(trim($officers->user->email)))
+                    {
+                        $check = false;
+                        $messages .= "Duplication of email is not allowed. ";
+                    }
                 }
             }
         }

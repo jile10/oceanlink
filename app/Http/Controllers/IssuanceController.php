@@ -11,7 +11,7 @@ use App\Groupattend;
 use App\Scheduledetail;
 use App\Classdetail;
 use App\Nosessionday;
-use App\Companyinfo
+use App\Companyinfo;
 use PDF;
 class IssuanceController extends Controller
 {

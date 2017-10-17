@@ -108,7 +108,7 @@
                                                             Finalize
                                                         @endif
                                                     </td>
-                                                	<td><form action="/receptionist/manage_enrollment/single/next" method="get"><input type="hidden" name="trainingclass_id" value="{{$tclasses->id}}"><button type="submit" class="btn btn-primary">Select</button></form>&ensp;@if($tclasses->groupapplicationdetail->status == 1)<button onclick="updateClicked({{$tclasses->id}},{{$tclasses->scheduledprogram->accountdetail->paymentMode}},{{$tclasses->schedule->scheduledetail->last()->id}})" data-toggle="modal" data-href="#update{{$tclasses->id}}" href="#update{{$tclasses->id}}" class="btn btn-primary"><i class="glyphicon glyphicon-pencil"></i>&ensp;Update</button>@endif</td>
+                                                	<td><form action="/receptionist/manage_enrollment/single/next" method="get"><input type="hidden" name="trainingclass_id" value="{{$tclasses->id}}"><button type="submit" class="btn btn-primary">Select</button></form>&ensp;@if($tclasses->groupapplicationdetail->application_status == 1)<button onclick="updateClicked({{$tclasses->id}},{{$tclasses->scheduledprogram->accountdetail->paymentMode}},{{$tclasses->schedule->scheduledetail->last()->id}})" data-toggle="modal" data-href="#update{{$tclasses->id}}" href="#update{{$tclasses->id}}" class="btn btn-primary"><i class="glyphicon glyphicon-pencil"></i>&ensp;Update</button>@endif</td>
                                                 </tr>
                                             @endif
                                         @endforeach

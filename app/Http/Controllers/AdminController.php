@@ -53,18 +53,18 @@ class AdminController extends Controller
                 else
                 {                    
                         foreach($tclasses->classdetail->where('status','!=',1) as $details){
-                        $certificate = Certificate::all();
-                        $a = count($certificate)+1;
-                        $certificate = new Certificate;
-                        $certificate->certificate_no = "OL-". $tclasses->scheduledprogram->rate->program->programCode . '-' . $a .'-' .Carbon::now()->format('Y');
-                        $certificate->date_issued = Carbon::now()->format('Y-m-d');
-                        $certificate->save();
-                        $certificate = Certificate::all();
-                        
-                        $groupclassdetail = Classdetail::find($details->id);
-                        $groupclassdetail->certificate_id = $a;
-                        $groupclassdetail->save();
-                    }
+                            $certificate = Certificate::all();
+                            $a = count($certificate)+1;
+                            $certificate = new Certificate;
+                            $certificate->certificate_no = "OL-". $tclasses->scheduledprogram->rate->program->programCode . '-' . $a .'-' .Carbon::now()->format('Y');
+                            $certificate->date_issued = Carbon::now()->format('Y-m-d');
+                            $certificate->save();
+                            $certificate = Certificate::all();
+                            
+                            $groupclassdetail = Classdetail::find($details->id);
+                            $groupclassdetail->certificate_id = $a;
+                            $groupclassdetail->save();
+                        }
                 }
 			}
 		}
@@ -75,10 +75,9 @@ class AdminController extends Controller
         $holiday = Holiday::all()->where('active','=',1);
         $sessionday = Nosessionday::all();
         foreach ($class as $classes) {
-			
             // start of date end
             $check = true;
-            $checkdays = 1;
+            $checkdays = 0;
             $dateEnd = Carbon::create();
             $dateEnd = Carbon::parse($classes->scheduledprogram->dateStart);
             $days = $classes->scheduledprogram->rate->duration/$classes->scheduledprogram->rate->classHour;
@@ -108,14 +107,16 @@ class AdminController extends Controller
                 {
                     $check = false;
                 }
-                $dateEnd = Carbon::parse($dateEnd)->addDays(1);
+                else{
+                    $dateEnd = Carbon::parse($dateEnd)->addDays(1);
+                }
             }
         	//end of date end
             $x++;
             $tclass = Trainingclass::find($classes->id);
             $end = Carbon::parse($dateEnd);
             //end class
-            if(Carbon::today()->gte($end))
+            if(Carbon::today()->gt($end))
             {
                 $tclass->status = 4;
                 $tclass->save();

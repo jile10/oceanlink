@@ -293,6 +293,7 @@ class HomeController extends Controller
                 "cstatus_id" =>$data->civilstatus->id,
                 "gender" =>$data->gender,
                 "dob" =>$data->dob,
+                "age" =>Carbon::parse($data->dob)->age,
                 "dop" =>$data->birthPlace,
                 "street" =>$data->street,
                 "barangay" =>$data->barangay,

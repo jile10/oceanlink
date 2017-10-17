@@ -34,7 +34,7 @@
 				<th width="50%" style="border: 1px solid black; height: 30px; padding-left: 5px;"> Name</th>
 				<th width="15%" style="border: 1px solid black; height: 30px; padding-left: 5px;"> Present <br> (Total)</th>
 				<th width="15%" style="border: 1px solid black; height: 30px; padding-left: 5px;"> Absent <br> (Total)</th>
-				<th width="15%" style="border: 1px solid black; height: 30px; padding-left: 5px;"> Late <br> (Total)</th>
+				<th width="15%" style="border: 1px solid black; height: 30px; padding-left: 5px;"> Tardy <br> (Total)</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -43,7 +43,7 @@
 					<tr style="border: 1px solid black;">
 						<td style="border: 1px solid black; height: 25px;  padding-left: 5px;">{{++$x}}</td>
 						<td style="border: 1px solid black; height: 25px;  padding-left: 5px;">{{$details->enrollee->firstName . ' ' . $details->enrollee->middleName . ' ' .$details->enrollee->lastName }}</td>
-						<td style="border: 1px solid black; height: 25px; padding-left: 5px;">{{count($details->attend->where('status','=',1))}}</td>
+						<td style="border: 1px solid black; height: 25px; padding-left: 5px;">{{count($details->attend->where('status','=',1)) + count($details->attend->where('status','=',3))}}</td>
 						<td style="border: 1px solid black; height: 25px; padding-left: 5px;">{{count($details->attend->where('status','=',2))}}</td>
 						<td style="border: 1px solid black; height: 25px; padding-left: 5px;">{{count($details->attend->where('status','=',3))}}</td>
 					</tr>

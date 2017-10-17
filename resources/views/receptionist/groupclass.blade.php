@@ -42,7 +42,7 @@
 				</div>
 				<div class="panel-body table-responsive">
 					<div class="col-md-12">
-					@if($tclass->groupapplicationdetail->status == 1)
+					@if($tclass->groupapplicationdetail->application_status == 1)
 						<div class="col-md-2">
 							<a href="/receptionist/manage_enrollment/gapplication" class="buttons btn btn-success" ><i class="glyphicon glyphicon-plus"></i>&ensp;New Student</a>  
 						</div>

@@ -80,7 +80,7 @@ class QueriesController extends Controller
         $sessionday = Nosessionday::all();
         foreach($trainingclass as $tclasses){
                 $check = true;
-                $checkdays = 1;
+                $checkdays = 0;
                 $dateEnd = Carbon::create();
                 $dateEnd = Carbon::parse($tclasses->scheduledprogram->dateStart);
                 $days = $tclasses->scheduledprogram->rate->duration/$tclasses->scheduledprogram->rate->classHour;
@@ -100,7 +100,7 @@ class QueriesController extends Controller
 
                     if($holidaycheck == false)
                     {
-                        foreach ($classes->schedule->scheduledetail as $details) {
+                        foreach ($tclasses->schedule->scheduledetail as $details) {
                             if($temp == $details->day->dayName){
                                 $checkdays++;
                             }

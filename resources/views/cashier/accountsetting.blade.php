@@ -1,4 +1,4 @@
-@extends('admin.layouts.default')
+@extends('cashier.layouts.default')
 @section("css")
 <link href="/vendors/datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen" />
 <link href="/vendors/jasny-bootstrap/css/jasny-bootstrap.css" rel="stylesheet" type="text/css" />

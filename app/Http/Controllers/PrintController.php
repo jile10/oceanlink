@@ -135,7 +135,7 @@ class PrintController extends Controller
     	$holiday = Holiday::all()->where('active','=',1);
     	// start of date end
             $check = true;
-            $checkdays = 1;
+            $checkdays = 0;
             $dateEnd = Carbon::create();
             $dateEnd = Carbon::parse($tclass->scheduledprogram->dateStart);
             $days = $tclass->scheduledprogram->rate->duration/$tclass->scheduledprogram->rate->classHour;

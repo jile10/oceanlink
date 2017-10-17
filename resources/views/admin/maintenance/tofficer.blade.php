@@ -197,9 +197,10 @@
 		<div class="modal-content">
 			<form  id="update-form{{$tofficers->id}}" action="/tofficer/update" method="post" class="form-horizontal">
 				{{ csrf_field() }}
+				<input type="hidden" name="id" value="{{$tofficers->id}}">
 				<div class="modal-header btn-primary">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-					<h4 class="modal-title">New Training Officer</h4>
+					<h4 class="modal-title">Update Training Officer</h4>
 				</div>
 				<div class="modal-body">
 					<div class="row">
@@ -294,9 +295,9 @@
 									</div>
 									<div class="col-md-6" id="contactC{{$tofficers->id}}" style="padding-left: 0px;">
 										@if(strlen($tofficers->contact) >= 11)
-										<input type="text" id="contact" class="selector cp form-control placeholder" name="contact" placeholder="0999 9999 999" value="{{$tofficers->contact}}" maxlength="11">
+										<input type="text" id="contact" class="selector cp form-control placeholder" name="contact" placeholder="0999 9999 999" value="{{$tofficers->contact}}">
 										@else
-										<input type="text" id="contact" class="tel form-control placeholder" placeholder="999 9999" value="{{$tofficers->contact}}"  maxlength="11">
+										<input type="text" id="contact" class="tel form-control placeholder" placeholder="999 9999" value="{{$tofficers->contact}}">
 										@endif 	
 
 									</div>

@@ -42,7 +42,7 @@ class TrainingRoomController extends Controller
 			$room->save();
 
 	        $notification = array(
-	            'message' => 'New training officer has been successfully added', 
+	            'message' => 'New training room has been successfully added', 
 	            'alert-type' => 'success'
 	        );
 
@@ -84,7 +84,7 @@ class TrainingRoomController extends Controller
 			$room->save();
 
 	        $notification = array(
-	            'message' => 'Training officer has been successfully updated', 
+	            'message' => 'Training room has been successfully updated', 
 	            'alert-type' => 'success'
 	        );
 
@@ -107,7 +107,7 @@ class TrainingRoomController extends Controller
 		$room->save();
 
         $notification = array(
-            'message' => 'Training officer has been successfully removed', 
+            'message' => 'Training room has been successfully removed', 
             'alert-type' => 'success'
         );
 
@@ -144,7 +144,7 @@ class TrainingRoomController extends Controller
 		$room->save();
 
         $notification = array(
-            'message' => 'Training officer has been successfully activated', 
+            'message' => 'Training room has been successfully activated', 
             'alert-type' => 'success'
         );
 

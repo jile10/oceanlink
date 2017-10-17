@@ -320,7 +320,7 @@ Route::group(['middleware' => ['cashier']],function(){
 	Route::get('/cashier/account','CashierController@viewAccount');
 	Route::post('/cashier/insert','CashierController@insertPayment');
 	//account settings
-	Route::get('/cashier/accountsetting','CashierController@viewAccount');
+	Route::get('/cashier/accountsetting','CashierController@viewAccountSettings');
 	Route::post('/cashier/update-image','CashierController@updateImage');
 });
 
