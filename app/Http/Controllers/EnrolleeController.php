@@ -45,7 +45,8 @@ class EnrolleeController extends Controller
         $tclass = Trainingclass::all()->where('status','=',1);
         $day = Day::all();
         $trainingroom = Trainingroom::all();
-        return view('admin/manage_application/enrollee',compact('rate','tofficer','gapp','day','trainingroom','tclass','gtclass'));
+        $z=0;
+        return view('admin/manage_application/enrollee',compact('z','rate','tofficer','gapp','day','trainingroom','tclass','gtclass'));
     }
 
     public function viewEnrollee(Request $request){
@@ -356,10 +357,7 @@ class EnrolleeController extends Controller
                     {
                         $check = false;
                     }
-                    else{
-
-                        $dateEnd = Carbon::parse($dateEnd)->addDays(1);
-                    }
+                    $dateEnd = Carbon::parse($dateEnd)->addDays(1);
                     if(Carbon::parse($request->dateStart)->eq($dateEnd)){
                         $checkconflict = true;
                     }
@@ -567,10 +565,7 @@ class EnrolleeController extends Controller
                         {
                             $check = false;
                         }
-                        else{
-
-                            $dateEnd = Carbon::parse($dateEnd)->addDays(1);
-                        }
+                        $dateEnd = Carbon::parse($dateEnd)->addDays(1);
                         if(Carbon::parse($request->dateStart)->eq($dateEnd)){
                             $checkconflict = true;
                         }
@@ -935,28 +930,18 @@ class EnrolleeController extends Controller
     public function cancelEnrollee(Request $request)
     {
         $classdetail = Classdetail::find($request->classdetail_id);
+        $accountdetail = Accountdetail::where('account_id','=',$classdetail->enrollee->account->id)->where('scheduledprogram_id','=',$classdetail->trainingclass_id)->first();
         if($classdetail->status != 1)
         {
             $refund = new Refund;
             $refund->enrollee_id = $classdetail->enrollee->id;
             $refund->trainingclass_id = $classdetail->trainingclass->id;
-            if($classdetail->status == 2)
-            {
-                $amount = $classdetail->trainingclass->scheduledprogram->rate->price/2;
-            }
-            else if($classdetail->status == 3){
-                $amount = $classdetail->trainingclass->scheduledprogram->rate->price;
-            }
-            $refund->amount = $amount;
+            $refund->amount = $classdetail->trainingclass->scheduledprogram->rate->price - $accountdetail->balance; 
             $refund->date = Carbon::today()->format('Y-m-d');
             $refund->save();
-        }
-        $accountdetail = Accountdetail::where('account_id','=',$classdetail->enrollee->account->id)->where('scheduledprogram_id','=',$classdetail->trainingclass_id)->get();
-        foreach($accountdetail as $accountdetail)
-        {
-            $accountD = Accountdetail::find($accountdetail->id);
-            $accountD->delete();
-        }
+        }        
+        $accountD = Accountdetail::find($accountdetail->id);
+        $accountD->delete();
         $classdetail->delete();
         return redirect('/manage_app/enrollee/view/'.$classdetail->trainingclass->id.'');
     }

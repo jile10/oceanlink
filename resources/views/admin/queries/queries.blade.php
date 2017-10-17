@@ -69,8 +69,6 @@ th{
 									<select name="query" id="query" class="form-control" onchange="queryChanged(this)">
 										<option selected disabled>--Select a Query--</option>
 										<option value="1">Most enrolled course</option>
-										<option value="2">Accounts with balance</option>
-										<option value="3">Most Recent Cancelled Schedule</option>
 									</select>
 								</div>
 							</div>
@@ -96,42 +94,25 @@ th{
 					$('#queryTable').empty();
 					$('#queryTable').append('<thead><tr><th width="30%">Program Type</th><th width="40%">Course Name</th><th width="30%">Number of Enrolled Students</th></tr></thead><tbody id="tableBody"></tbody>');
 					$.ajax({
-		            type:'get',
-		            url:'{!!URL::to('ajax-query-course-enrolled')!!}',
-		            data:{},
-		            success:function(data){
-									for(var i = 0; i< data.length; i++){
-										var count = data[i]['counter'];
-											$('#tableBody').append('<tr><td>'+data[i]['program_type']+'</td><td>'+data[i]['course_name']+'</td><td>'+data[i]['counter']+'</td></tr>')
-									}
-									$("#tableBody tr:nth-child(1)").addClass('first');
-									$("#tableBody tr:nth-child(2)").addClass('second');
-									$("#tableBody tr:nth-child(3)").addClass('third');
-		            },
-		            error:function(){
-		            }
-		          });
+			            type:'get',
+			            url:'{!!URL::to('ajax-query-course-enrolled')!!}',
+			            data:{},
+			            success:function(data){
+										for(var i = 0; i< data.length; i++){
+											var count = data[i]['counter'];
+												$('#tableBody').append('<tr><td>'+data[i]['program_type']+'</td><td>'+data[i]['course_name']+'</td><td>'+data[i]['counter']+'</td></tr>')
+										}
+										$("#tableBody tr:nth-child(1)").addClass('first');
+										$("#tableBody tr:nth-child(2)").addClass('second');
+										$("#tableBody tr:nth-child(3)").addClass('third');
+			            },
+			            error:function(){
+			            }
+			          });
 					break;
 
 				case "2":
-					$('#queryTable').empty();
-					$('#queryTable').append('<thead><tr><th width="25%">Account Number</th><th width="40%">Account Owner Name</th><th width="20%">Balance</th><th width="15%">Action</th></tr></thead><tbody id="tableBody"></tbody>');
-					$.ajax({
-		            type:'get',
-		            url:'{!!URL::to('ajax-query-account-balance')!!}',
-		            data:{},
-		            success:function(data){
-						for(var i = 0; i< data.length; i++){
-							$('#tableBody').append('<tr><td>'+data[i]['accountNumber']+'</td><td>'+data[i]['accountName']+'</td><td>'+data[i]['balance']+'</td><td><button type="button" class="btn btn-success">Print Notification</button></td></tr>')
-						}
-						$("#tableBody tr:nth-child(1)").addClass('first');
-						$("#tableBody tr:nth-child(2)").addClass('second');
-						$("#tableBody tr:nth-child(3)").addClass('third');
-		            },
-		            error:function(){
-		            }
-		          });
-					break;
+					
 			}
 		}
 

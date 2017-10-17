@@ -4,27 +4,10 @@
 <link href="/css/table.css" rel="stylesheet" />
 @endsection
 @section('content')
-<style type="text/css">
-#total{
-	border-top: 1px solid black;
-}
-.helpblock{
-	margin-top: 0px;
-	font-size: 5px;
-}
-.parent{
-	position:relative;
-}
-.child{
-	position:absolute;
-	margin-left: 20px;
-}
-</style>
-
 
 <section class="content-header">
 	<!--section starts-->
-	<h1>Collection Report</h1>
+	<h1>Refund Report</h1>
 	<ol class="breadcrumb">
 		<li>
 			<a href="{{url('/admin')}}">
@@ -35,7 +18,7 @@
 		<li>
 			<a >Reports</a>
 		</li>
-		<li class="active">Collection Report</li>
+		<li class="active">Refund Report</li>
 	</ol>
 </section>
 <section class="content">
@@ -48,7 +31,7 @@
 				</div>
 				<div class="panel-body table-responsive">
 					<div class="form-horizontal">
-						<form action="/reports/collection/print" method="post" target="_blank">
+						<form action="/reports/refund/print" method="post" target="_blank">
 							{{csrf_field()}}
 							<div class="col-md-12">
 								<div class="col-md-4">
@@ -122,7 +105,6 @@
 													<option value="{{$i}}">{{$i}}</option>
 													@else
 													<option value="{{$i}}" selected>{{$i}}</option>
-													
 													@endif
 												}
 												@endfor
@@ -189,7 +171,7 @@
 		forceParse: 0,
 	});
 	$('#reports').addClass(' active ');
-	$('#collectionReport').addClass(' active ');
+	$('#refund').addClass(' active ');
 </script> 
 
 <script type="text/javascript">
@@ -244,23 +226,23 @@ if(timePeriod == "monthly"){
 		$('#form_monthly').removeClass('has-error');
 
 		$('#title').empty();
-		$('#title').append('<center><h2>Collection Report for the Month of '+monthly_month+'</h2></center>')
+		$('#title').append('<center><h2>Refund Report for the Month of '+monthly_month+'</h2></center>')
 
 		$('#queryTable').empty();
-		$('#queryTable').append('<thead><tr><th width="25%">Account Number</th><th width="25%">Account Name</th><th width="25%">Date</th><th width="25%">Payment</th></tr></thead><tbody id="tableBody"></tbody>');
+		$('#queryTable').append('<thead><tr><th width="25%">Name</th><th width="30%">Course</th><th width="15%" style="text-align: right;">Amount (Php)</th><th width="15%" style="text-align:center;">Date</th></tr></thead><tbody id="tableBody"></tbody>');
 
 		$.ajax({
 			type:'get',
-			url:'{!!URL::to('ajax-query-collection-monthly')!!}',
+			url:'{!!URL::to('ajax-query-refund-monthly')!!}',
 			data:{monthly_month:monthly_month,monthly_year:monthly_year},
 			success:function(data){
 				for(var i = 0; i< data.length; i++){
-					$('#tableBody').append('<tr><td>'+data[i]['accountNumber']+'</td><td>'+data[i]['accountName']+'</td><td>'+data[i]['paymentDate']+'</td><td>'+data[i]['amount']+'</td></tr>');
-					total += parseFloat(data[i]['amount']);
+					$('#tableBody').append('<tr><td>'+data[i]['name']+'</td><td>'+data[i]['course']+'</td><td style="text-align:right;">'+data[i]['amount']+'</td><td style="text-align:center;">'+data[i]['date']+'</td></tr>');
+					// total += parseFloat(data[i]['amount']);
 
 				}
-				$('#total').empty();
-				$('#total').append('<thead><tr><th width="25%">Total</th><th width="25%"></th><th width="25%"></th><th width="25%">'+parseFloat(total).toFixed(2)+'</th></tr></thead>');
+				// $('#total').empty();
+				// $('#total').append('<thead><tr><th width="25%">Total</th><th width="25%"></th><th width="25%"></th><th width="25%">'+parseFloat(total).toFixed(2)+'</th></tr></thead>');
 			},
 			error:function(){
 			}
@@ -272,22 +254,22 @@ else if(timePeriod == "yearly"){
 	var yearly_year = $('#yearly_year').val();
 
 	$('#title').empty();
-	$('#title').append('<center><h2>Collection Report for the Year '+yearly_year+'</h2></center>')
+	$('#title').append('<center><h2>Refund Report for the Year '+yearly_year+'</h2></center>')
 
 	$('#queryTable').empty();
-	$('#queryTable').append('<thead><tr><th width="25%">Account Number</th><th width="25%">Account Name</th><th width="25%">Date</th><th width="25%">Payment</th></tr></thead><tbody id="tableBody"></tbody>');
+		$('#queryTable').append('<thead><tr><th width="25%">Name</th><th width="30%">Course</th><th width="15%" style="text-align: right;">Amount (Php)</th><th width="15%" style="text-align:center;">Date</th></tr></thead><tbody id="tableBody"></tbody>');
 
 	$.ajax({
 		type:'get',
-		url:'{!!URL::to('ajax-query-collection-yearly')!!}',
+		url:'{!!URL::to('ajax-query-refund-yearly')!!}',
 		data:{yearly_year:yearly_year},
 		success:function(data){
 			for(var i = 0; i< data.length; i++){
-				$('#tableBody').append('<tr><td>'+data[i]['accountNumber']+'</td><td>'+data[i]['accountName']+'</td><td>'+data[i]['paymentDate']+'</td><td>'+data[i]['amount']+'</td></tr>');
-				total += parseFloat(data[i]['amount']);
+					$('#tableBody').append('<tr><td>'+data[i]['name']+'</td><td>'+data[i]['course']+'</td><td style="text-align:right;">'+data[i]['amount']+'</td><td style="text-align:center;">'+data[i]['date']+'</td></tr>');
+				// total += parseFloat(data[i]['amount']);
 			}
-			$('#total').empty();
-			$('#total').append('<thead><tr><th width="25%">Total</th><th width="25%"></th><th width="25%"></th><th width="25%">'+parseFloat(total).toFixed(2)+'</th></tr></thead>');
+			// $('#total').empty();
+			// $('#total').append('<thead><tr><th width="25%">Total</th><th width="25%"></th><th width="25%"></th><th width="25%">'+parseFloat(total).toFixed(2)+'</th></tr></thead>');
 		},
 		error:function(){
 		}
@@ -332,22 +314,21 @@ else if(timePeriod == "dateRange"){
 
 
 			$('#title').empty();
-			$('#title').append('<center><h2>Collection Report from '+range_dateFrom+' to '+range_dateTo+'</h2></center>')
+			$('#title').append('<center><h2>Refund Report from '+range_dateFrom+' to '+range_dateTo+'</h2></center>')
 
 			$('#queryTable').empty();
-			$('#queryTable').append('<thead><tr><th width="25%">Account Number</th><th width="25%">Account Name</th><th width="25%">Date</th><th width="25%">Payment</th></tr></thead><tbody id="tableBody"></tbody>');
+		$('#queryTable').append('<thead><tr><th width="25%">Name</th><th width="30%">Course</th><th width="15%" style="text-align: right;">Amount (Php)</th><th width="15%" style="text-align:center;">Date</th></tr></thead><tbody id="tableBody"></tbody>');
 
 			$.ajax({
 				type:'get',
-				url:'{!!URL::to('ajax-query-collection-dateRange')!!}',
+				url:'{!!URL::to('ajax-query-refund-dateRange')!!}',
 				data:{range_dateFrom:range_dateFrom,range_dateTo:range_dateTo},
 				success:function(data){
 					for(var i = 0; i< data.length; i++){
-						$('#tableBody').append('<tr><td>'+data[i]['accountNumber']+'</td><td>'+data[i]['accountName']+'</td><td>'+data[i]['paymentDate']+'</td><td>'+data[i]['amount']+'</td></tr>');
-						total += parseFloat(data[i]['amount']);
+						$('#tableBody').append('<tr><td>'+data[i]['name']+'</td><td>'+data[i]['course']+'</td><td style="text-align:right;">'+data[i]['amount']+'</td><td style="text-align:center;">'+data[i]['date']+'</td></tr>');
 					}
-					$('#total').empty();
-					$('#total').append('<thead><tr><th width="25%">Total</th><th width="25%"></th><th width="25%"></th><th width="25%">'+parseFloat(total).toFixed(2)+'</th></tr></thead>');
+					// $('#total').empty();
+					// $('#total').append('<thead><tr><th width="25%">Total</th><th width="25%"></th><th width="25%"></th><th width="25%">'+parseFloat(total).toFixed(2)+'</th></tr></thead>');
 				},
 				error:function(){
 				}
@@ -357,4 +338,4 @@ else if(timePeriod == "dateRange"){
 			}//end of dateRange report
 		}//end of PreviewCLicked
 	</script>
-	@endsection
+@endsection

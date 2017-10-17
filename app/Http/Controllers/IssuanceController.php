@@ -11,6 +11,7 @@ use App\Groupattend;
 use App\Scheduledetail;
 use App\Classdetail;
 use App\Nosessionday;
+use App\Companyinfo
 use PDF;
 class IssuanceController extends Controller
 {
@@ -39,6 +40,7 @@ class IssuanceController extends Controller
     	}
 		$tclass = Trainingclass::find($request->trainingclass_id);
     	$holiday = Holiday::all()->where('active','=',1);
+        $sessionday = Nosessionday::all();
     	// start of date end
             $check = true;
             $checkdays = 1;
@@ -53,10 +55,10 @@ class IssuanceController extends Controller
                         $holidaycheck = true;
                     }
                 }
-                $check = Nosessionday::where('date',Carbon::parse($dateEnd)->format('Y-m-d'))->get();
-                if(count($check)>0)
-                {
-                    $holidaycheck = true;
+                foreach($sessionday as $sessiondays){
+                    if(Carbon::parse($dateEnd)->between(Carbon::parse($sessiondays->dateStart), Carbon::parse($sessiondays->dateEnd))){
+                        $holidaycheck = true;
+                    }
                 }
                 if($holidaycheck == false)
                 {
@@ -70,13 +72,11 @@ class IssuanceController extends Controller
                 {
                     $check = false;
                 }
-                else{
-
-                    $dateEnd = Carbon::parse($dateEnd)->addDays(1);
-                }
+                $dateEnd = Carbon::parse($dateEnd)->addDays(1);
             }
         	//end of date end
-    	$pdf = PDF::loadView('admin/Issuance_Certificate/certificate',['tclass'=>$tclass,'dateEnd'=>$dateEnd,'detail'=>$classdetail])->setPaper([0,0,612,792],'portrait');
+        $cinfo = Companyinfo::all()->first();
+    	$pdf = PDF::loadView('admin/Issuance_Certificate/certificate',['tclass'=>$tclass,'dateEnd'=>$dateEnd,'detail'=>$classdetail,'cinfo'=>$cinfo])->setPaper([0,0,612,792],'portrait');
     	return $pdf->stream();
     }
 }

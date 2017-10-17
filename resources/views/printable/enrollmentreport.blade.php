@@ -73,11 +73,11 @@
 	<div style="width: 60%; float: right;">
 		<h4 style="text-align: center;">Certified True and Correct:</h4>
 		<div style="width: 50%; float: left">
-				<h4 style="text-align: center;"><u>Capt. Esmeraldo B. Arriesgado</u></h4>
+				<h4 style="text-align: center;"><u>{{$cinfo->director}}</u></h4>
 				<p style="text-align: center; padding-top: -20px;">Training Director</p>
 		</div>
 		<div style="width: 50%; float: right;">
-				<h4 style="text-align: center;"><u>Frederick Francisco</u></h4>
+				<h4 style="text-align: center;"><u>{{$cinfo->registrar}}</u></h4>
 				<p style="text-align: center; padding-top: -20px;">Registrar</p>
 		</div>
 		<div style="clear: both;"></div>

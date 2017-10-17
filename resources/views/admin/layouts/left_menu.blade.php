@@ -187,6 +187,12 @@
 					Account with Balance
 				</a>
 			</li>
+			<li id="refund">
+				<a href="{{url('/reports/refund')}}">
+					<i class="fa fa-angle-double-right"></i>
+					Refund Report
+				</a>
+			</li>
 		</ul>
 	</li>
 </ul>
