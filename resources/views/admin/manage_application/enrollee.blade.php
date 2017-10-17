@@ -116,7 +116,7 @@
 <div class="modal fade in" id="responsive" tabindex="-1" role="dialog" aria-hidden="false" style="display:none;">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <form action="/manage_app/genrollee/insert" method="post" class="form-horizontal">
+            <form action="/manage_app/genrollee/insert" method="post" class="form-horizontal" id="create-form">
                 {{ csrf_field() }}
                 <div class="modal-header btn-primary">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -710,4 +710,40 @@
     }
   @endif
 </script>
+
+<script type="text/javascript">
+            $.validator.addMethod("regx", function(value, element, regexpr) {          
+                return regexpr.test(value);
+            }, "No special characters except(hypen ( - ))");
+
+            $.validator.addMethod("regx1", function(value, element, regexpr) {          
+                return regexpr.test(value);
+            }, "Allowed characters: ' - ( ) , : ; & / # ? ! *");
+
+            $.validator.addMethod("regx2", function(value, element, regexpr) {          
+                return regexpr.test(value);
+            }, "Invalid Input");
+
+            $(function(){
+                $('#create-form').validate({
+                    ignore:[],
+                    rules:{
+                        orgName:{
+                            required: true,
+                            regx1: /(^[a-zA-Z0-9 \'\-\Ñ\ñ(),?!*]+$)/i,
+                            space: true,
+                        },
+                        orgAddress:{
+                            required: true,
+                            space: true,
+                        },
+                        orgRepresentative:{
+                            required: true,
+                            regx1: /(^[a-zA-Z0-9 \'\-\Ñ\ñ(),]+$)/i,
+                            space: true,
+                        }
+                    }
+                });
+            });
+        </script>
 @endsection

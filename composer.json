@@ -8,6 +8,7 @@
         "php": ">=5.6.4",
         "barryvdh/laravel-dompdf": "^0.8.0",
         "intervention/image": "^2.4",
+        "khill/lavacharts": "^3.1",
         "laravel/framework": "5.4.*",
         "laravel/tinker": "~1.0",
         "riskihajar/terbilang": "^1.1",
