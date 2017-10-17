@@ -111,6 +111,9 @@
 <script src="{{ asset('/js/jquery.dataTables.min.js') }}" type="text/javascript"></script>
 <script src="{{ asset('/js/dataTables.bootstrap.min.js') }}" type="text/javascript"></script>
 <script src="{{ asset('js/clockface.js') }}" type="text/javascript" ></script>
+<script src="{{ asset('/js/jquery.validate.js') }}"></script>
+<script src="{{ asset('/js/nowhitespace.js') }}"></script>
+<script src="{{ asset('/js/pattern.js') }}"></script>
 <script type="text/javascript">
     
     $(document).ready(function(){

@@ -67,7 +67,7 @@
 								<td>@if($employees->gender == 'F')Female @else Male @endif</td>
 								<td>{{Carbon\Carbon::createFromFormat('Y-m-d',$employees->dob)->age}}</td>
 								<td>{{$employees->user->position->positionName}}</td>
-								<td align="center"><button class="btn btn-primary" data-toggle="modal" data-href="#update{{$employees->id}}" href="#update{{$employees->id}}">Update</button></td>
+								<td align="center"><button class="btn btn-primary" data-toggle="modal" data-href="#update{{$employees->id}}" href="#update{{$employees->id}}" onclick="update({{$employees->id}})">Update</button></td>
 								<td align="center"><form action="/employee/delete" method="post">{{csrf_field()}}<input type="hidden" name="id" value="{{$employees->id}}"><button type="submit" class="btn btn-danger">Deactivate</button></form></td>
 							</tr>
 							@endforeach
@@ -209,7 +209,7 @@
 		<div class="modal fade in" id="update{{$employees->id}}" tabindex="-1" role="dialog" aria-hidden="false" style="display:none;">
 			<div class="modal-dialog modal-xl">
 				<div class="modal-content">
-					<form  action="/employee/update" method="post" class="form-horizontal">
+					<form id="update-form{{$employees->id}}" action="/employee/update" method="post" class="form-horizontal">
 						{{csrf_field()}}
 						<div class="modal-header btn-primary">
 							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -380,11 +380,15 @@
 		</script>
 
 		<script type="text/javascript">
-			function dobChanged(dob){
-				var age = moment(dob.value,"MMM D, YYYY").fromNow(true);
-				$('#age').val(age+' old');
-			}
-		</script>
+	      function dobChanged(dob){
+	          // var age = moment(dob.value,"MMM D, YYYY").fromNow(true);
+	          // $('#age').val(age+' old');
+	          var bday=  moment(dob.value,"MMM D, YYYY");
+	          var today = moment();
+	          $('#age').val(today.diff(bday,"years"));
+	          $('#age').valid();
+	      }
+	  </script>
 
 		<script>
 			$(document).ready( function(){
@@ -465,4 +469,125 @@
       }
     }
 		</script>
+
+		<script type="text/javascript">
+            $.validator.addMethod("regx", function(value, element, regexpr) {          
+                return regexpr.test(value);
+            }, "No special characters except(hypen ( - ))");
+
+            $.validator.addMethod("regx1", function(value, element, regexpr) {          
+                return regexpr.test(value);
+            }, "No special characters except(hypen ( - ) and apostrophe ( ' ))");
+
+            $.validator.addMethod("regx2", function(value, element, regexpr) {          
+                return regexpr.test(value);
+            }, "Allowed characters: ' - ( ) , : ; & / # ");
+
+            $.validator.addMethod("regx3", function(value, element) {          
+                return this.optional(element) || /(^[a-zA-Z0-9 \'\-\Ñ\ñ]+$)/i.test(value) || value == "";
+            }, "Invalid Input");
+
+            $.validator.addMethod("regx4", function(value, element) {          
+                return this.optional(element) || ((/(^[0-9]+$)/i.test(value)) && (value.length == 7 || value.length == 11));
+            }, "Invalid Input");
+
+            $.validator.addMethod("adult", function(value, element) {          
+            if(value>=18)
+                return true;
+            }, "Must be 18 years old and above");
+
+            function update(x)
+            {
+            	$(function(){
+                $('#update-form'+x).validate({
+                    ignore:[],
+                    rules:{
+                        firstName:{
+                            required: true,
+                            regx1: /(^[a-zA-Z0-9 -\'\Ñ\ñ]+$)/i,
+                            space: true,
+                        },
+                        middleName:{
+                            regx3: true,
+                            space: true,
+                        },
+                        lastName:{
+                            required: true,
+                            regx1: /(^[a-zA-Z0-9 \'\-\Ñ\ñ]+$)/i,
+                            space: true,
+                        },
+                        dob:{
+                            required: true
+                        },
+                        age:{
+                            adult: true
+                        },
+                        street:{
+                            required: true,
+                            space: true,
+                        },
+                        barangay:{
+                            required: true,
+                            space: true,
+                        },
+                        city:{
+                            required: true,
+                            space: true,
+                        },
+                        contact:{
+                            required: true
+                        },
+                        email:{
+                            required: true
+                        }
+                    },
+                });
+            });
+            }
+            $(function(){
+                $('#create-form').validate({
+                    ignore:[],
+                    rules:{
+                        firstName:{
+                            required: true,
+                            regx1: /(^[a-zA-Z0-9 -\'\Ñ\ñ]+$)/i,
+                            space: true,
+                        },
+                        middleName:{
+                            regx3: true,
+                            space: true,
+                        },
+                        lastName:{
+                            required: true,
+                            regx1: /(^[a-zA-Z0-9 \'\-\Ñ\ñ]+$)/i,
+                            space: true,
+                        },
+                        dob:{
+                            required: true
+                        },
+                        age:{
+                            adult: true
+                        },
+                        street:{
+                            required: true,
+                            space: true,
+                        },
+                        barangay:{
+                            required: true,
+                            space: true,
+                        },
+                        city:{
+                            required: true,
+                            space: true,
+                        },
+                        contact:{
+                            required: true
+                        },
+                        email:{
+                            required: true
+                        }
+                    }
+                });
+            });
+        </script>
 		@endsection

@@ -80,7 +80,7 @@ h2{
 								<tr>
 									<td>{{$details->enrollee->studentNumber}}</td><input type="hidden" name="classdetail_id[]" value="{{$details->id}}">
 									<td>{{$details->enrollee->firstName . ' ' . $details->enrollee->middleName . ' ' . $details->enrollee->lastName}}</td>
-									<td><form>@if(count($details->enrollee->trainingattend)>0)<button  data-toggle="modal" onclick="counter({{$details->enrollee->trainingattend->sum('id')}})" data-href="#studentUpdate{{$details->id}}" href="##studentUpdate{{$details->id}}" type="button" class="btn btn-primary"><i class="glyphicon glyphicon-edit"></i>&ensp; Update</button>@else<button  data-toggle="modal" onclick="counter(0)" data-href="#studentUpdate{{$details->id}}" href="##studentUpdate{{$details->id}}" type="button" class="btn btn-primary"><i class="glyphicon glyphicon-edit"></i>&ensp; Update</button>@endif</form></td>
+									<td><form>@if(count($details->enrollee->trainingattend)>0)<button  data-toggle="modal" onclick="counter({{$details->enrollee->trainingattend->sum('id')}},{{$details->id}})" data-href="#studentUpdate{{$details->id}}" href="#studentUpdate{{$details->id}}" type="button" class="btn btn-primary" onclick="clicks({{$details->id}})"><i class="glyphicon glyphicon-edit"></i>&ensp; Update</button>@else<button  data-toggle="modal" onclick="counter(0, {{$details->id}})" data-href="#studentUpdate{{$details->id}}" href="#studentUpdate{{$details->id}}" type="button" class="btn btn-primary"><i class="glyphicon glyphicon-edit"></i>&ensp; Update</button>@endif</form></td>
 								</tr>
 								@endif
 								@endforeach
@@ -97,10 +97,10 @@ h2{
 	<!-- Dialog Box Confirmation -->
 	@if(count($tclass->classdetail)>0)
 	@foreach($tclass->classdetail as $details)
-		<div class="modal fade in" id="studentUpdate{{$details['id']}}" tabindex="-1" role="dialog" aria-hidden="false" style="display:none;">
+		<div class="modal fade in" id="studentUpdate{{$details->id}}" tabindex="-1" role="dialog" aria-hidden="false" style="display:none;">
 			<div class="modal-dialog modal-xl">
 				<div class="modal-content">
-					<form action="/tofficer/class/enrollee/update" method="post" class="form-horizontal">
+					<form action="/tofficer/class/enrollee/update" id="update-form{{$details->id}}" method="post" class="form-horizontal">
 						{{ csrf_field() }} 	
 						<input type="hidden" name="tclass_id" value="{{$details->trainingclass_id}}"/>
 						<input type="hidden" name="enrollee_id" value="{{$details->enrollee_id}}">
@@ -120,6 +120,14 @@ h2{
 						</div>
 						<div class="modal-body">
 							<div class="row">
+
+								<div class="row">
+									<div class="col-md-4">
+										<div class="alert alert-success">
+												<p><em>Note: <font color="red">*</font> fields are required</em></p>
+										</div>
+									</div>
+								</div>
 								<div class="col-md-12">
 					                <div class="panel panel-primary" style="margin-top: 0px;">
 					                    <div class="panel-heading">
@@ -184,12 +192,18 @@ h2{
 					                            <div class="col-md-4">
 					                                <div class="input-group date form_datetime"  data-date-format="MM dd, yyyy" data-link-field="dtp_input1">
 					                                    <span class="input-group-addon">Birthdate<font color="red">*</font></span>
-					                                    <input class="form-control" size="16" type="text" readonly name="dob" id="1dob"  value="{{Carbon\Carbon::parse($details->enrollee->dob)->format('F d, Y')}}">
+					                                    <input class="form-control" size="16" type="text" readonly name="dob" id="1dob"  value="{{Carbon\Carbon::parse($details->enrollee->dob)->format('F d, Y')}}" onchange="dobChanged(this)">
 					                                    <span class="input-group-addon">
 					                                        <span class="glyphicon glyphicon-th"></span>
 					                                    </span>
 					                                </div>
 					                            </div>
+	                                    <div class="col-md-4">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">Age</span>
+                                            <input type="text" id="age" class="form-control" name="age" readonly="readonly" maxlength="3" value="{{Carbon\Carbon::parse($details->enrollee->dob)->age}}">
+                                        </div>
+	                                    </div>
 					                            <div class="col-md-4">
 				                                    <div class="input-group">
 				                                        <span class="input-group-addon">Birthplace<font color="red">*</font></span>
@@ -254,13 +268,22 @@ h2{
 					                            <div class="col-md-8">
 				                                    <div id="contactC" class="input-group">
 				                                        <span class="input-group-addon">Contact<font color="red">*</font></span>
-				                                        <input type="text" value="{{$details->enrollee->contact}}" id="1contactI" name="contact" class="cp form-control placeholder selector" placeholder="e.g: 0999 9999 999">
+	                                            		@if(strlen($details->enrollee->contact) < 9)
+	                                                <input type="text" id="1contactI" name="contact" class="tel form-control placeholder selector" placeholder="e.g: 999 9999" value="{{$details->enrollee->contact}}">
+	                                                @else
+	                                                <input type="text" id="1contactI" name="contact" class="cp form-control placeholder selector" placeholder="e.g: 0999 9999 999" value="{{$details->enrollee->contact}}">
+	                                                @endif
 				                                    </div>
 					                            </div>
 					                            <div class="col-md-4">
 					                                <select name="contactType" id="contactType" class="selector form-control" onchange="changeContactType(this)">
-					                                    <option selected value="mobile">Mobile No.</option>
-					                                    <option value="tel">Landline No.</option>
+					                                    @if(strlen($details->enrollee->contact) < 9)
+	                                                <option value="mobile">Mobile No.</option>
+	                                                <option selected value="tel">Landline No.</option>
+	                                              @else
+	                                                <option selected value="mobile">Mobile No.</option>
+	                                                <option value="tel">Landline No.</option>
+	                                              @endif
 					                                </select>
 					                            </div>
 					                        </div>
@@ -304,19 +327,28 @@ h2{
 					                            </div>
 					                        </div>
 					                        <div class="row form-group">
-				                                <div class="col-md-8">
-			                                        <div id="contactE" class="input-group">
-			                                            <span class="input-group-addon">Contact<font color="red">*</font></span>
-			                                            <input type="text" id="1Econtact" value="{{$details->enrollee->contactperson->contact}}" class="selector cp form-control placeholder" name="Econtact" placeholder="e.g: 0999 9999 999">
-			                                        </div>
-				                                </div>
+		                                <div class="col-md-8">
+                                        <div id="contactE" class="input-group">
+                                            <span class="input-group-addon">Contact<font color="red">*</font></span>
+                                            @if(strlen($details->enrollee->contactperson->contact) < 9)
+                                            <input type="text" id="1Econtact" value="{{$details->enrollee->contactperson->contact}}" class="selector tel form-control placeholder" name="Econtact" placeholder="e.g: 0999 9999 999">
+                                            @else
+                                            <input type="text" id="1Econtact" value="{{$details->enrollee->contactperson->contact}}" class="selector cp form-control placeholder" name="Econtact" placeholder="e.g: 0999 9999 999">
+                                            @endif
+                                        </div>
+                                    </div>
 				                                <div class="col-md-4">
 				                                    <select name="EContactType" id="1EContactType" class="selector form-control" onchange="EchangeContactType(this)">
+				                                    	@if(strlen($details->enrollee->contactperson->contact) < 9)
+				                                        <option value="mobile">Mobile No.</option>
+				                                        <option selected value="tel">Landline No.</option>
+				                                       @else
 				                                        <option selected value="mobile">Mobile No.</option>
 				                                        <option value="tel">Landline No.</option>
+				                                       @endif
 				                                    </select>
 				                                </div>
-					                        </div>
+					                      	</div>
 					                        <div class="row form-group">
 					                            <div class="col-md-12">
 				                                    <div class="input-group">
@@ -499,6 +531,9 @@ h2{
 	<script type="text/javascript" src="/vendors/datetimepicker/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 	<script src="/js/toastr.min.js"></script>
 	<script type="text/javascript" src="\vendors\bootstrap3-editable\js\bootstrap-editable.js"></script>
+  <script type="text/javascript" src="/js/moment.min.js" charset="UTF-8"></script>
+  <script src="/vendors/input-mask/jquerymask.js" type="text/javascript"></script>
+
 	<script type="text/javascript">
 		$.fn.editable.defaults.mode = 'popup';
 		$.fn.editable.defaults.params = function (params) {
@@ -537,9 +572,128 @@ h2{
 	<script type="text/javascript">
 		$('#table1').DataTable();
 	var i = 0;
-	function counter(x){
+	function counter(x, id){
 		i = x+1;
-	console.log(x);
+		console.log(x);
+		$.validator.addMethod("regx", function(value, element, regexpr) {          
+                return regexpr.test(value);
+            }, "No special characters except(hypen ( - ))");
+
+            $.validator.addMethod("regx1", function(value, element, regexpr) {          
+                return regexpr.test(value);
+            }, "No special characters except(hypen ( - ) and apostrophe ( ' ))");
+
+            $.validator.addMethod("regx2", function(value, element, regexpr) {          
+                return regexpr.test(value);
+            }, "Allowed characters: ' - ( ) , : ; & / # ");
+
+            $.validator.addMethod("regx3", function(value, element) {          
+                return this.optional(element) || /(^[a-zA-Z0-9 \'\-\Ñ\ñ]+$)/i.test(value) || value == "";
+            }, "Invalid Input");
+
+            $.validator.addMethod("regx4", function(value, element) {          
+                return this.optional(element) || ((/(^[0-9]+$)/i.test(value)) && (value.length == 7 || value.length == 11));
+            }, "Invalid Input");
+
+            $.validator.addMethod("adult", function(value, element) {          
+            if(value>=18)
+                return true;
+            }, "Must be 18 years old and above");
+
+            $(function(){
+                $('#update-form'+id).validate({
+                    ignore:[],
+                    rules:{
+                        firstName:{
+                            required: true,
+                            regx1: /(^[a-zA-Z0-9 -\'\Ñ\ñ]+$)/i,
+                            space: true,
+                        },
+                        middleName:{
+                            regx3: true,
+                            space: true,
+                        },
+                        lastName:{
+                            required: true,
+                            regx1: /(^[a-zA-Z0-9 \'\-\Ñ\ñ]+$)/i,
+                            space: true,
+                        },
+                        civilStatus:{
+                            required: true
+                        },
+                        dob:{
+                            required: true
+                        },
+                        age:{
+                            adult: true
+                        },
+                        dop:{
+                            required: true,
+                            space: true,
+                            regx2: /(^[a-zA-Z0-9 \'\-\Ñ\ñ\#\.\,();:/&]+$)/i,
+                        },
+                        street:{
+                            required: true,
+                            space: true,
+                        },
+                        barangay:{
+                            required: true,
+                            space: true,
+                        },
+                        city:{
+                            required: true,
+                            space: true,
+                        },
+                        contact:{
+                            required: true
+                        },
+                        email:{
+                            required: true
+                        },
+                        Ename:{
+                            required: true,
+                            regx1: /(^[a-zA-Z0-9 -\'\Ñ\ñ]+$)/i,
+                            space: true,
+                        },
+                        Erel:{
+                            required: true,
+                            regx1: /(^[a-zA-Z0-9 -\'\Ñ\ñ]+$)/i,
+                            space: true,
+                        },
+                        Econtact:{
+                            required: true
+                        },
+                        Eaddress:{
+                            required: true,
+                            regx2: /(^[a-zA-Z0-9 \'\-\Ñ\ñ\#\.\,();:/&]+$)/i,
+                            space: true,
+                        },
+                        EBattainment:{
+                            required: true,
+                            regx2: /(^[a-zA-Z0-9 \'\-\Ñ\ñ\#\.\,();:/&]+$)/i,
+                            space: true,
+                        },
+                        EBschool:{
+                            required: true,
+                            regx2: /(^[a-zA-Z0-9 \'\-\Ñ\ñ\#\.\,();:/&]+$)/i,
+                            space: true,
+                        },
+                        EBcourse:{
+                            space: true,
+                        },
+                        noYears:{
+                            number: true,
+                            space: true
+                        },
+                        rank:{
+                            space: true,
+                        }
+                    },
+                    errorPlacement:function(error,element){
+                        error.insertAfter(element.parent("div"));
+                    },
+                });
+            });
 	}
 	function clicks(x){
 		$('#dynamic_field'+x).append('<tr id="delete'+i+'"><td><input type="text" class="selector form-control capital" name="trainingTitle[]"></td><td><input type="text" class="selector form-control capital" name="trainingCenter[]"></td><td><input type="date" class="selector form-control" name="dateTaken[]"></td><td><button type="button" onclick="remove('+i+')" class="selector btn btn-danger" id="add">Remove</button></td></tr>');
@@ -588,4 +742,102 @@ h2{
 	    }
 	  @endif
 	</script>
-	@endsection
+
+	<script type="text/javascript">
+    function dobChanged(dob){
+        // var age = moment(dob.value,"MMM D, YYYY").fromNow(true);
+        // $('#age').val(age+' old');
+        var bday=  moment(dob.value,"MMM D, YYYY");
+        var today = moment();
+        $('#age').val(today.diff(bday,"years"));
+        $('#age').valid();
+    }
+	</script>
+
+<script type="text/javascript">
+            
+  function changeContactType(contactType){
+      if(contactType.value == "tel"){
+           {{--  document.getElementById('contact').value = "";
+          $("#contact").removeClass("cp").addClass("tel").attr("placeholder":"e.g: 0999 9999 999");
+          console.log("tel");   --}}
+          $("#contactC").empty();
+          $("#contactC").append('<span class="input-group-addon">Contact<font color="red">*</font></span><input type="text" id="1contactI" name="contact" class="tel form-control placeholder selector" placeholder="e.g: 999 9999">')
+          
+          
+          $('.tel').mask('000 0000',
+          {
+              "placeholder": "--- ----"
+          });
+
+          $('.cp').mask('0000 0000 000',
+          {
+              "placeholder": "---- ---- ---"
+          });
+      }
+      else{
+          {{--  document.getElementById('contact').value = "";
+          $("#contact").removeClass("tel").addClass("cp").attr("placeholder":"e.g: 999 9999");
+          console.log("cp");  --}}
+          
+          $("#contactC").empty();
+          $("#contactC").append('<span class="input-group-addon">Contact<font color="red">*</font></span><input type="text" id="1contactI" name="contact" class="cp form-control placeholder selector" placeholder="e.g: 0999 9999 999">')
+          
+          $('.tel').mask('000 0000',
+       		{
+              "placeholder": "--- ----"
+          });
+
+          $('.cp').mask('0000 0000 000',
+          {
+              "placeholder": "---- ---- ---"
+          });
+      }
+  }
+
+</script>
+
+<script type="text/javascript">
+  function EchangeContactType(contactType){
+      if(contactType.value == "tel"){
+           {{--  document.getElementById('Econtact').value = "";
+          $("#contact").removeClass("cp").addClass("tel").attr("placeholder":"e.g: 0999 9999 999");
+          console.log("tel");   --}}
+
+          $("#contactE").empty();
+          $("#contactE").append('<span class="input-group-addon">Contact<font color="red">*</font></span><input type="text" id="1Econtact" name="Econtact" class="tel form-control placeholder selector" placeholder="e.g: 999 9999">');
+
+          
+          $('.tel').mask('000 0000',
+          {
+              "placeholder": "--- ----"
+          });
+
+          $('.cp').mask('0000 0000 000',
+          {
+              "placeholder": "---- ---- ---"
+          });
+      }
+      else{
+          {{--  document.getElementById('contact').value = "";
+          $("#contact").removeClass("tel").addClass("cp").attr("placeholder":"e.g: 999 9999");
+          console.log("cp");  --}}
+
+          $("#contactE").empty();
+
+          $("#contactE").append('<span class="input-group-addon">Contact<font color="red">*</font></span><input type="text" id="1EContact" name="Econtact" class="cp form-control placeholder selector" placeholder="e.g: 0999 9999 999">');
+          
+          $('.tel').mask('000 0000',
+          {
+              "placeholder": "--- ----"
+          });
+
+          $('.cp').mask('0000 0000 000',
+          {
+              "placeholder": "---- ---- ---"
+          });
+      }
+  }
+
+</script>
+@endsection
