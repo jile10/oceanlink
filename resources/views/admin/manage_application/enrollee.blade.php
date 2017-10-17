@@ -7,6 +7,7 @@
 <link href="/vendors/touchspin/dist/jquery.bootstrap-touchspin.css" rel="stylesheet" type="text/css" media="all" />
 <link href="/vendors/select2/select2.css" rel="stylesheet" />
 <link rel="stylesheet" href="/vendors/select2/select2-bootstrap.css" />
+    <link href="/vendors/panel/panel.css" rel="stylesheet" type="text/css"/>
 @endsection
 @section('content')
 <style type="text/css">
@@ -29,10 +30,7 @@
         <li>
             <a >Transaction</a>
         </li>
-        <li>
-            <a >Process Enrollment</a>
-        </li>
-        <li class="active">Single Application</li>
+        <li class="active">Process Enrollment</li>
     </ol>
 </section>
 <section class="content">
@@ -41,7 +39,6 @@
             <div class="panel panel-success filterable" style="overflow:auto;">
                 <div class="panel-heading">
                     <h3 class="panel-title">
-                        <i class="livicon" data-name="responsive" data-size="16" data-loop="true" data-c="#fff" data-hc="white"></i>
                     </h3>
                 </div>
                 <div class="panel-body table-responsive">
@@ -121,12 +118,21 @@
         <div class="modal-content">
             <form action="/manage_app/genrollee/insert" method="post" class="form-horizontal">
                 {{ csrf_field() }}
-                <div class="modal-header">
+                <div class="modal-header btn-primary">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title">New Group Applicants</h4>
+                    <h4 class="modal-title">New Group Application</h4>
                 </div>
                 <div class="modal-body">
                     <div class="row">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="col-md-12">
+                                    <div class="alert alert-success">
+                                            <p><em>Note: <font color="red">*</font> fields are required</em></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="col-md-12">
                             <div class="panel panel-primary filterable" style="overflow:auto;">
                                 <div class="panel-heading">
@@ -134,19 +140,19 @@
                                 </div>
                                 <div class="panel-body">
                                     <div class="form-group">
-                                        <label class="col-sm-3 control-label">Choose desired program</label>
+                                        <label class="col-sm-3 control-label">Choose desired program<font color="red">*</font></label>
                                         <div class="col-sm-8">
-                                            <select class="form-control" onchange="rateChange(this)" name="rate_id" >
+                                            <select class="form-control select2" onchange="rateChange(this)" name="rate_id" >
                                                 @foreach($rate as $rates)
-                                                <option value="{{$rates->id}}">{{$rates->program->programName . ' ('.$rates->duration.' Hours'}}</option>
+                                                <option value="{{$rates->id}}">{{$rates->program->programName . ' ('.$rates->duration.' Hours)'}}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-3 control-label">Training Room</label>
+                                        <label class="col-sm-3 control-label">Training Room<font color="red">*</font></label>
                                         <div class="col-sm-8">
-                                            <select class="form-control" name="trainingroom_id" >
+                                            <select class="form-control select2" name="trainingroom_id" >
                                                 @foreach($trainingroom as $trainingrooms)
                                                 <option value="{{$trainingrooms->id}}">{{$trainingrooms->building->buildingName . ' ' . $trainingrooms->floor->floorName . ' room ' . $trainingrooms->room_no }}</option>
                                                 @endforeach
@@ -154,9 +160,9 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-3 control-label">Training Officer</label>
+                                        <label class="col-sm-3 control-label">Training Officer<font color="red">*</font></label>
                                         <div class="col-sm-8">
-                                            <select class="form-control" name="tofficer_id" >
+                                            <select class="form-control select2" name="tofficer_id" id="Ctofficer_id">
                                                 @foreach($tofficer as $tofficers)
                                                 <option value="{{$tofficers->id}}">{{$tofficers->firstName . ' ' . $tofficers->middleName . ' ' . $tofficers->lastName }}</option>
                                                 @endforeach
@@ -164,7 +170,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="inputEmail3" class="col-sm-3 control-label">Program Start</label>
+                                        <label for="inputEmail3" class="col-sm-3 control-label">Program Start<font color="red">*</font></label>
                                         <div class="col-sm-8">
                                             <div class="input-group date form_datetime"  data-date-format="MM dd, yyyy" data-link-field="dtp_input1">
                                                 <input class="form-control" size="16" type="text" value="{{Carbon\Carbon::now()->format('F d, Y')}}" readonly name="dateStart" id="1dob">
@@ -175,7 +181,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="inputEmail3" class="col-sm-3 control-label">Payment Method</label>
+                                        <label for="inputEmail3" class="col-sm-3 control-label">Payment Method<font color="red">*</font></label>
                                         <div class="col-sm-8">
                                             <label class="radio-inline"><input type="radio" name="paymentMode" id="PP" value="1">Partial Payment</label>
                                             <label class="radio-inline"><input type="radio" name="paymentMode" value="2">Full payment</label>
@@ -201,19 +207,19 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="inputEmail3" class="col-sm-3 control-label">Name</label>
+                                        <label for="inputEmail3" class="col-sm-3 control-label">Organization Name<font color="red">*</font></label>
                                         <div class="col-sm-6">
                                             <input type="text" id="org_name" name="orgName" class="enable form-control">
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="inputEmail3" class="col-sm-3 control-label">Address</label>
+                                        <label for="inputEmail3" class="col-sm-3 control-label">Company Address<font color="red">*</font></label>
                                         <div class="col-sm-6">
                                             <input type="text" id="org_address" name="orgAddress" class="form-control enable">
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="inputEmail3" class="col-sm-3 control-label">Representative</label>
+                                        <label for="inputEmail3" class="col-sm-3 control-label">Representative<font color="red">*</font></label>
                                         <div class="col-sm-6">
                                             <input type="text" id="org_representative" name="orgRepresentative" class="enable form-control">
                                         </div>
@@ -288,7 +294,7 @@
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label">Choose desired program</label>
                                         <div class="col-sm-8">
-                                            <select class="form-control" name="rate_id" >
+                                            <select class="form-control select2" name="rate_id" >
                                                 @foreach($rate as $rates)
                                                 @if($rates->id != $tclasses->scheduledprogram->rate->id)
                                                 <option value="{{$rates->id}}">{{$rates->program->programName . ' ('.$rates->duration.' Hours'}}</option>
@@ -302,7 +308,7 @@
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label">Training Room</label>
                                         <div class="col-sm-8">
-                                            <select class="form-control" name="trainingroom_id" >
+                                            <select class="form-control select2" name="trainingroom_id" >
                                                 @foreach($trainingroom as $trainingrooms)
                                                 @if($trainingrooms->id != $tclasses->trainingroom_id)
                                                 <option value="{{$trainingrooms->id}}">{{$trainingrooms->building->buildingName . ' ' . $trainingrooms->floor->floorName . ' room ' . $trainingrooms->room_no }}</option>
@@ -315,8 +321,8 @@
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label">Training Officer</label>
-                                        <div class="col-sm-8">
-                                            <select class="form-control" name="tofficer_id" >
+                                        <div class="col-sm-8" >
+                                            <select class="form-control select2" name="tofficer_id" >
                                                 @foreach($tofficer as $tofficers)
                                                 @if($tofficers->id != $tclasses->scheduledprogram->trainingofficer_id)
                                                 <option value="{{$tofficers->id}}">{{$tofficers->firstName . ' ' . $tofficers->middleName . ' ' . $tofficers->lastName }}</option>
@@ -426,6 +432,10 @@
         $('#org_data').select2({
             placeholder: "Select past data",
         });
+        $('.select2').select2({
+            placeholder: "Select a Training Officer",
+        });
+        
     </script>
     <script type="text/javascript">
         var classHours = 0;
@@ -539,7 +549,11 @@
                 classHours = parseInt({{$classes->scheduledprogram->rate->classHour}});
                 $('#tableRow'+id).empty();
                 i = {{count($classes->schedule->scheduledetail)}}+1;
+<<<<<<< HEAD
                 $('#tableRow'+id).append('@foreach($classes->schedule->scheduledetail as $details)<tr id="updateDelete{{$details->id}}"> <td> <select id="day1" onchange="days(1)" class="form-control" name="day[]"> @foreach ($day as $days) @if ($days->id == $details->day_id)<option selected value="{{$days->id}}">{{$days->dayName}}</option>@else<option value="{{$days->id}}">{{$days->dayName}}</option> @endif @endforeach</select></td><td><div class="operationTime input-group"><span class="input-group-addon"><i class="fa fa-sun-o"></i></span><select id="morning{{$details->id}}" onchange="mornChange({{$details->id}})" name="morning[]" class="form-control" >@for ($i=8; $i<18;$i++) @for ($a=0;$a<4;$a++) @if ($i<17) @if ($a*15 == 0) @if (strval($i) == Carbon\Carbon::parse($details->start)->format("G")) <option class="morning" selected value="{{$i}}:00">{{$i}}:00</option> @else <option class="morning" value="{{$i}}:00">{{$i}}:00</option>  @endif @else @if(strval($i) == Carbon\Carbon::parse($details->start)->format("G") && strval($a*15) == Carbon\Carbon::parse($details->start)->format("i")) <option class="morning" selected value="{{$i}}:{{$a*15}}">{{$i}}:{{$a*15}}</option> @else <option class="morning" value="{{$i}}:{{$a*15}}">{{$i}}:{{$a*15}}</option> @endif @endif @endif @if ($i==17 && $a==0 ) @if (Carbon\Carbon::parse($details->start)->format("G") == strval($i))<option class="morning" selected value="{{$i}}:00">{{$i}}:00</option> @else <option class="morning" value="{{$i}}:00">{{$i}}:00</option> @endif @endif @endfor @endfor</select></div></td><td><div class="operationTime input-group"><span class="input-group-addon"><i class="fa fa-sun-o"></i></span><input type="text" id="afternoons{{$details->id}}" name="afternoon" class="form-control" readonly="" value="{{Carbon\Carbon::parse($details->end)->format("G:i")}}"></div></td><td><select name="breaktime[]" class="form-control" >@for($a=1;$a<5;$a++) @if($a*15 == $details->breaktime)<option selected value="{{$a*15}}">{{$a*15}}</option>@else <option value="{{$a*15}}">{{$a*15}}</option> @endif @endfor </select></td> @if($z++ == 1)<td><button type="button" onclick="updateClick({{$classes->id}})" class="btn btn-primary"><i class="glyphicon glyphicon-plus" ></i></button></td> @else <td><button type="button" onclick="updateRemove({{$classes->id}})" class="btn btn-danger"><i class="glyphicon glyphicon-remove" ></i></button></td> @endif </tr>@endforeach');
+=======
+                $(z
+>>>>>>> 61d91d395ebc9e245d4c811517a5eb152d02d49d
               $('.morning').each(function(element){
                 if(moment($(this).val(),'H:mm').add(''+classHours+'','h').isAfter(moment('17:00','H:mm')))
                 {
@@ -603,6 +617,7 @@
 <script>
     $(document).ready( function(){
         var table = $('#table1').DataTable();
+        $('#table2').DataTable();
         var table = $('#table2').DataTable();
         var i = 1;
         $('#add').click(function(){

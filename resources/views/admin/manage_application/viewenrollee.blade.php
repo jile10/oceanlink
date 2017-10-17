@@ -22,7 +22,7 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
 	<!--section starts-->
-	<h1>Applicants</h1>
+	<h1>Enrollees</h1>
 	<ol class="breadcrumb">
 		<li>
 			<a href="{{url('/admin')}}">
@@ -45,7 +45,6 @@
 			<div class="panel panel-success filterable" style="overflow:auto;">
 				<div class="panel-heading">
 					<h3 class="panel-title">
-						<i class="livicon" data-name="responsive" data-size="16" data-loop="true" data-c="#fff" data-hc="white"></i>
 					</h3>
 				</div>
 				<div class="panel-body table-responsive">

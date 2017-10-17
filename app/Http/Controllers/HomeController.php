@@ -314,233 +314,233 @@ class HomeController extends Controller
     }
 
 	public function insertiApply(Request $request){
-        // if(count($request->alumni)!=0)
-        // {
-        //     $enrollee = Enrollee::find($request->enrollee_id);
-        //     $account = Account::find($enrollee->account_id);
-        //     $holiday = Holiday::all()->where('status','=',1);
-        //     $message = "";
-        //     $checkStudent = true;
-        //     //account detail
-        //     $checkconflict = false;
-        //     for($i=0;$i<count($request->sprogram_id);$i++)
-        //     {   
-        //         $sprog = Scheduledprogram::find($request->sprogram_id[$i]);
-        //         foreach($enrollee->classdetail as $cdetails)
-        //         {
-        //             if($cdetails->trainingclass->status == 1 || $cdetails->trainingclass->status == 2 || $cdetails->trainingclass->status == 3)
-        //             {
-        //                 // start of date end
-        //                 $check = true;
-        //                 $checkdays = 0;
-        //                 $dateEnd = Carbon::create();
-        //                 $dateEnd = Carbon::parse($cdetails->trainingclass->scheduledprogram->dateStart);
-        //                 $days = $cdetails->trainingclass->scheduledprogram->rate->duration/$cdetails->trainingclass->scheduledprogram->rate->classHour;
-        //                 while ($check) {
-        //                     $temp = Carbon::parse($dateEnd)->format('l');
-        //                     $holidaycheck = false;
-        //                     foreach($holiday as $holidays){
-        //                         if(Carbon::parse($dateEnd)->between(Carbon::parse($holidays->dateStart)->subDays(1), Carbon::parse($holidays->dateEnd)->addDays(1)) || Carbon::parse($dateEnd)->format("F d, Y") == Carbon::parse($holidays->dateStart)->format("F d, Y") || Carbon::parse($dateEnd)->format("F d, Y") == Carbon::parse($holidays->dateEnd)->format("F d, Y")){
-        //                             $holidaycheck = true;
-        //                         }
-        //                     }
-        //                     $check = Nosessionday::where('date',Carbon::parse($dateEnd)->format('Y-m-d'))->get();
-        //                     if(count($check)>0)
-        //                     {
-        //                         $holidaycheck = true;
-        //                     }
-        //                     if($holidaycheck == false)
-        //                     {
-        //                         foreach ($cdetails->trainingclass->schedule->scheduledetail as $details) {
-        //                             if($temp == $details->day->dayName){
-        //                                 $checkdays++;
-        //                             }
-        //                         }
-        //                     }
-        //                     if($days == 1)
-        //                     {
-        //                         $checkdays = 1;
-        //                     }
-        //                     if(Carbon::parse($sprog->dateStart)->eq($dateEnd)){
-        //                         $checkconflict = true;
-        //                     }
-        //                     if($checkdays == $days)
-        //                     {
-        //                         $check = false;
-        //                     }
-        //                     else{
-        //                         $dateEnd = Carbon::parse($dateEnd)->addDays(1);
-        //                     }
-        //                 }
-        //                 //end of date end
-        //             }
-        //         }
-        //     }
-        //     for($i=0;$i<count($request->sprogram_id);$i++)
-        //     {
-        //         $existClass = Classdetail::where('enrollee_id','=',$request->enrollee_id)->where('trainingclass_id','=',$request->sprogram_id[$i])->get();
-        //         if(count($existClass)>0)
-        //         {
-        //             $message = "Already a student in this class";
-        //             $checkStudent = false;
-        //         }
-        //     }
-        //     if($checkStudent)
-        //     {
-        //         if($checkconflict)
-        //         {
-        //             $request->session()->flash('message_exist',"Conflict in student's schedule");
-        //             return redirect('/registercourse');
-        //         }
-        //         else
-        //         {
-        //             for($i=0;$i<count($request->sprogram_id);$i++)
-        //             {
-        //                 $accountdetail = new Accountdetail;
-        //                 $sprog = Scheduledprogram::find($request->sprogram_id[$i]);
-        //                 $balance = $sprog->rate->price;
-        //                 $accountdetail->account_id = $enrollee->account_id;
-        //                 $accountdetail->balance = $balance;
-        //                 $accountdetail->status = 1;
-        //                 $accountdetail->scheduledprogram_id = $request->sprogram_id[$i];
-        //                 $accountdetail->paymentMode = $request->paymentMode[$i];
-        //                 $accountdetail->save(); 
+        if(count($request->alumni)!=0)
+        {
+            $enrollee = Enrollee::find($request->enrollee_id);
+            $account = Account::find($enrollee->account_id);
+            $holiday = Holiday::all()->where('status','=',1);
+            $message = "";
+            $checkStudent = true;
+            //account detail
+            $checkconflict = false;
+            for($i=0;$i<count($request->sprogram_id);$i++)
+            {   
+                $sprog = Scheduledprogram::find($request->sprogram_id[$i]);
+                foreach($enrollee->classdetail as $cdetails)
+                {
+                    if($cdetails->trainingclass->status == 1 || $cdetails->trainingclass->status == 2 || $cdetails->trainingclass->status == 3)
+                    {
+                        // start of date end
+                        $check = true;
+                        $checkdays = 0;
+                        $dateEnd = Carbon::create();
+                        $dateEnd = Carbon::parse($cdetails->trainingclass->scheduledprogram->dateStart);
+                        $days = $cdetails->trainingclass->scheduledprogram->rate->duration/$cdetails->trainingclass->scheduledprogram->rate->classHour;
+                        while ($check) {
+                            $temp = Carbon::parse($dateEnd)->format('l');
+                            $holidaycheck = false;
+                            foreach($holiday as $holidays){
+                                if(Carbon::parse($dateEnd)->between(Carbon::parse($holidays->dateStart)->subDays(1), Carbon::parse($holidays->dateEnd)->addDays(1)) || Carbon::parse($dateEnd)->format("F d, Y") == Carbon::parse($holidays->dateStart)->format("F d, Y") || Carbon::parse($dateEnd)->format("F d, Y") == Carbon::parse($holidays->dateEnd)->format("F d, Y")){
+                                    $holidaycheck = true;
+                                }
+                            }
+                            $check = Nosessionday::where('date',Carbon::parse($dateEnd)->format('Y-m-d'))->get();
+                            if(count($check)>0)
+                            {
+                                $holidaycheck = true;
+                            }
+                            if($holidaycheck == false)
+                            {
+                                foreach ($cdetails->trainingclass->schedule->scheduledetail as $details) {
+                                    if($temp == $details->day->dayName){
+                                        $checkdays++;
+                                    }
+                                }
+                            }
+                            if($days == 1)
+                            {
+                                $checkdays = 1;
+                            }
+                            if(Carbon::parse($sprog->dateStart)->eq($dateEnd)){
+                                $checkconflict = true;
+                            }
+                            if($checkdays == $days)
+                            {
+                                $check = false;
+                            }
+                            else{
+                                $dateEnd = Carbon::parse($dateEnd)->addDays(1);
+                            }
+                        }
+                        //end of date end
+                    }
+                }
+            }
+            for($i=0;$i<count($request->sprogram_id);$i++)
+            {
+                $existClass = Classdetail::where('enrollee_id','=',$request->enrollee_id)->where('trainingclass_id','=',$request->sprogram_id[$i])->get();
+                if(count($existClass)>0)
+                {
+                    $message = "Already a student in this class";
+                    $checkStudent = false;
+                }
+            }
+            if($checkStudent)
+            {
+                if($checkconflict)
+                {
+                    $request->session()->flash('message_exist',"Conflict in student's schedule");
+                    return redirect('/registercourse');
+                }
+                else
+                {
+                    for($i=0;$i<count($request->sprogram_id);$i++)
+                    {
+                        $accountdetail = new Accountdetail;
+                        $sprog = Scheduledprogram::find($request->sprogram_id[$i]);
+                        $balance = $sprog->rate->price;
+                        $accountdetail->account_id = $enrollee->account_id;
+                        $accountdetail->balance = $balance;
+                        $accountdetail->status = 1;
+                        $accountdetail->scheduledprogram_id = $request->sprogram_id[$i];
+                        $accountdetail->paymentMode = $request->paymentMode[$i];
+                        $accountdetail->save(); 
 
-        //                 //class detail
-        //                 $classdetail = new Classdetail;
-        //                 $classdetail->enrollee_id = $enrollee->id;
-        //                 $classdetail->trainingclass_id = $sprog->trainingclass->id;
-        //                 $classdetail->save();
-        //             }
-        //             $request->session()->put('enrollee',$enrollee->id);
-        //             $request->session()->put('sprogram',$request->sprogram_id);
-        //             return redirect('/thankyou');
-        //         }
-        //     }
-        //     else
-        //     {
-        //         $request->session()->flash('message_exist',$message);
-        //         return redirect('/registercourse');
-        //     }
-        // }
-        // else{
-        //     //education background
-        //     $message = "";
-        //     $exist_enrollee = Enrollee::where('firstName','=',$request->firstName)->where('middleName','=',$request->middleName)->where('lastName','=',$request->lastName)->get();
-        //     if(count($exist_enrollee)>0)
-        //     {
-        //         $message = "Already a student in this class";
-        //         session()->flash('message_exist',$message);
-        //         return redirect('/registercourse');
-        //     }
-        //     else
-        //     {
-        //         $edub = new Educationalbackground;
-        //         $edub->attainment = $request->EBattainment;
-        //         $edub->school = $request->EBschool;
-        //         $edub->course = $request->EBcourse;
-        //         $edub->save();
-        //         $edub = Educationalbackground::All();
-        //         $edub_last = $edub->last();
+                        //class detail
+                        $classdetail = new Classdetail;
+                        $classdetail->enrollee_id = $enrollee->id;
+                        $classdetail->trainingclass_id = $sprog->trainingclass->id;
+                        $classdetail->save();
+                    }
+                    $request->session()->put('enrollee',$enrollee->id);
+                    $request->session()->put('sprogram',$request->sprogram_id);
+                    return redirect('/thankyou');
+                }
+            }
+            else
+            {
+                $request->session()->flash('message_exist',$message);
+                return redirect('/registercourse');
+            }
+        }
+        else{
+            //education background
+            $message = "";
+            $exist_enrollee = Enrollee::where('firstName','=',$request->firstName)->where('middleName','=',$request->middleName)->where('lastName','=',$request->lastName)->get();
+            if(count($exist_enrollee)>0)
+            {
+                $message = "Already a student in this class";
+                session()->flash('message_exist',$message);
+                return redirect('/registercourse');
+            }
+            else
+            {
+                $edub = new Educationalbackground;
+                $edub->attainment = $request->EBattainment;
+                $edub->school = $request->EBschool;
+                $edub->course = $request->EBcourse;
+                $edub->save();
+                $edub = Educationalbackground::All();
+                $edub_last = $edub->last();
 
-        //         //contact person
-        //         $contactp = new Contactperson;
-        //         $contactp->name = $request->Ename;
-        //         $contactp->relationship = $request->Erel;
-        //         $contactp->address = $request->Eaddress;
-        //         $contactp->contact = $request->Econtact;
-        //         $contactp->save();
-        //         $contactp =Contactperson::all();
-        //         $contactp_last = $contactp->last();
+                //contact person
+                $contactp = new Contactperson;
+                $contactp->name = $request->Ename;
+                $contactp->relationship = $request->Erel;
+                $contactp->address = $request->Eaddress;
+                $contactp->contact = $request->Econtact;
+                $contactp->save();
+                $contactp =Contactperson::all();
+                $contactp_last = $contactp->last();
 
-        //         //account
-        //         $accounts = Account::all();
-        //         $accountx = count($accounts);
-        //         $accountx += 1;
-        //         $account = new Account;
-        //         $account->accountNumber = 'OC-'.Carbon::today()->format('Y').'-000'. $accountx;
-        //         $account->save();
-        //         $account = Account::all();
-        //         $account_last = $account->last();
+                //account
+                $accounts = Account::all();
+                $accountx = count($accounts);
+                $accountx += 1;
+                $account = new Account;
+                $account->accountNumber = 'OC-'.Carbon::today()->format('Y').'-000'. $accountx;
+                $account->save();
+                $account = Account::all();
+                $account_last = $account->last();
 
-        //         //account detail
-        //         for($i=0;$i<count($request->sprogram_id);$i++)
-        //         {
-        //             $accountdetail = new Accountdetail;
-        //             $sprog = Scheduledprogram::find($request->sprogram_id[$i]);
-        //             $balance = $sprog->rate->price;
-        //             $accountdetail->account_id = $account_last->id;
-        //             $accountdetail->balance = $balance;
-        //             $accountdetail->status = 1;
-        //             $accountdetail->scheduledprogram_id = $request->sprogram_id[$i];
-        //             $accountdetail->paymentMode = $request->paymentMode[$i];
-        //             $accountdetail->save();
-        //         }
-        //         //enrollee
-        //         $enrollee = new Enrollee;
-        //         $enrollee->firstName = $request->firstName;
-        //         $enrollee->middleName = $request->middleName;
-        //         $enrollee->lastName = $request->lastName;
-        //         $enrollee->gender = $request->gender;
-        //         $enrollee->civilstatus_id = $request->civilStatus;
-        //         $enrollee->dob = Carbon::parse($request->dob)->format('Y-m-d');
-        //         $enrollee->birthPlace = $request->dop;
-        //         $enrollee->street = $request->street;
-        //         $enrollee->barangay = $request->barangay;
-        //         $enrollee->city = $request->city;
-        //         $enrollee->contact = $request->contact;
-        //         $enrollee->email = $request->email;
-        //         $enrollee->educationalbackground_id = $edub_last->id;
-        //         $enrollee->contactperson_id = $contactp_last->id;
-        //         $enrollee->account_id = $account_last->id;
-        //         $enrollee->status_id = 1;
-        //         $enrollee->save();
-        //         $enrollee = Enrollee::all();
-        //         $enrollee_last = $enrollee->last();
-        //         $enrollee = Enrollee::find($enrollee_last->id);
-        //         $enrollee->studentNumber = 'AP-'.Carbon::today()->format('Y').'-000'.$enrollee_last->id;
-        //         $enrollee->save();
+                //account detail
+                for($i=0;$i<count($request->sprogram_id);$i++)
+                {
+                    $accountdetail = new Accountdetail;
+                    $sprog = Scheduledprogram::find($request->sprogram_id[$i]);
+                    $balance = $sprog->rate->price;
+                    $accountdetail->account_id = $account_last->id;
+                    $accountdetail->balance = $balance;
+                    $accountdetail->status = 1;
+                    $accountdetail->scheduledprogram_id = $request->sprogram_id[$i];
+                    $accountdetail->paymentMode = $request->paymentMode[$i];
+                    $accountdetail->save();
+                }
+                //enrollee
+                $enrollee = new Enrollee;
+                $enrollee->firstName = $request->firstName;
+                $enrollee->middleName = $request->middleName;
+                $enrollee->lastName = $request->lastName;
+                $enrollee->gender = $request->gender;
+                $enrollee->civilstatus_id = $request->civilStatus;
+                $enrollee->dob = Carbon::parse($request->dob)->format('Y-m-d');
+                $enrollee->birthPlace = $request->dop;
+                $enrollee->street = $request->street;
+                $enrollee->barangay = $request->barangay;
+                $enrollee->city = $request->city;
+                $enrollee->contact = $request->contact;
+                $enrollee->email = $request->email;
+                $enrollee->educationalbackground_id = $edub_last->id;
+                $enrollee->contactperson_id = $contactp_last->id;
+                $enrollee->account_id = $account_last->id;
+                $enrollee->status_id = 1;
+                $enrollee->save();
+                $enrollee = Enrollee::all();
+                $enrollee_last = $enrollee->last();
+                $enrollee = Enrollee::find($enrollee_last->id);
+                $enrollee->studentNumber = 'AP-'.Carbon::today()->format('Y').'-000'.$enrollee_last->id;
+                $enrollee->save();
 
-        //         //class detail
-        //         foreach($request->sprogram_id as $sprograms)
-        //         {
-        //             $classdetail = new Classdetail;
-        //             $classdetail->enrollee_id = $enrollee_last->id;
-        //             $sprog = Scheduledprogram::find($sprograms);
-        //             $classdetail->trainingclass_id = $sprog->trainingclass->id;
-        //             $classdetail->save();
-        //         }
+                //class detail
+                foreach($request->sprogram_id as $sprograms)
+                {
+                    $classdetail = new Classdetail;
+                    $classdetail->enrollee_id = $enrollee_last->id;
+                    $sprog = Scheduledprogram::find($sprograms);
+                    $classdetail->trainingclass_id = $sprog->trainingclass->id;
+                    $classdetail->save();
+                }
 
-        //         //sea exp
-        //         if($request->noYears != "" && $request->rank!="")
-        //         {
-        //             $seaexp = new Seaexperience;
-        //             $seaexp->noYears = $request->noYears;
-        //             $seaexp->rank = $request->rank;
-        //             $seaexp->enrollee_id = $enrollee_last->id;
-        //             $seaexp->save();
-        //             $seaexp = Seaexperience::all();
-        //             $seaexp_last = $seaexp->last();
-        //         }
+                //sea exp
+                if($request->noYears != "" && $request->rank!="")
+                {
+                    $seaexp = new Seaexperience;
+                    $seaexp->noYears = $request->noYears;
+                    $seaexp->rank = $request->rank;
+                    $seaexp->enrollee_id = $enrollee_last->id;
+                    $seaexp->save();
+                    $seaexp = Seaexperience::all();
+                    $seaexp_last = $seaexp->last();
+                }
 
-        //         //training attends
-        //         for($x = 0; $x < count($request->trainingTitle) ; $x++ )
-        //         {
-        //             if($request->trainingTitle[$x] != "" && $request->trainingCenter[$x] != "" && $request->dateTaken[$x] != "")
-        //             {
-        //                 $tattend = new Trainingattend;
-        //                 $tattend->trainingTitle = $request->trainingTitle[$x];
-        //                 $tattend->trainingCenter = $request->trainingCenter[$x];
-        //                 $tattend->dateTaken = Carbon::parse($request->dateTaken[$x])->format('Y-m-d');
-        //                 $tattend->enrollee_id = $enrollee_last->id;
-        //                 $tattend->save();
-        //             }
-        //         }
-        //         $request->session()->put('enrollee',$enrollee_last->id);
-        //         $request->session()->put('sprogram',$request->sprogram_id);
-        //         return redirect('/thankyou');
-        //     }
-        // }
+                //training attends
+                for($x = 0; $x < count($request->trainingTitle) ; $x++ )
+                {
+                    if($request->trainingTitle[$x] != "" && $request->trainingCenter[$x] != "" && $request->dateTaken[$x] != "")
+                    {
+                        $tattend = new Trainingattend;
+                        $tattend->trainingTitle = $request->trainingTitle[$x];
+                        $tattend->trainingCenter = $request->trainingCenter[$x];
+                        $tattend->dateTaken = Carbon::parse($request->dateTaken[$x])->format('Y-m-d');
+                        $tattend->enrollee_id = $enrollee_last->id;
+                        $tattend->save();
+                    }
+                }
+                $request->session()->put('enrollee',$enrollee_last->id);
+                $request->session()->put('sprogram',$request->sprogram_id);
+                return redirect('/thankyou');
+            }
+        }
         
 	}
 
