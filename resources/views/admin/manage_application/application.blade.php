@@ -558,10 +558,10 @@
                 allowClear:true
             });
             var i = 1;
-            $('#add').click(function(){
-                i++;
-                $('#dynamic_field').append('<tr id="row'+i+'"><td><input type="text" class="form-control" name="trainingTitle[]"></td><td><input type="text"class="form-control" name="trainingCenter[]"></td><td><input type="date" class="form-control" name="dateTaken[]"></td><td><button name="remove" type="button" id="'+i+'" class="btn btn-danger remove" >X</button></td></tr>');
-            });
+            // $('#add').click(function(){
+            //     i++;
+            //     $('#dynamic_field').append('<tr id="row'+i+'"><td><input type="text" class="form-control" name="trainingTitle[]"></td><td><input type="text"class="form-control" name="trainingCenter[]"></td><td><input type="date" class="form-control" name="dateTaken[]"></td><td><button name="remove" type="button" id="'+i+'" class="btn btn-danger remove" >X</button></td></tr>');
+            // });
             $(document).on('click','.remove',function(){
                 var btn_id = $(this).attr('id');
                 $('#row'+btn_id+'').remove();
@@ -627,7 +627,7 @@
             $('#dynamic_head').empty();
             $('#dynamic_field').empty();
             $('#dynamic_head').append('<tr><th width="35%">Training Title</th><th width="35%">Training Center</th><th width="20%">Date Taken</th><th width="10%">Action</th></tr>');
-            $('#dynamic_field').append('<tr><td><input type="text" class="selector form-control capital" name="trainingTitle[]"></td><td><input type="text" class="selector form-control capital" name="trainingCenter[]"></td><td><input type="date" class="selector form-control" name="dateTaken[]"></td><td><button type="button" class="selector btn btn-success" onclick="clicks()" id="add">Add more</button></td></tr>');
+            $('#dynamic_field').append('<tr><td><div><input type="text" class="selector form-control capital training" name="trainingTitle[]" onblur="validateTraining(this)"></div></td><td><div><input type="text" class="selector form-control capital training" name="trainingCenter[]"  onblur="validateTraining(this)"></div></td><td><div class="input-group date form_datetime selector"  data-date-format="MM dd, yyyy" data-link-field="dtp_input1"><input class="form-control selector training" size="16" type="text" value="" readonly name="dateTaken[]" id="dateTaken" onchange="validateTraining(this)"><span class="input-group-addon"><span class="glyphicon glyphicon-remove selector"></span></span><span class="input-group-addon"><span class="glyphicon glyphicon-th selector"></span></span></div></td><td><button type="button" class="selector btn btn-success" onclick="clicks()" id="add"><span class="glyphicon glyphicon-plus"></span></button></td></tr>');
             $(".form_datetime").datetimepicker({
                 format: "MM dd, yyyy",
                 weekStart: 1,

@@ -30,7 +30,7 @@
         <li>
             <a >Transaction</a>
         </li>
-        <li class="active">>Process Enrollment</li>
+        <li class="active">Process Enrollment</li>
     </ol>
 </section>
 <section class="content">
@@ -142,10 +142,9 @@
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label">Choose desired program<font color="red">*</font></label>
                                         <div class="col-sm-8">
-                                            <select class="form-control select2" name="rate_id" >
-                                            <select class="form-control" onchange="rateChange(this)" name="rate_id" >
+                                            <select class="form-control select2" onchange="rateChange(this)" name="rate_id" >
                                                 @foreach($rate as $rates)
-                                                <option value="{{$rates->id}}">{{$rates->program->programName . ' ('.$rates->duration.' Hours'}}</option>
+                                                <option value="{{$rates->id}}">{{$rates->program->programName . ' ('.$rates->duration.' Hours)'}}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -550,7 +549,7 @@
                 classHours = parseInt({{$classes->scheduledprogram->rate->classHour}});
                 $('#tableRow'+id).empty();
                 i = {{count($classes->schedule->scheduledetail)}}+1;
-                $('#tableRow'+id).append('@foreach($classes->schedule->scheduledetail as $details)<tr id="updateDelete{{$details->id}}"> <td> <select id="day1" onchange="days(1)" class="form-control" name="day[]"> @foreach ($day as $days) @if ($days->id == $details->day_id)<option selected value="{{$days->id}}">{{$days->dayName}}</option>@else<option value="{{$days->id}}">{{$days->dayName}}</option> @endif @endforeach</select></td><td><div class="operationTime input-group"><span class="input-group-addon"><i class="fa fa-sun-o"></i></span><select id="morning{{$details->id}}" onchange="mornChange({{$details->id}})" name="morning[]" class="form-control" >@for ($i=8; $i<18;$i++) @for ($a=0;$a<4;$a++) @if ($i<17) @if ($a*15 == 0) @if (strval($i) == Carbon\Carbon::parse($details->start)->format("G")) <option class="morning" selected value="{{$i}}:00">{{$i}}:00</option> @else <option class="morning" value="{{$i}}:00">{{$i}}:00</option>  @endif @else @if(strval($i) == Carbon\Carbon::parse($details->start)->format("G") && strval($a*15) == Carbon\Carbon::parse($details->start)->format("i")) <option class="morning" selected value="{{$i}}:{{$a*15}}">{{$i}}:{{$a*15}}</option> @else <option class="morning" value="{{$i}}:{{$a*15}}">{{$i}}:{{$a*15}}</option> @endif @endif @endif @if ($i==17 && $a==0 ) @if (Carbon\Carbon::parse($details->start)->format("G") == strval($i))<option class="morning" selected value="{{$i}}:00">{{$i}}:00</option> @else <option class="morning" value="{{$i}}:00">{{$i}}:00</option> @endif @endif @endfor @endfor</select></div></td><td><div class="operationTime input-group"><span class="input-group-addon"><i class="fa fa-sun-o"></i></span><input type="text" id="afternoons{{$details->id}}" name="afternoon" class="form-control" readonly="" value="{{Carbon\Carbon::parse($details->end)->format("G:i")}}"></div></td><td><select name="breaktime[]" class="form-control" >@for($a=1;$a<5;$a++) @if($a*15 == $details->breaktime)<option selected value="{{$a*15}}">{{$a*15}}</option>@else <option value="{{$a*15}}">{{$a*15}}</option> @endif @endfor </select></td> @if (++$z == 1)<td><button type="button" onclick="updateClick({{$classes->id}})" class="btn btn-primary"><i class="glyphicon glyphicon-plus" ></i></button></td> @else <td><button type="button" onclick="updateRemove({{$classes->id}})" class="btn btn-danger"><i class="glyphicon glyphicon-remove" ></i></button></td> @endif </tr>@endforeach');
+                $(z
               $('.morning').each(function(element){
                 if(moment($(this).val(),'H:mm').add(''+classHours+'','h').isAfter(moment('17:00','H:mm')))
                 {
