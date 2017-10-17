@@ -170,6 +170,8 @@
 		maxView: 4,
 		forceParse: 0,
 	});
+	$('#reports').addClass(' active ');
+	$('#accountbalance').addClass(' active ');
 </script> 
 
 <script type="text/javascript">

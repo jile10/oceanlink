@@ -10,6 +10,8 @@ use App\Holiday;
 use App\Scheduledetail;
 use App\Payment;
 use App\Account;
+use App\Refund;
+use App\Companyinfo;
 class PrintController extends Controller
 {
     public function voucher(){
@@ -170,7 +172,8 @@ class PrintController extends Controller
 
     public function setEnrollmentReport(Request $request){
     	$tclass = Trainingclass::find($request->tclass_id);
-    	$pdf = PDF::loadView('printable/enrollmentreport',['tclass'=>$tclass,'x'=>0])->setPaper([0,0,612,792],'portrait');
+    	$cinfo = Companyinfo::all()->first();
+    	$pdf = PDF::loadView('printable/enrollmentreport',['tclass'=>$tclass,'x'=>0,'cinfo'=>$cinfo])->setPaper([0,0,612,792],'portrait');
     	return $pdf->stream();
     }
 
@@ -216,6 +219,41 @@ class PrintController extends Controller
 														->where('paymentDate', '<=' , $dateTo)
 														->get();
 		    	$pdf = PDF::loadView('printable/collectionreport',["report"=>$report,"timePeriod" => $timePeriod])->setPaper([0,0,612,792],'portrait');
+		    	return $pdf->stream();
+		    	break;
+    	}
+    }
+
+    public function printRefundReport(Request $request)
+    {
+    	$timePeriod ="";
+    	switch($request->timePeriod)
+    	{
+    		case 'yearly':
+    			$timePeriod = "(Year " .$request->yearly_year . ')';
+				$report = Refund::whereYear('date', '=', $request->yearly_year )->get();
+		    	$pdf = PDF::loadView('printable/refundreport',["report"=>$report,"timePeriod" => $timePeriod])->setPaper([0,0,612,792],'portrait');
+		    	return $pdf->stream();
+    			break;
+    		case 'monthly':
+	    		$month = $request->monthly_month;
+				$year = $request->monthly_year;
+    			$timePeriod = "(" .Carbon::parse($month)->format('F'). ' '.$request->yearly_year . ')';
+					$report = Refund::whereYear('date', '=', $year )
+														->whereMonth('date', '=', Carbon::parse($month)->format('m'))
+														->get();
+		    	$pdf = PDF::loadView('printable/refundreport',["report"=>$report,"timePeriod" => $timePeriod])->setPaper([0,0,612,792],'portrait');
+		    	return $pdf->stream();
+    			break;
+  			case 'dateRange':
+    			$dateFrom = Carbon::parse($request->dateFrom)->format("Y-m-d");
+					$dateTo = Carbon::parse($request->dateTo)->format("Y-m-d");
+					echo $dateFrom .' ' . $dateTo;
+    			$timePeriod = "(From " .Carbon::parse($dateFrom)->format('F d,Y'). ' to '.Carbon::parse($dateTo)->format('F d,Y') . ')';
+					$report = Refund::where('date', '>=' , $dateFrom)//whereBetween('paymentDate', [$dateFrom , $dateTo])
+														->where('date', '<=' , $dateTo)
+														->get();
+		    	$pdf = PDF::loadView('printable/refundreport',["report"=>$report,"timePeriod" => $timePeriod])->setPaper([0,0,612,792],'portrait');
 		    	return $pdf->stream();
 		    	break;
     	}

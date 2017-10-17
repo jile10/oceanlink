@@ -22,6 +22,9 @@ Route::get('/ajax-query-collection-dateRange','CollectionReportController@getDat
 Route::get('/ajax-query-accountbalance-monthly','CollectionReportController@getAccountMonthly');
 Route::get('/ajax-query-accountbalance-yearly','CollectionReportController@getAccountYearly');
 Route::get('/ajax-query-accountbalance-dateRange','CollectionReportController@getAccountDateRange');
+Route::get('/ajax-query-refund-monthly','CollectionReportController@getRefundMonthly');
+Route::get('/ajax-query-refund-yearly','CollectionReportController@getRefundYearly');
+Route::get('/ajax-query-refund-dateRange','CollectionReportController@getRefundDateRange');
 
 //Ajax
 Route::get('/ajax-building','FloorController@getbuilding');
@@ -41,6 +44,11 @@ Route::get('/employee/update-dob','EmployeeController@updateDob');
 Route::get('/employee/update-contact','EmployeeController@updateContact');
 
 Route::post('/update-class','TrainingOfficerController@updateClass');
+Route::post('/update-company-name','UtilitiesController@updateCompanyName');
+Route::post('/update-company-address','UtilitiesController@updateCompanyAddress');
+Route::post('/update-company-tdirector','UtilitiesController@updateTDirector');
+Route::post('/update-company-cofficer','UtilitiesController@updateCOfficer');
+Route::post('/update-company-registrar','UtilitiesController@updateRegistrar');
 
 Route::get('/ajax-enrollee-schedule-fill','EnrollmentController@fillSchedule');
 
@@ -101,7 +109,9 @@ Route::group(['middleware' => ['admin']],function(){
 	//Reports
 	Route::get('reports/collectionreport','CollectionReportController@viewReport');
 	Route::get('reports/accountbalance','CollectionReportController@viewAccount');
+	Route::get('reports/refund','CollectionReportController@viewRefund');
 	Route::post('reports/accountbalance/print','PrintController@printAccountBalanceReport');
+	Route::post('reports/refund/print','PrintController@printRefundReport');
 	Route::post('accountbalance/notification','PrintController@printNotification');
 
 	Route::get('/manage_app/enrollee','EnrolleeController@viewTrainingclass');

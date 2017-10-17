@@ -8,6 +8,7 @@ use App\Payment;
 use Carbon\Carbon;
 use App\Accountdetail;
 use App\Account;
+use App\Refund;
 class CollectionReportController extends Controller
 {
 	public function viewReport(){
@@ -23,19 +24,26 @@ class CollectionReportController extends Controller
 		$monthlyArray = array();
 		$x=0;
 
-    foreach($result as $results){
-        $monthlyArray[$x] = [
-            "accountNumber" =>$results->account->accountNumber,
-            "accountName" =>$results->account->enrollee->firstName . ' '. 
-            								$results->account->enrollee->middleName .' '. 
-            								$results->account->enrollee->lastName,
-            "paymentDate" =>$results->paymentDate,
-            "amount" =>$results->amount
-        ];
-        $x++;
-    }
+        foreach($result as $results){
+            $accountName = "";
+            if ($results->account->has('enrollee')) {
+                $accountName = $results->account->enrollee->firstName . ' '. 
+                                                $results->account->enrollee->middleName .' '. 
+                                                $results->account->enrollee->lastName;
+            }
+            else{
+                $accountName = $results->account->groupapplication->orgName;
+            }
+            $monthlyArray[$x] = [
+                "accountNumber" =>$results->account->accountNumber,
+                "accountName" => $accountName,
+                "paymentDate" =>$results->paymentDate,
+                "amount" =>$results->amount
+            ];
+            $x++;
+        }
 
-    return response()->json($monthlyArray);
+        return response()->json($monthlyArray);
 
 	}
 
@@ -47,26 +55,26 @@ class CollectionReportController extends Controller
 		$yearlyArray = array();
 		$x=0;
 
-    foreach($result as $results){
-        $accountName = "";
-        if ($results->account->has('enrollee')) {
-            $accountName = $results->account->enrollee->firstName . ' '. 
-                                            $results->account->enrollee->middleName .' '. 
-                                            $results->account->enrollee->lastName;
+        foreach($result as $results){
+            $accountName = "";
+            if ($results->account->has('enrollee')) {
+                $accountName = $results->account->enrollee->firstName . ' '. 
+                                                $results->account->enrollee->middleName .' '. 
+                                                $results->account->enrollee->lastName;
+            }
+            else{
+                $accountName = $results->account->groupapplication->orgName;
+            }
+            $yearlyArray[$x] = [
+                "accountNumber" =>$results->account->accountNumber,
+                "accountName" => $accountName,
+                "paymentDate" =>$results->paymentDate,
+                "amount" =>$results->amount
+            ];
+            $x++;
         }
-        else{
-            $accountName = $results->account->groupapplication->orgName;
-        }
-        $yearlyArray[$x] = [
-            "accountNumber" =>$results->account->accountNumber,
-            "accountName" => $accountName,
-            "paymentDate" =>$results->paymentDate,
-            "amount" =>$results->amount
-        ];
-        $x++;
-    }
 
-    return response()->json($yearlyArray);
+        return response()->json($yearlyArray);
 
 	}
 
@@ -80,18 +88,25 @@ class CollectionReportController extends Controller
 		$dateRangeArray = array();
 		$x=0;
 
-    foreach($result as $results){
-        $dateRangeArray[$x] = [
-            "accountNumber" =>$results->account->accountNumber,
-            "accountName" =>$results->account->enrollee->firstName . ' '. 
-            								$results->account->enrollee->middleName .' '. 
-            								$results->account->enrollee->lastName,
-            "paymentDate" =>$results->paymentDate,
-            "amount" =>$results->amount
-        ];
-        $x++;
-    }
-    return response()->json($dateRangeArray);
+        foreach($result as $results){
+            $accountName = "";
+            if ($results->account->has('enrollee')) {
+                $accountName = $results->account->enrollee->firstName . ' '. 
+                                                $results->account->enrollee->middleName .' '. 
+                                                $results->account->enrollee->lastName;
+            }
+            else{
+                $accountName = $results->account->groupapplication->orgName;
+            }
+            $dateRangeArray[$x] = [
+                "accountNumber" =>$results->account->accountNumber,
+                "accountName" => $accountName,
+                "paymentDate" =>$results->paymentDate,
+                "amount" =>$results->amount
+            ];
+            $x++;
+        }
+        return response()->json($dateRangeArray);
 
 	}
 
@@ -215,5 +230,75 @@ class CollectionReportController extends Controller
             }
         }
         return response()->json($accountAll);
+    }
+
+    public function viewRefund(){
+        return view('admin/reports/refund');
+    }
+
+    public function getRefundMonthly(Request $request){
+        $month = $request->monthly_month;
+        $year = $request->monthly_year;
+
+        $result = Refund::whereYear('date', '=', $year )
+                            ->whereMonth('date', '=', Carbon::parse($month)->format('m'))
+                            ->get();
+        $monthlyArray = array();
+        $x=0;
+
+        foreach($result as $results){
+            $monthlyArray[$x] = [
+                "name" =>$results->enrollee->firstName . ' ' . $results->enrollee->middleName . ' ' . $results->enrollee->lastName,
+                "course" =>$results->trainingclass->scheduledprogram->rate->program->programName . ' (' . $results->trainingclass->scheduledprogram->rate->duration . ' Hours)',
+                "date" =>Carbon::parse($results->date)->format('F d,Y'),
+                "amount" =>number_format($results->amount,2)
+            ];
+            $x++;
+        }
+
+        return response()->json($monthlyArray);
+
+    }
+
+    public function getRefundYearly(Request $request){
+        $year = $request->yearly_year;
+
+        $result = Refund::whereYear('date', '=', $year )
+                                            ->get();
+        $yearlyArray = array();
+        $x=0;
+
+        foreach($result as $results){
+            $yearlyArray[$x] = [
+            "name" =>$results->enrollee->firstName . ' ' . $results->enrollee->middleName . ' ' . $results->enrollee->lastName,
+            "course" =>$results->trainingclass->scheduledprogram->rate->program->programName . ' (' . $results->trainingclass->scheduledprogram->rate->duration . ' Hours)',
+            "date" =>Carbon::parse($results->date)->format('F d,Y'),
+            "amount" =>number_format($results->amount,2)
+            ];
+            $x++;
+        }
+        return response()->json($yearlyArray);
+    }
+
+    public function getRefundDateRange(Request $request){
+        $dateFrom = Carbon::parse($request->range_dateFrom)->format("Y-m-d");
+        $dateTo = Carbon::parse($request->range_dateTo)->format("Y-m-d");
+
+        $result = Refund::where('date', '>=' , $dateFrom)
+                                            ->where('date', '<=' , $dateTo)
+                                            ->get();
+        $dateRangeArray = array();
+        $x=0;
+
+        foreach($result as $results){
+            $dateRangeArray[$x] = [
+                "name" =>$results->enrollee->firstName . ' ' . $results->enrollee->middleName . ' ' . $results->enrollee->lastName,
+                "course" =>$results->trainingclass->scheduledprogram->rate->program->programName . ' (' . $results->trainingclass->scheduledprogram->rate->duration . ' Hours)',
+                "date" =>Carbon::parse($results->date)->format('F d,Y'),
+                "amount" =>number_format($results->amount,2)
+            ];
+            $x++;
+        }
+        return response()->json($dateRangeArray);
     }
 }

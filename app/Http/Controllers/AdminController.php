@@ -51,7 +51,7 @@ class AdminController extends Controller
                 }
                 else
                 {                    
-                        foreach($tclasses->classdetail->where('status','=!',1) as $details){
+                        foreach($tclasses->classdetail->where('status','!=',1) as $details){
                         $certificate = Certificate::all();
                         $a = count($certificate)+1;
                         $certificate = new Certificate;
@@ -107,9 +107,7 @@ class AdminController extends Controller
                 {
                     $check = false;
                 }
-                else{
-                    $dateEnd = Carbon::parse($dateEnd)->addDays(1);
-                }
+                $dateEnd = Carbon::parse($dateEnd)->addDays(1);
             }
         	//end of date end
             $x++;

@@ -65,7 +65,7 @@
 							@endif
 						</tbody>
 					</table>
-					<form action="/certificate/individual" method="post">
+					<form action="/certificate/individual" method="post" target="_blank">
 					{{csrf_field()}}
 						<input type="hidden" name="trainingclass_id" value="{{$tclass->id}}">
 						<div id="mark">

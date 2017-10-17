@@ -23,12 +23,12 @@
 		</div>
 		<div style="margin-top: 150px;">
 			<div style="float:left; margin-right: 20px; width: 50%; text-align: center;">
-				<h4 style="margin:10px;"><u>MARIA LOURDES C. CAUDAL</u></h4>
+				<h4 style="margin:10px;"><u>{{$cinfo->chiefofficer}}</u></h4>
 				<p style="margin: 10px;">Chief Operating Officer</p>
 			</div>
 			<div style="float:right; margin-left: 20px; width: 50%; text-align: center;">
-				<h4 style="margin:10px;"><u>CAPT. ESMERALDO B. ARRIESGADO</u></h4>
-				<p style="margin: 10px;">Chief Operating Officer</p>
+				<h4 style="margin:10px;"><u>{{$cinfo->director}}</u></h4>
+				<p style="margin: 10px;">Training Director</p>
 			</div>
 		</div>
 	</body>

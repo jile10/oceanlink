@@ -41,6 +41,11 @@
                 <div class="responsive_nav"></div>
             </a>
         </div>
+        <div class="navbar-left"`>
+            <div class="col-md-12 text-center" style="margin-top: 7px;">
+                <h4 id="time" style="color: white !important;"></h4>
+            </div>
+        </div>
         <div class="navbar-right" style="margin-right: 0.3%;">
             <ul class="nav navbar-nav">
                 <li class="dropdown user user-menu" >
@@ -114,6 +119,7 @@
 <script src="{{ asset('/js/jquery.validate.js') }}"></script>
 <script src="{{ asset('/js/nowhitespace.js') }}"></script>
 <script src="{{ asset('/js/pattern.js') }}"></script>
+<script src="/js/moment.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function(){
         var height = parseInt($('#right-side').css('height'));
@@ -121,6 +127,10 @@
             height = 450;
         }
         $('#left-side').css('height',height+'px');
+            $('#time').text(moment().format("dddd, MMMM Do YYYY, h:mm:ss A"));
+        setInterval(function(){
+            $('#time').text(moment().format("dddd, MMMM Do YYYY, h:mm:ss A"));
+        },1000);
     });
     $('#right-side').resize(function(){
         var height = parseInt($('#right-side').css('height'));
