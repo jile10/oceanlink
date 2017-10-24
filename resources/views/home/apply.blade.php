@@ -956,7 +956,7 @@
 
             $.validator.addMethod("regx2", function(value, element, regexpr) {          
                 return regexpr.test(value);
-            }, "Invalid Input");
+            }, "Allowed characters: ' - ( ) , : ; & / # ");
 
             $.validator.addMethod("regx3", function(value, element) {          
                 return this.optional(element) || /(^[a-zA-Z0-9 \'\-\Ñ\ñ]+$)/i.test(value) || value == "";
@@ -1001,21 +1001,21 @@
                         dop:{
                             required: true,
                             space: true,
-                            regx2: /(^[a-zA-Z0-9 \'\-\Ñ\ñ\#\.\,]+$)/i,
+                            regx2: /(^[a-zA-Z0-9 \'\-\Ñ\ñ\#\.\,();:/&]+$)/i,
                         },
                         street:{
                             required: true,
-                            regx2: /(^[a-zA-Z0-9 \'\-\Ñ\ñ\#\.\,]+$)/i,
+                            regx2: /(^[a-zA-Z0-9 \'\-\Ñ\ñ\#\.\,();:/&]+$)/i,
                             space: true,
                         },
                         barangay:{
                             required: true,
-                            regx2: /(^[a-zA-Z0-9 \'\-\Ñ\ñ\#\.\,]+$)/i,
+                            regx2: /(^[a-zA-Z0-9 \'\-\Ñ\ñ\#\.\,();:/&]+$)/i,
                             space: true,
                         },
                         city:{
                             required: true,
-                            regx2: /(^[a-zA-Z0-9 \'\-\Ñ\ñ\#\.\,]+$)/i,
+                            regx2: /(^[a-zA-Z0-9 \'\-\Ñ\ñ\#\.\,();:/&]+$)/i,
                             space: true,
                         },
                         contact:{
@@ -1039,17 +1039,17 @@
                         },
                         Eaddress:{
                             required: true,
-                            regx2: /(^[a-zA-Z0-9 \'\-\Ñ\ñ\#\.\,]+$)/i,
+                            regx2: /(^[a-zA-Z0-9 \'\-\Ñ\ñ\#\.\,();:/&]+$)/i,
                             space: true,
                         },
                         EBattainment:{
                             required: true,
-                            regx2: /(^[a-zA-Z0-9 \'\-\Ñ\ñ\#\.\,]+$)/i,
+                            regx2: /(^[a-zA-Z0-9 \'\-\Ñ\ñ\#\.\,();:/&]+$)/i,
                             space: true,
                         },
                         EBschool:{
                             required: true,
-                            regx2: /(^[a-zA-Z0-9 \'\-\Ñ\ñ\#\.\,]+$)/i,
+                            regx2: /(^[a-zA-Z0-9 \'\-\Ñ\ñ\#\.\,();:/&]+$)/i,
                             space: true,
                         },
                         EBcourse:{
