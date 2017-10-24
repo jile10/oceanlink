@@ -442,6 +442,14 @@ $.validator.addMethod("regx4", function(value, element, regexpr) {
     return regexpr.test(value);
 }, "Invalid");
 
+$.validator.addMethod("min", function(value, element) {          
+    if(value > 0)
+    {
+    	return true;
+    }
+}, "Invalid minimum students");
+
+
 	$(function(){
 		$('#create-form').validate({
 			rules:{
@@ -454,7 +462,7 @@ $.validator.addMethod("regx4", function(value, element, regexpr) {
 					required: true,
 					regx3 : /^[0-9]+$/i,
 					maxlength: 1,
-					range: [1,8],
+					range: [2,8],
 					number: true
 				},
 				price:{
@@ -467,6 +475,7 @@ $.validator.addMethod("regx4", function(value, element, regexpr) {
 					regx3: /^[0-9]+$/i,
 					required: true,
 					number: true,
+					min:true,
 				}
 			},
 			messages:{
@@ -499,7 +508,7 @@ $.validator.addMethod("regx4", function(value, element, regexpr) {
 					required: true,
 					regx3 : /^[0-9]+$/i,
 					maxlength: 1,
-					range: [1,8],
+					range: [2,8],
 					number: true
 				},
 				price:{
@@ -512,6 +521,7 @@ $.validator.addMethod("regx4", function(value, element, regexpr) {
 					regx3: /^[0-9]+$/i,
 					required: true,
 					number: true,
+					min:true,
 				}
 			},
 			messages:{

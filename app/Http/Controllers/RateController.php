@@ -40,7 +40,6 @@ class RateController extends Controller
             $check = false;
             $messages .= "Invalid class hours input.";
         }
-
         if($request->duration<$request->class_hours)
         {
             $check = false;

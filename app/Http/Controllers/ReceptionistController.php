@@ -41,7 +41,8 @@ class ReceptionistController extends Controller
         $tclass = Trainingclass::all()->where('status','=',1);
         $day = Day::all();
         $trainingroom = Trainingroom::all();
-        return view('receptionist/home',compact('rate','tofficer','gapp','day','trainingroom','tclass','gtclass'));
+        $z=0;
+        return view('receptionist/home',compact('z','rate','tofficer','gapp','day','trainingroom','tclass','gtclass'));
     }
 
     public function SNextStep(Request $request){

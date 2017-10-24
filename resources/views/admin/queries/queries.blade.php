@@ -69,6 +69,8 @@ th{
 									<select name="query" id="query" class="form-control" onchange="queryChanged(this)">
 										<option selected disabled>--Select a Query--</option>
 										<option value="1">Most enrolled course</option>
+										<option value="2">Recent cancelled schedule </option>
+										<option value="3">On going training classes</option>
 									</select>
 								</div>
 							</div>
@@ -112,7 +114,46 @@ th{
 					break;
 
 				case "2":
-					
+					$('#queryTable').empty();
+					$('#queryTable').append('<thead><tr><th width="30%">Program Type</th><th width="40%">Course Name</th><th width="30%">Date</th></tr></thead><tbody id="tableBody"></tbody>');
+					$.ajax({
+			            type:'get',
+			            url:'{!!URL::to('ajax-query-course-cancel')!!}',
+			            data:{},
+			            success:function(data){
+							for(var i = 0; i< data.length; i++){
+								var count = data[i]['counter'];
+									$('#tableBody').append('<tr><td>'+data[i]['program_type']+'</td><td>'+data[i]['course_name']+'</td><td>'+data[i]['date']+'</td></tr>')
+							}
+							$("#tableBody tr:nth-child(1)").addClass('first');
+							$("#tableBody tr:nth-child(2)").addClass('second');
+							$("#tableBody tr:nth-child(3)").addClass('third');
+			            },
+			            error:function(){
+			            }
+			          });
+					break;
+				case "3":
+					$('#queryTable').empty();
+					$('#queryTable').append('<thead><tr><th width="25%">Class Name</th><th width="35%">Course Name</th><th width="20%">Date Start</th><th width="20%">Date End</th></tr></thead><tbody id="tableBody"></tbody>');
+					$.ajax({
+			            type:'get',
+			            url:'{!!URL::to('ajax-query-trainingclass-ongoing')!!}',
+			            data:{},
+			            success:function(data){
+							for(var i = 0; i< data.length; i++){
+								var count = data[i]['counter'];
+									$('#tableBody').append('<tr><td>'+data[i]['program_type']+'</td><td>'+data[i]['course_name']+'</td><td>'+data[i]['dateStart']+'</td><td>'+data[i]['dateEnd']+'</td></tr>')
+							}
+							$("#tableBody tr:nth-child(1)").addClass('first');
+							$("#tableBody tr:nth-child(2)").addClass('second');
+							$("#tableBody tr:nth-child(3)").addClass('third');
+			            },
+			            error:function(){
+			            }
+			          });
+					break;
+
 			}
 		}
 

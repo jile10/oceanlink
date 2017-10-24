@@ -12,6 +12,8 @@
 */
 //Ajax Query 
 Route::get('/ajax-query-course-enrolled','QueriesController@getCourse');
+Route::get('/ajax-query-course-cancel','QueriesController@getCancel');
+Route::get('/ajax-query-trainingclass-ongoing','QueriesController@getOngingTrainingclass');
 Route::get('/ajax-query-account-balance','QueriesController@getBalance');
 //End of Ajax queries
 

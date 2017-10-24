@@ -85,7 +85,7 @@
 										{{$scheds['scheds']}}</br>
 									@endforeach
 									@else
-										{{$tclasses['sched']}}
+										{{count($tclasses['sched'])}}
 									@endif
 									</td>
 									<td align="center">{{$tclasses['total']}}</td>

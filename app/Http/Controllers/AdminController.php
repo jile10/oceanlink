@@ -132,9 +132,11 @@ class AdminController extends Controller
                 $enrolledStudents += count($trainingclasses->classdetail->where('status','!=',1));
             }
             else{
-                if($count($trainingclasses->groupapplicationdetail->where('status','!=',1)))
-                {
-                    $enrolledStudents += count($trainingclasses->groupclassdetail);
+                if(count($trainingclasses->groupapplicationdetail)>0){
+                    if(count($trainingclasses->groupapplicationdetail->where('status','!=',1))>0)
+                    {
+                        $enrolledStudents += count($trainingclasses->groupclassdetail);
+                    }
                 }
             }
         }

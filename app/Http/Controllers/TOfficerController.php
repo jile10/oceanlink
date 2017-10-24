@@ -62,7 +62,7 @@ class TOfficerController extends Controller
             
             $notification = array(
                 'message' => $messages, 
-                'alert-type' => 'success'
+                'alert-type' => 'warning'
             );
             return redirect()->back()->with($notification);
         }
@@ -111,7 +111,7 @@ class TOfficerController extends Controller
             
             $notification = array(
                 'message' => $messages, 
-                'alert-type' => 'success'
+                'alert-type' => 'warning'
             );
             return redirect()->back()->with($notification);
         }
@@ -125,7 +125,7 @@ class TOfficerController extends Controller
 
         $notification = array(
             'message' => 'Training officer has been successfully removed', 
-            'alert-type' => 'warning'
+            'alert-type' => 'success'
         );
 
 
@@ -147,8 +147,6 @@ class TOfficerController extends Controller
             'message' => 'Training officer has been successfully activated', 
             'alert-type' => 'success'
         );
-
-
         return redirect('/maintenance/tofficer')->with($notification);
     }
 }

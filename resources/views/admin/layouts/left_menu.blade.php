@@ -123,12 +123,6 @@
 					Holiday
 				</a>
 			</li>
-			<li id="vessel">
-				<a href="/maintenance/vessel">
-					<i class="fa fa-angle-double-right"></i>
-					Vessel
-				</a>
-			</li>
 		</ul>
 	</li>
 	<li id="utilities">
@@ -143,22 +137,10 @@
 					Company Information
 				</a>
 			</li>
-			<li id="configuration">
-				<a href="{{url('/maintenance/employee')}}">
-					<i class="fa fa-angle-double-right"></i>
-					Configuration
-				</a>
-			</li>
 			<li id="employee">
 				<a href="{{url('/maintenance/employee')}}">
 					<i class="fa fa-angle-double-right"></i>
 					Employee
-				</a>
-			</li>
-			<li id="position">
-				<a href="/maintenance/position">
-					<i class="fa fa-angle-double-right"></i>
-					Position 
 				</a>
 			</li>
 		</ul>

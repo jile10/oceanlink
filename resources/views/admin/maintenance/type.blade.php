@@ -218,14 +218,14 @@
 
 $.validator.addMethod("regx", function(value, element, regexpr) {          
     return regexpr.test(value);
-}, "No special characters except(hypen ( - ) and apostrophe ( ' )");
+}, "No special characters except(hypen ( - ), apostrophe ( ' ) and parentheses");
 
 	$(function(){
 		$('#create-form').validate({
 			rules:{
 				typeName:{
 					required: true,
-					regx: /(^[a-zA-Z0-9 \'-()]+$)/i,
+					regx: /(^[a-zA-Z0-9 \' \- ()]+$)/i,
 					space: true,
 					maxlength: 50
 				},
@@ -241,7 +241,7 @@ $.validator.addMethod("regx", function(value, element, regexpr) {
 			rules:{
 				typeName:{
 					required: true,
-					regx: /(^[a-zA-Z0-9 \'-()]+$)/i,
+					regx: /(^[a-zA-Z0-9 \' \- ()]+$)/i,
 					space: true,
 					maxlength: 50
 				},

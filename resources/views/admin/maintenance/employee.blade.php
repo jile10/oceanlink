@@ -47,9 +47,6 @@
 					<div class="col-md-6">
 						<button class="buttons btn btn-success" data-toggle="modal" data-href="#responsive" href="#responsive"><i class="glyphicon glyphicon-plus"></i>&ensp;New Employee</button>
 					</div>
-					<div class="col-md-6 text-right">
-						<a href="/maintenance/building/archive" class="buttons btn btn-success"><i class="glyphicon glyphicon-folder-open"></i>&ensp;Archive</a>
-					</div>
 					<table class="table table-striped table-bordered" id="table1">
 						<thead>
 							<tr>

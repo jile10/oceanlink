@@ -26,7 +26,7 @@ class ManageClassController extends Controller
         foreach ($class as $classes) {
                 // start of date end
                 $check = true;
-                $checkdays = 1;
+                $checkdays = 0;
                 $dateEnd = Carbon::create();
                 $dateEnd = Carbon::parse($classes->scheduledprogram->dateStart);
                 $days = $classes->scheduledprogram->rate->duration/$classes->scheduledprogram->rate->classHour;
@@ -43,7 +43,10 @@ class ManageClassController extends Controller
                             $holidaycheck = true;
                         }
                     }
-
+                    if($days == 1)
+                    {
+                        $checkdays == 1;
+                    }
                     if($holidaycheck == false)
                     {
                         foreach ($classes->schedule->scheduledetail as $details) {
@@ -57,7 +60,6 @@ class ManageClassController extends Controller
                         $check = false;
                     }
                     else{
-
                         $dateEnd = Carbon::parse($dateEnd)->addDays(1);
                     }
                 }
@@ -148,7 +150,7 @@ class ManageClassController extends Controller
         $sessionday = Nosessionday::all();
         // start of date end
             $check = true;
-            $checkdays = 1;
+            $checkdays = 0;
             $dateEnd = Carbon::create();
             $dateEnd = Carbon::parse($tclass->scheduledprogram->dateStart);
             $days = $tclass->scheduledprogram->rate->duration/$tclass->scheduledprogram->rate->classHour;
@@ -173,6 +175,9 @@ class ManageClassController extends Controller
                             $checkdays++;
                         }
                     }
+                }
+                if($days == 1){
+                    $checkdays == 1;
                 }
                 if($checkdays == $days)
                 {

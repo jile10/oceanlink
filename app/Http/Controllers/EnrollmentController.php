@@ -96,6 +96,7 @@ class EnrollmentController extends Controller
                     $scheck = true;
                     $schedules= "";
                     foreach ($classes->schedule->scheduledetail as $details) {
+                        $scounter = $details->day->id;
                         if($scounter != 0)
                         {
                             if($details->day->id - $scounter != 1){
@@ -103,7 +104,6 @@ class EnrollmentController extends Controller
                                 break;
                             }
                         }
-                        $scounter = $details->day->id;
                     }
                     if($scheck){
                         if(count(Scheduledetail::where('schedule_id','=',$classes->schedule->id)->get())==1){

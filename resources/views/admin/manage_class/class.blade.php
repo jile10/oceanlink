@@ -53,7 +53,8 @@
 									<td>{{$tclasses['course_name']}}</td>
 									<td>{{$tclasses['officer']}}</td> 
 									<td>{{$tclasses['dateEnd']}}</td>
-									<td><div class="col-md-6" style="margin-left: -15px;"><form action="/manage_class/setgrade" method="post">{{csrf_field()}}<input type="hidden" name="id" value="{{$tclasses['id']}}"><button type="submit"  class="btn btn-primary">Set Grade</button></form></div><div class="col-md-6 " style="margin-left: -15px;"> <form action="/manage_class/setattendance" method="post">{{csrf_field()}}<input type="hidden" name="id" value="{{$tclasses['id']}}"><button type="submit" class="btn btn-primary">Set Attendance</button></form></div></td>
+									<td><div class="col-md-6" style="margin-left: -15px;"><form action="/manage_class/setgrade" method="post">{{csrf_field()}}<input type="hidden" name="id" value="{{$tclasses['id']}}"><button type="submit"  class="btn btn-primary">Set Grade</button></form></div><div class="col-md-6 " style="margin-left: -15px;"> <form action="/manage_class/setattendance" method="post">{{csrf_field()}}<input type="hidden" name="id" value="{{$tclasses['id']}}"><button type="submit" class="btn btn-primary">Set Attendance</button></form></div>
+									</td>
 								</tr>
 							@endforeach
 						</tbody>
