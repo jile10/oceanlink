@@ -229,7 +229,8 @@
 	$("#maintenance").last().addClass( "active" );
 	$("#vessel").last().addClass( "active" );
 
-</script><script type="text/javascript">
+</script>
+<script type="text/javascript">
 	 @if(Session::has('message'))
     var type = "{{ Session::get('alert-type', 'info') }}";
     switch(type){

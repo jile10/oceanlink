@@ -67,6 +67,7 @@ class EnrolleeController extends Controller
         {
             $enrollee = Enrollee::find($request->enrollee_id);
             $holiday = Holiday::all()->where('status','=',1);
+            $sessionday = Nosessionday::all();
             $sprog = Scheduledprogram::find($request->sprog_id);
             $checkconflict = false;
             foreach($enrollee->classdetail as $cdetails)
@@ -87,10 +88,10 @@ class EnrolleeController extends Controller
                                 $holidaycheck = true;
                             }
                         }
-                        $check = Nosessionday::where('date',Carbon::parse($dateEnd)->format('Y-m-d'))->get();
-                        if(count($check)>0)
-                        {
-                            $holidaycheck = true;
+                        foreach($sessionday as $sessiondays){
+                            if(Carbon::parse($dateEnd)->between(Carbon::parse($sessiondays->dateStart), Carbon::parse($sessiondays->dateEnd))){
+                                $holidaycheck = true;
+                            }
                         }
                         if($holidaycheck == false)
                         {
@@ -321,6 +322,7 @@ class EnrolleeController extends Controller
         $tofficer = Trainingofficer::find($request->tofficer_id);
         $checkconflict = false;
         $holiday = Holiday::all()->where('active','=',1);
+        $sessionday = Nosessionday::all();
         foreach($tofficer->scheduledprogram as $classes)
         {
             // start of date end
@@ -337,10 +339,10 @@ class EnrolleeController extends Controller
                             $holidaycheck = true;
                         }
                     }
-                    $check = Nosessionday::where('date',Carbon::parse($dateEnd)->format('Y-m-d'))->get();
-                    if(count($check)>0)
-                    {
-                        $holidaycheck = true;
+                    foreach($sessionday as $sessiondays){
+                        if(Carbon::parse($dateEnd)->between(Carbon::parse($sessiondays->dateStart), Carbon::parse($sessiondays->dateEnd))){
+                            $holidaycheck = true;
+                        }
                     }
                     if($holidaycheck == false)
                     {
@@ -499,7 +501,7 @@ class EnrolleeController extends Controller
                 $groupappdetail->trainingclass_id = $class_last->id;
                 $groupappdetail->save();
 
-                return redirect('/manage_app/genrollee')->with($notification);
+                return redirect('/manage_app/enrollee')->with($notification);
             }
             else{
                 $accounts = Account::all();
@@ -551,6 +553,7 @@ class EnrolleeController extends Controller
         $checkconflict = false;
         $holiday = Holiday::all()->where('active','=',1);
         $tclass = Trainingclass::find($request->trainingclass_id);
+        $sessionday = Nosessionday::all();
         foreach($tofficer->scheduledprogram as $classes)
         {
             if($tclass->scheduledprogram->id != $classes->id)
@@ -569,10 +572,10 @@ class EnrolleeController extends Controller
                                 $holidaycheck = true;
                             }
                         }
-                        $check = Nosessionday::where('date',Carbon::parse($dateEnd)->format('Y-m-d'))->get();
-                        if(count($check)>0)
-                        {
-                            $holidaycheck = true;
+                        foreach($sessionday as $sessiondays){
+                            if(Carbon::parse($dateEnd)->between(Carbon::parse($sessiondays->dateStart), Carbon::parse($sessiondays->dateEnd))){
+                                $holidaycheck = true;
+                            }
                         }
                         if($holidaycheck == false)
                         {
