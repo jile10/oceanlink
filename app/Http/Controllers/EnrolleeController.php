@@ -73,7 +73,7 @@ class EnrolleeController extends Controller
             $checkconflict = false;
             foreach($enrollee->classdetail as $cdetails)
             {
-                if($cdetails->trainingclass->status == 1 || $cdetails->trainingclass->status == 2 || $cdetails->trainingclass->status == 3)
+                if($cdetails->trainingclass->status == 0 ||  $cdetails->trainingclass->status == 1 || $cdetails->trainingclass->status == 2 || $cdetails->trainingclass->status == 3)
                 {
                     // start of date end
                     $check = true;
@@ -328,7 +328,7 @@ class EnrolleeController extends Controller
         {
             // start of date end
                 $check = true;
-                $checkdays = 1;
+                $checkdays = 0;
                 $dateEnd = Carbon::create();
                 $dateEnd = Carbon::parse($classes->dateStart);
                 $days = $classes->rate->duration/$classes->rate->classHour;
@@ -357,7 +357,9 @@ class EnrolleeController extends Controller
                     {
                         $check = false;
                     }
-                    $dateEnd = Carbon::parse($dateEnd)->addDays(1);
+                    else{
+                        $dateEnd = Carbon::parse($dateEnd)->addDays(1);
+                    }
                     if(Carbon::parse($request->dateStart)->eq($dateEnd)){
                         $checkconflict = true;
                     }
@@ -536,7 +538,7 @@ class EnrolleeController extends Controller
             {
                 // start of date end
                     $check = true;
-                    $checkdays = 1;
+                    $checkdays = 0;
                     $dateEnd = Carbon::create();
                     $dateEnd = Carbon::parse($classes->dateStart);
                     $days = $classes->rate->duration/$classes->rate->classHour;
@@ -565,7 +567,9 @@ class EnrolleeController extends Controller
                         {
                             $check = false;
                         }
-                        $dateEnd = Carbon::parse($dateEnd)->addDays(1);
+                        else{
+                            $dateEnd = Carbon::parse($dateEnd)->addDays(1);
+                        }
                         if(Carbon::parse($request->dateStart)->eq($dateEnd)){
                             $checkconflict = true;
                         }

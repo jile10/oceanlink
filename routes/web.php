@@ -322,6 +322,7 @@ Route::group(['middleware' => ['cashier']],function(){
 	//account settings
 	Route::get('/cashier/accountsetting','CashierController@viewAccountSettings');
 	Route::post('/cashier/update-image','CashierController@updateImage');
+	Route::get('cashier/reports/collectionreport','CashierController@viewReport');
 });
 
 

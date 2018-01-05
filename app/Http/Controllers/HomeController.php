@@ -185,12 +185,11 @@ class HomeController extends Controller
         foreach ($class as $classes) {
             // start of date end
             $check = true;
-            $checkdays = 1;
+            $checkdays = 0;
             $dateEnd = Carbon::create();
             $dateEnd = Carbon::parse($classes->scheduledprogram->dateStart);
             $days = $classes->scheduledprogram->rate->duration/$classes->scheduledprogram->rate->classHour;
             while ($check) {
-                $dateEnd = Carbon::parse($dateEnd)->addDays(1);
                 $temp = Carbon::parse($dateEnd)->format('l');
                 $holidaycheck = false;
                 foreach($holiday as $holidays){
@@ -320,6 +319,7 @@ class HomeController extends Controller
             $enrollee = Enrollee::find($request->enrollee_id);
             $account = Account::find($enrollee->account_id);
             $holiday = Holiday::all()->where('status','=',1);
+            $sessionday = Nosessionday::all();
             $message = "";
             $checkStudent = true;
             //account detail
@@ -345,11 +345,12 @@ class HomeController extends Controller
                                     $holidaycheck = true;
                                 }
                             }
-                            $check = Nosessionday::where('date',Carbon::parse($dateEnd)->format('Y-m-d'))->get();
-                            if(count($check)>0)
-                            {
-                                $holidaycheck = true;
+                            foreach($sessionday as $sessiondays){
+                                if(Carbon::parse($dateEnd)->between(Carbon::parse($sessiondays->dateStart), Carbon::parse($sessiondays->dateEnd))){
+                                    $holidaycheck = true;
+                                }
                             }
+
                             if($holidaycheck == false)
                             {
                                 foreach ($cdetails->trainingclass->schedule->scheduledetail as $details) {

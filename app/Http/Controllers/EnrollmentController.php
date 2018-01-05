@@ -95,6 +95,14 @@ class EnrollmentController extends Controller
                     $scounter = 0;
                     $scheck = true;
                     $schedules= "";
+                    if(count(Scheduledetail::where('schedule_id','=',$classes->schedule->id)->get())==1){
+                            $sched = Scheduledetail::where('schedule_id','=',$classes->schedule->id);
+                            $startsched = $sched->first();
+                            $startsched = Carbon::parse($startsched->day->dayName)->format("D");
+                            $schedules = $startsched;
+                            $time = $sched->first();
+                            $schedules .= ' &ensp;' . Carbon::parse($time->start)->format("g:i A") . '-' . Carbon::parse($time->end)->format("g:i A");
+                        }
                     foreach ($classes->schedule->scheduledetail as $details) {
                         $scounter = $details->day->id;
                         if($scounter != 0)
@@ -107,12 +115,7 @@ class EnrollmentController extends Controller
                     }
                     if($scheck){
                         if(count(Scheduledetail::where('schedule_id','=',$classes->schedule->id)->get())==1){
-                            $sched = Scheduledetail::where('schedule_id','=',$classes->schedule->id);
-                            $startsched = $sched->first();
-                            $startsched = Carbon::parse($startsched->day->dayName)->format("D");
-                            $schedules = $startsched;
-                            $time = $sched->first();
-                            $schedules .= ' &ensp;' . Carbon::parse($time->start)->format("g:i A") . '-' . Carbon::parse($time->end)->format("g:i A");
+                            
                         }
                         else
                         {
@@ -234,9 +237,10 @@ class EnrollmentController extends Controller
         $checkconflict = false;
         $holiday = Holiday::all()->where('active','=',1);
         $sessionday = Nosessionday::all();
+        $checkhours = false;
         foreach($tofficer->scheduledprogram as $classes)
         {
-            if($classes->trainingclass->status == 1 || $classes->trainingclass->status == 2 || $classes->trainingclass->status == 3)
+            if($classes->trainingclass->status == 0 || $classes->trainingclass->status == 1 || $classes->trainingclass->status == 2 || $classes->trainingclass->status == 3)
             {
                 // start of date end
                 $check = true;
@@ -270,6 +274,7 @@ class EnrollmentController extends Controller
                         $checkdays = 1;
                     }
                     if(Carbon::parse($request->dateStart)->eq($dateEnd)){
+
                         $checkconflict = true;
                     }
                     if($checkdays == $days)
@@ -280,8 +285,43 @@ class EnrollmentController extends Controller
                         $dateEnd = Carbon::parse($dateEnd)->addDays(1);
                     }
                 }
+                if($checkconflict)
+                {
+                    foreach ($classes->trainingclass->schedule->scheduledetail as $details) {
+                        if(count($request->start)!=0)
+                        {
+                            if(Carbon::parse($request->morning)->between(Carbon::parse($details->start),Carbon::parse($details->end)) || Carbon::parse($request->morning)->addHours($classes->rate->classHour)->between(Carbon::parse($details->start),Carbon::parse($details->end)))
+                            {
+                                $checkconflict = true;
+                                $checkhours = true;
+                            }
+                            else
+                            {
+                                $checkconflict = false;
+                            }
+                        }
+                        else
+                        {
+                            for($i=0 ; $i < count($request->day) ; $i++){
+                                if(Carbon::parse($request->morning[$i])->between(Carbon::parse($details->start),Carbon::parse($details->end)) || Carbon::parse($request->morning[$i])->addHours($classes->rate->classHour)->between(Carbon::parse($details->start),Carbon::parse($details->end)))
+                                {
+                                    $checkconflict = true;
+                                    $checkhours = true;
+                                }
+                                else
+                                {
+                                    $checkconflict = false;
+                                }
+                            }
+                        }
+                    }
+                }
                 //end of date end
             }
+        }
+        if($checkhours)
+        {
+            $checkconflict = true;
         }
         $checkholiday = false;
         foreach($holiday as $holidays)
@@ -358,7 +398,6 @@ class EnrollmentController extends Controller
         {
             foreach($request->day as $days)
             {
-                echo Carbon::parse("2018-01-".$days)->format("l") .' '. Carbon::parse($request->dateStart)->format("l") .'<br>';
                 if(Carbon::parse("2018-01-".$days)->format("l") == Carbon::parse($request->dateStart)->format("l"))
                 {
                     $checkdatestart = true;
@@ -486,13 +525,15 @@ class EnrollmentController extends Controller
         //validation
         $validdate = true;
         $message = "";
+        $sprog = Scheduledprogram::find($request->trainingclass_id);
         $tofficer = Trainingofficer::find($request->officer_id);
         $checkconflict = false;
         $holiday = Holiday::all()->where('active','=',1);
+        $checkhours =false;
         $sessionday = Nosessionday::all();
         foreach($tofficer->scheduledprogram as $classes)
         {
-            if($classes->trainingclass->status == 1 || $classes->trainingclass->status == 2 || $classes->trainingclass->status == 3)
+            if($classes->trainingclass->status == 0 || $classes->trainingclass->status == 1 || $classes->trainingclass->status == 2 || $classes->trainingclass->status == 3)
             {
                 if($classes->trainingclass->id != $request->trainingclass_id)
                 {
@@ -539,9 +580,33 @@ class EnrollmentController extends Controller
                             $dateEnd = Carbon::parse($dateEnd)->addDays(1);
                         }
                     }
+                    
+                    if($checkconflict)
+                    {
+                        foreach ($sprog->trainingclass->schedule->scheduledetail as $sdetails) {
+                            # code...
+                            foreach($classes->trainingclass->schedule->scheduledetail as $details)
+                            {
+                                if(Carbon::parse($sdetails->start)->between(Carbon::parse($details->start),Carbon::parse($details->end)) || Carbon::parse($sdetails->end)->between(Carbon::parse($details->start),Carbon::parse($details->end)) )
+                                    {
+                                        $checkconflict = true;
+                                        $checkhours = false;
+                                    }
+                                    else
+                                    {
+                                        $checkconflict = false;
+                                    }
+                            }
+                        }
+                    }
+
                     //end of date end
                 }
             }
+        }
+        if($checkhours)
+        {
+            $checkconflict = true;
         }
         $checkholiday = false;
         foreach($holiday as $holidays)
@@ -579,7 +644,6 @@ class EnrollmentController extends Controller
             }
         }
 
-        $sprog = Scheduledprogram::find($request->trainingclass_id);
         $checkdatestart = false;
         foreach($sprog->trainingclass->schedule->scheduledetail as $days)
         {
@@ -634,10 +698,11 @@ class EnrollmentController extends Controller
         $tofficer = Trainingofficer::find($request->officer_id);
         $checkconflict = false;
         $holiday = Holiday::all()->where('active','=',1);
+        $checkhours = true;
         $sessionday = Nosessionday::all();
         foreach($tofficer->scheduledprogram as $classes)
         {
-            if($classes->trainingclass->status == 1 || $classes->trainingclass->status == 2 || $classes->trainingclass->status == 3)
+            if($classes->trainingclass->status == 0 ||  $classes->trainingclass->status == 1 || $classes->trainingclass->status == 2 || $classes->trainingclass->status == 3)
             {
                 if($classes->trainingclass->id != $request->trainingclass_id)
                 {
@@ -684,9 +749,44 @@ class EnrollmentController extends Controller
                             $dateEnd = Carbon::parse($dateEnd)->addDays(1);
                         }
                     }
+                   if($checkconflict)
+                    {
+                        foreach ($classes->trainingclass->schedule->scheduledetail as $details) {
+                            if(count($request->start)!=0)
+                            {
+                                if(Carbon::parse($request->morning)->between(Carbon::parse($details->start),Carbon::parse($details->end)) || Carbon::parse($request->morning)->addHours($classes->rate->classHour)->between(Carbon::parse($details->start),Carbon::parse($details->end)))
+                                {
+                                    $checkconflict = true;
+                                    $checkhours = true;
+                                }
+                                else
+                                {
+                                    $checkconflict = false;
+                                }
+                            }
+                            else
+                            {
+                                for($i=0 ; $i < count($request->day) ; $i++){
+                                    if(Carbon::parse($request->morning[$i])->between(Carbon::parse($details->start),Carbon::parse($details->end)) || Carbon::parse($request->morning[$i])->addHours($classes->rate->classHour)->between(Carbon::parse($details->start),Carbon::parse($details->end)))
+                                    {
+                                        $checkconflict = true;
+                                        $checkhours = true;
+                                    }
+                                    else
+                                    {
+                                        $checkconflict = false;
+                                    }
+                                }
+                            }
+                        }
+                    }
                     //end of date end
                 }
             }
+        }
+        if($checkhours)
+        {
+            $checkconflict = true;
         }
         $checkholiday = false;
         foreach($holiday as $holidays)

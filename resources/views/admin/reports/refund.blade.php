@@ -300,7 +300,7 @@ else if(timePeriod == "dateRange"){
 	}
 	else{
 
-		if(range_dateFrom > range_dateTo){
+		if(moment($('#dateFrom').val(),'MM dd,YY').isAfter(moment($('#dateTo').val(),'MM dd,YY'))){
 			$('#form_dateTo').addClass('has-error');
 			$('#form_dateFrom').addClass('has-error');
 			$('#queryTable').empty();

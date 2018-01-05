@@ -1,16 +1,33 @@
-@extends('admin.layouts.default')
+@extends('cashier.layouts.default')
 @section('css')
 <link href="/vendors/datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet" />
 <link href="/css/table.css" rel="stylesheet" />
 @endsection
 @section('content')
+<style type="text/css">
+#total{
+	border-top: 1px solid black;
+}
+.helpblock{
+	margin-top: 0px;
+	font-size: 5px;
+}
+.parent{
+	position:relative;
+}
+.child{
+	position:absolute;
+	margin-left: 20px;
+}
+</style>
+
 
 <section class="content-header">
 	<!--section starts-->
-	<h1>Accounts with Balance Report</h1>
+	<h1>Collection Report</h1>
 	<ol class="breadcrumb">
 		<li>
-			<a href="{{url('/admin')}}">
+			<a href="{{url('/cashier')}}">
 				<i class="livicon" data-name="home" data-size="14" data-loop="true"></i>
 				Home
 			</a> 
@@ -18,7 +35,7 @@
 		<li>
 			<a >Reports</a>
 		</li>
-		<li class="active">Accounts with Balance Report</li>
+		<li class="active">Collection Report</li>
 	</ol>
 </section>
 <section class="content">
@@ -31,7 +48,7 @@
 				</div>
 				<div class="panel-body table-responsive">
 					<div class="form-horizontal">
-						<form action="/reports/accountbalance/print" method="post" target="_blank">
+						<form action="/reports/collection/print" method="post" target="_blank">
 							{{csrf_field()}}
 							<div class="col-md-12">
 								<div class="col-md-4">
@@ -105,6 +122,7 @@
 													<option value="{{$i}}">{{$i}}</option>
 													@else
 													<option value="{{$i}}" selected>{{$i}}</option>
+													
 													@endif
 												}
 												@endfor
@@ -157,6 +175,7 @@
 @endsection
 @section('js')
 <script type="text/javascript" src="/vendors/datetimepicker/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+<script src="/js/moment.min.js"></script>
 
 <script type="text/javascript">
 	$(".form_datetime").datetimepicker({
@@ -171,7 +190,7 @@
 		forceParse: 0,
 	});
 	$('#reports').addClass(' active ');
-	$('#accountbalance').addClass(' active ');
+	$('#collectionReport').addClass(' active ');
 </script> 
 
 <script type="text/javascript">
@@ -226,23 +245,23 @@ if(timePeriod == "monthly"){
 		$('#form_monthly').removeClass('has-error');
 
 		$('#title').empty();
-		$('#title').append('<center><h2>Accounts with Balance Report for the Month of '+monthly_month+'</h2></center>')
+		$('#title').append('<center><h2>Collection Report for the Month of '+monthly_month+'</h2></center>')
 
 		$('#queryTable').empty();
-		$('#queryTable').append('<thead><tr><th width="25%">Account Number</th><th width="30%">Account Name</th><th width="15%" style="text-align: right;">Balance (Php)</th><th width="15%" style="text-align:center;">Actions</th></tr></thead><tbody id="tableBody"></tbody>');
+		$('#queryTable').append('<thead><tr><th width="25%">Account Number</th><th width="25%">Account Name</th><th width="25%">Date</th><th width="25%">Payment</th></tr></thead><tbody id="tableBody"></tbody>');
 
 		$.ajax({
 			type:'get',
-			url:'{!!URL::to('ajax-query-accountbalance-monthly')!!}',
+			url:'{!!URL::to('ajax-query-collection-monthly')!!}',
 			data:{monthly_month:monthly_month,monthly_year:monthly_year},
 			success:function(data){
 				for(var i = 0; i< data.length; i++){
-					$('#tableBody').append('<tr><td>'+data[i]['accountNumber']+'</td><td>'+data[i]['accountName']+'</td><td style="text-align:right;">'+data[i]['balance']+'</td><td style="text-align:center;"><<form action="/accountbalance/notification" target="_blank" method="post">{{csrf_field()}}<button class="btn btn-primary" name="id" value="'+data[i]['id']+'"><i class="glyphicon glyphicon-print"></i>&ensp;Notify</button></form></td></tr>');
-					// total += parseFloat(data[i]['amount']);
+					$('#tableBody').append('<tr><td>'+data[i]['accountNumber']+'</td><td>'+data[i]['accountName']+'</td><td>'+data[i]['paymentDate']+'</td><td>'+data[i]['amount']+'</td></tr>');
+					total += parseFloat(data[i]['amount']);
 
 				}
-				// $('#total').empty();
-				// $('#total').append('<thead><tr><th width="25%">Total</th><th width="25%"></th><th width="25%"></th><th width="25%">'+parseFloat(total).toFixed(2)+'</th></tr></thead>');
+				$('#total').empty();
+				$('#total').append('<thead><tr><th width="25%">Total</th><th width="25%"></th><th width="25%"></th><th width="25%">'+parseFloat(total).toFixed(2)+'</th></tr></thead>');
 			},
 			error:function(){
 			}
@@ -254,22 +273,22 @@ else if(timePeriod == "yearly"){
 	var yearly_year = $('#yearly_year').val();
 
 	$('#title').empty();
-	$('#title').append('<center><h2>Accounts with Balance Report for the Year '+yearly_year+'</h2></center>')
+	$('#title').append('<center><h2>Collection Report for the Year '+yearly_year+'</h2></center>')
 
 	$('#queryTable').empty();
-	$('#queryTable').append('<thead><tr><th width="25%">Account Number</th><th width="30%">Account Name</th><th width="15%" style="text-align: right;">Balance (Php)</th><th width="15%" style="text-align:center;">Actions</th></tr></thead><tbody id="tableBody"></tbody>');
+	$('#queryTable').append('<thead><tr><th width="25%">Account Number</th><th width="25%">Account Name</th><th width="25%">Date</th><th width="25%">Payment</th></tr></thead><tbody id="tableBody"></tbody>');
 
 	$.ajax({
 		type:'get',
-		url:'{!!URL::to('ajax-query-accountbalance-yearly')!!}',
+		url:'{!!URL::to('ajax-query-collection-yearly')!!}',
 		data:{yearly_year:yearly_year},
 		success:function(data){
 			for(var i = 0; i< data.length; i++){
-				$('#tableBody').append('<tr><td>'+data[i]['accountNumber']+'</td><td>'+data[i]['accountName']+'</td><td style="text-align:right;">'+data[i]['balance']+'</td><td style="text-align:center;"><form action="/accountbalance/notification" target="_blank" method="post">{{csrf_field()}}<button class="btn btn-primary" name="id" value="'+data[i]['id']+'"><i class="glyphicon glyphicon-print"></i>&ensp;Notify</button></form></td></tr>');
-				// total += parseFloat(data[i]['amount']);
+				$('#tableBody').append('<tr><td>'+data[i]['accountNumber']+'</td><td>'+data[i]['accountName']+'</td><td>'+data[i]['paymentDate']+'</td><td>'+data[i]['amount']+'</td></tr>');
+				total += parseFloat(data[i]['amount']);
 			}
-			// $('#total').empty();
-			// $('#total').append('<thead><tr><th width="25%">Total</th><th width="25%"></th><th width="25%"></th><th width="25%">'+parseFloat(total).toFixed(2)+'</th></tr></thead>');
+			$('#total').empty();
+			$('#total').append('<thead><tr><th width="25%">Total</th><th width="25%"></th><th width="25%"></th><th width="25%">'+parseFloat(total).toFixed(2)+'</th></tr></thead>');
 		},
 		error:function(){
 		}
@@ -314,21 +333,22 @@ else if(timePeriod == "dateRange"){
 
 
 			$('#title').empty();
-			$('#title').append('<center><h2>Accounts with Balance Report from '+range_dateFrom+' to '+range_dateTo+'</h2></center>')
+			$('#title').append('<center><h2>Collection Report from '+range_dateFrom+' to '+range_dateTo+'</h2></center>')
 
 			$('#queryTable').empty();
-			$('#queryTable').append('<thead><tr><th width="25%">Account Number</th><th width="30%">Account Name</th><th width="15%" style="text-align: right;">Balance (Php)</th><th width="15%" style="text-align:center;">Actions</th></tr></thead><tbody id="tableBody"></tbody>');
+			$('#queryTable').append('<thead><tr><th width="25%">Account Number</th><th width="25%">Account Name</th><th width="25%">Date</th><th width="25%">Payment</th></tr></thead><tbody id="tableBody"></tbody>');
 
 			$.ajax({
 				type:'get',
-				url:'{!!URL::to('ajax-query-accountbalance-dateRange')!!}',
+				url:'{!!URL::to('ajax-query-collection-dateRange')!!}',
 				data:{range_dateFrom:range_dateFrom,range_dateTo:range_dateTo},
 				success:function(data){
 					for(var i = 0; i< data.length; i++){
-						$('#tableBody').append('<tr><td>'+data[i]['accountNumber']+'</td><td>'+data[i]['accountName']+'</td><td style="text-align:right;">'+data[i]['balance']+'</td><td style="text-align:center;"><form action="/accountbalance/notification" target="_blank" method="post">{{csrf_field()}}<button name="id" class="btn btn-primary" value="'+data[i]['id']+'"><i class="glyphicon glyphicon-print"></i>&ensp;Notify</button></form></td></tr>');
+						$('#tableBody').append('<tr><td>'+data[i]['accountNumber']+'</td><td>'+data[i]['accountName']+'</td><td>'+data[i]['paymentDate']+'</td><td>'+data[i]['amount']+'</td></tr>');
+						total += parseFloat(data[i]['amount']);
 					}
-					// $('#total').empty();
-					// $('#total').append('<thead><tr><th width="25%">Total</th><th width="25%"></th><th width="25%"></th><th width="25%">'+parseFloat(total).toFixed(2)+'</th></tr></thead>');
+					$('#total').empty();
+					$('#total').append('<thead><tr><th width="25%">Total</th><th width="25%"></th><th width="25%"></th><th width="25%">'+parseFloat(total).toFixed(2)+'</th></tr></thead>');
 				},
 				error:function(){
 				}
@@ -338,4 +358,4 @@ else if(timePeriod == "dateRange"){
 			}//end of dateRange report
 		}//end of PreviewCLicked
 	</script>
-@endsection
+	@endsection

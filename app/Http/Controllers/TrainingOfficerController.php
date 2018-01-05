@@ -205,7 +205,7 @@ class TrainingOfficerController extends Controller
         $sessionday = Nosessionday::all();
          // start of date end
         $check = true;
-        $checkdays = 1;
+        $checkdays = 0;
         $dateEnd = Carbon::create();
         $dateEnd = Carbon::parse($tclass->scheduledprogram->dateStart);
         $days = $tclass->scheduledprogram->rate->duration/$tclass->scheduledprogram->rate->classHour;
@@ -234,7 +234,9 @@ class TrainingOfficerController extends Controller
             {
                 $check = false;
             }
+            else{
                 $dateEnd = Carbon::parse($dateEnd)->addDays(1);
+            }
         }
         return view('training_officer/attendance',compact('tclass','dateEnd'));
     }

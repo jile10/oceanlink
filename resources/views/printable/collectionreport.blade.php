@@ -47,7 +47,7 @@
 			</tr>
 			@endforeach
 			<tr>
-				<td colspan="4" style="border: 1px solid black; height: 25px;  padding-right: 5px; text-align: right; border-top: 2px solid black;">Total : Php {{number_format($reports->sum('amount'),2)}}</td>
+				<td colspan="4" style="border: 1px solid black; height: 25px;  padding-right: 5px; text-align: right; border-top: 2px solid black;">Total : Php {{number_format($report->sum('amount'),2)}}</td>
 			</tr>
 		</tbody>
 		<div style="width: 35%; text-align: center;">

@@ -210,4 +210,8 @@ class CashierController extends Controller
             return redirect('/cashier/accountsetting');
         }
     }
+
+    public function viewReport(){
+        return view('cashier/collectionreport');
+    }
 }

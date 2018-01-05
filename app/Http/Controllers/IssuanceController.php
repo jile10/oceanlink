@@ -43,7 +43,7 @@ class IssuanceController extends Controller
         $sessionday = Nosessionday::all();
     	// start of date end
             $check = true;
-            $checkdays = 1;
+            $checkdays = 0;
             $dateEnd = Carbon::create();
             $dateEnd = Carbon::parse($tclass->scheduledprogram->dateStart);
             $days = $tclass->scheduledprogram->rate->duration/$tclass->scheduledprogram->rate->classHour;
@@ -72,7 +72,9 @@ class IssuanceController extends Controller
                 {
                     $check = false;
                 }
-                $dateEnd = Carbon::parse($dateEnd)->addDays(1);
+                else{
+                    $dateEnd = Carbon::parse($dateEnd)->addDays(1);
+                }
             }
         	//end of date end
         $cinfo = Companyinfo::all()->first();
